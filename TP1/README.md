@@ -14,7 +14,7 @@ L'interface utilisateur utilise un layout de type LinearLayout et ressemble à �
 
 La seconde Activité affichera les éléments envoyés :
 
-<img src="snapshot2.png" height="350">
+<img src="snapshot2.png" width="100">
 
 
 ## Application 2
