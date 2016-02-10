@@ -1,4 +1,4 @@
-#Projet développement mobile 2015-2016 : Choplifter Reboot
+# Projet développement mobile 2015-2016 : Choplifter Reboot
 
 <a href="https://fr.wikipedia.org/wiki/Choplifter">Choplifter</a> est un jeu sorti en 1982 sur Apple ][ puis porté sur différents systèmes.
 Le but de ce projet est de réaliser un clone de ce jeu pour le système Android.
@@ -30,7 +30,7 @@ Une bonne pratique consiste à placer les vues Android (en général toutes les 
 Les classes modèles, vues et contrôleurs seront placées dans les trois packages **model**, **view**, **controller** (deux *l* à **controller** !).
 
 	
-###Définition des écrans
+### Définition des écrans
 
 L'application comportera au minimum deux activités qui correspondront aux deux écrans principaux de l'application : 
 
@@ -39,13 +39,13 @@ L'application comportera au minimum deux activités qui correspondront aux deux 
 
 	
 
-###Définition du modèle
+### Définition du modèle
 
 La classe ``GameModel`` contient les classes métier, c'est à dire l'ensemble des éléments du jeu (positions, vitesse, type des différents sprites, etc.).
 Tous les éléments du modèle sont complètement indépendants de l'affichage, et peuvent être réutilisés tels quels dans un autre projet utilisant éventuellement un autre type d'affichage.
 
 	
-###Définition du contrôleur
+### Définition du contrôleur
 
 Le contrôleur est le chef d'orchestre : il contrôle la mise à jour de la vue à partir du modèle, la mise à jour du modèle, la réponse aux évènements.
 Toute la logique de jeu est contenue dans la partie contrôleur
@@ -54,15 +54,15 @@ Toute la logique de jeu est contenue dans la partie contrôleur
 - ``GameThread`` : le thread exécutant la boucle de jeu. 
 
 			
-###Définition de la vue	
+### Définition de la vue	
 La vue principale du jeu :
  
 - ``GameView`` : dérive de la classe `View`. Définit l'ensemble des méthodes relatives à l'affichage, ainsi que la gestion des évènements.
 				Possède une référence vers la classe contrôleur.
 
-###Modélisation UML
+### Modélisation UML
 La modélisation UML correspondante est la suivante :
-	<img src="fig/mvc.png">  
+	<img src="fig/mvc.png" height="400">  
 	
 
 ## Mise en oeuvre
@@ -89,9 +89,7 @@ Ceci est une  *proposition* pour vous aider à démarrer le projet.
 		
 	- appelle la méthode `startGame()` du contrôleur pour lancer la boucle de jeu.
 		
- 
-	
-###Vue : package view 
+### Vue : package view 
 
 La vue possède une référence vers le contrôleur, mais pas de référence vers le modèle pour respecter le paradigme MVC (découplage entre vue et modèle).
 
@@ -124,7 +122,7 @@ public boolean onTouchEvent(MotionEvent event) {
 }
 ```
 		
-##Contrôleurs : package controller
+## Contrôleurs : package controller
 
 - `GameController` possède une référence vers la vue et vers le modèle. Son rôle est :
 	- d'instancier le modèle de jeu `GameModel` et d'instancier la vue `GameView`			
@@ -180,7 +178,7 @@ public void run() {
 
 - Très important : seul le thread principal (UI thread) peut mettre à jour l'interface graphique. Il faut donc faire appel à ``View.postInvalidate()`` pour mettre à jour la vue (un appel direct à `view.invalidate()`échoue). La méthode `View.postInvalidate()` permet de déléguer la mise à jour de la vue au thread UI.</li>
 
-##Planning prévisionnel
+## Planning prévisionnel
 1. Semaine 2 : mise en place de la structure générale. Création du menu principal, du menu de préférences. Création des premières classes modèle. Affichage de l'hélicoptère sur la vue de jeu. Implantation d'une méthode d'interaction  au choix permettant de diriger l'hélicoptère et de changer sa position (côté, face). 
 2. Semaine 3 (22 février) : mise en place du background. Base, terrain. L'hélicoptère peut se poser. Amélioration de la physique de l'hélicoptère : accélération, vitesse. Classes modèle : civils, tanks, ... 
 3. Semaine 4 (29 février) : génération procédurale (aléatoire) du jeu. Les civils se déplacent. L'hélicoptère peut tirer. Les tanks peuvent tirer. Gestion du score.
