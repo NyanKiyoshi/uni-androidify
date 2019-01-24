@@ -12,9 +12,9 @@ Une fois ce **fork** réalisé, partagez-le avec votre enseignant en allant dans
 
 Vous pouvez maintenant **cloner** votre dépôt sur votre machine de travail afin de disposer d'un espace de travail local :
 ```sh
-git clone https://git.unistra.fr/[votre login]/P4a.git
+git clone https://git.unistra.fr/[votre login]/P4b.git
 ```
-Vous vous retrouvez alors avec un dossier P4y qui contient une copie locale de votre dépôt.
+Vous vous retrouvez alors avec un dossier P4b qui contient une copie locale de votre dépôt.
 
 ---
 
