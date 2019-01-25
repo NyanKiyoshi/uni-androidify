@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Android TP1</string>
+    <string name="main_activity_first_name_label">Prénom</string>
+    <string name="main_activity_last_name_label">Nom de famille</string>
+    <string name="main_activity_address_label">Adresse</string>
+    <string name="main_activity_phone_number_label">Téléphone</string>
+    <string name="main_activity_submit_btn_text">Soumettre</string>
+    <string name="main_activity_cancel_btn_text">Annuler</string>
+</resources>
