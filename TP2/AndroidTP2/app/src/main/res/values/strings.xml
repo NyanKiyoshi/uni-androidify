@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android TP2</string>
+    <string name="button_1">Cat</string>
+    <string name="toggle_lorem_ipsum_button">Lorem</string>
+    <string name="cat_picture_alt_text">It\'s a cat. It\'s cute.</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet.</string>
 </resources>
