@@ -2,4 +2,6 @@
 build/
 .*/
 *.swp
+*.jar
+gradle/
 
