@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Android TP2</string>
+    <string name="button_1">Cat</string>
+    <string name="toggle_lorem_ipsum_button">Lorem</string>
+    <string name="cat_picture_alt_text">It\'s a cat. It\'s cute.</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="cat_drawer_entry_title">Cat</string>
+    <string name="submit_button">Submit</string>
+    <string name="text_editor_input_field_label">Your Custom Text to Save</string>
+    <string name="text_drawer_entry_title">View Custom Text</string>
+    <string name="editor_drawer_entry_title">Edit Custom Text</string>
+</resources>
