@@ -16,6 +16,6 @@ public class ButtonActivity extends BaseViewManager {
                 this.fragmentManager, this.cuteCatFragment));
 
         loremButton.setOnClickListener(new FragmentToggleListener(
-                this.fragmentManager, this.loremIpsumFragment));
+                this.fragmentManager, this.textFragment));
     }
 }

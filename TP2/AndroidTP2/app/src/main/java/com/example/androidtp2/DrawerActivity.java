@@ -57,8 +57,10 @@ public class DrawerActivity extends BaseViewManager
 
         if (id == R.id.nav_cat) {
             this.replaceFragment(this.cuteCatFragment);
-        } else if (id == R.id.nav_lorem) {
-            this.replaceFragment(this.loremIpsumFragment);
+        } else if (id == R.id.nav_text) {
+            this.replaceFragment(this.textFragment);
+        } else if (id == R.id.nav_editor) {
+            this.replaceFragment(this.editorFragment);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
