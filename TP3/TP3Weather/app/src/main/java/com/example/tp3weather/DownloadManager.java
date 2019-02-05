@@ -1,5 +1,7 @@
 package com.example.tp3weather;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -11,27 +13,36 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 public class DownloadManager extends AsyncTask<URL, Integer, DownloadManager.Result> {
 
-    public class Result {
-        final JSONObject body;
-        final Exception exception;
+    public static class Result {
+        public JSONObject body = null;
+        public Bitmap bitmap = null;
+        public Exception exception = null;
 
-        public Result(JSONObject body, Exception exception) {
+        public Result(JSONObject body) {
             this.body = body;
+        }
+
+        public Result(Bitmap bitmap) {
+            this.bitmap = bitmap;
+        }
+
+        public Result(Exception exception) {
             this.exception = exception;
         }
     }
 
-    public interface JSONCallback {
-        public void onJSONDataReceived(Result results);
+    public interface DownloadCallback {
+        public void onDownloadDone(Result results);
     }
 
-    private final JSONCallback listener;
+    private final DownloadCallback listener;
 
-    public DownloadManager(JSONCallback listener) {
+    public DownloadManager(DownloadCallback listener) {
         this.listener = listener;
     }
 
@@ -44,30 +55,50 @@ public class DownloadManager extends AsyncTask<URL, Integer, DownloadManager.Res
         return sb.toString();
     }
 
-    public static JSONObject readJsonFromUrl(URL url) throws IOException, JSONException {
-        InputStream is = url.openStream();
+    public static Result downloadJSON(InputStream inputStream) throws IOException, JSONException {
+        BufferedReader rd = new BufferedReader(
+                new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        String jsonText = readAll(rd);
+        return new Result(new JSONObject(jsonText));
+    }
+
+    public static Result downloadImage(InputStream inputStream) {
+        return new Result(BitmapFactory.decodeStream(inputStream));
+    }
+
+    public static Result downloadURL(URL url) throws IOException, JSONException {
+        URLConnection urlConnection = url.openConnection();
+        InputStream inputStream = urlConnection.getInputStream();
+        String contentType = urlConnection.getContentType().split(";")[0];
         try {
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            return new JSONObject(jsonText);
+            switch (contentType) {
+                case "application/json":
+                    return downloadJSON(inputStream);
+                case "image/x-icon":
+                case "image/png":
+                    return downloadImage(inputStream);
+                default:
+                    return new Result(
+                            new UnsupportedOperationException(
+                                    urlConnection.getContentType()));
+            }
         } finally {
-            is.close();
+            inputStream.close();
         }
     }
 
     @Override
     protected Result doInBackground(URL... urls) {
         try {
-            return new Result(readJsonFromUrl(urls[0]), null);
+            return downloadURL(urls[0]);
         }
         // Exception will return null
         catch (IOException | JSONException e) {
-            return new Result(null, e);
+            return new Result(e);
         }
     }
 
     protected void onPostExecute(Result result) {
-        this.listener.onJSONDataReceived(result);
+        this.listener.onDownloadDone(result);
     }
 }
