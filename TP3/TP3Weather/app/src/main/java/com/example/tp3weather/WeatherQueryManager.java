@@ -1,6 +1,8 @@
 package com.example.tp3weather;
 
-import android.os.AsyncTask;
+import com.example.tp3weather.downloadManagers.BaseDownloadManager;
+import com.example.tp3weather.downloadManagers.BitmapDownloadManager;
+import com.example.tp3weather.downloadManagers.JSONDownloadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,26 +22,22 @@ public class WeatherQueryManager {
             Settings.OPEN_WEATHER_API_KEY);
     }
 
-    public static AsyncTask<URL, Integer, DownloadManager.Result>
-    getDataByQuery(String query, DownloadManager.DownloadCallback listener) {
-
+    public static void getDataByQuery(String query, BaseDownloadManager.DownloadCallback listener) {
         String url = getEndpointURL("weather") + "&q=" + query;
 
         try {
-            return new DownloadManager(listener).execute(new URL(url));
+            new JSONDownloadManager(listener).execute(new URL(url));
         }
-        catch (MalformedURLException e) {
-            return null;
+        catch (MalformedURLException ignored) {
         }
 
     }
 
-    public static AsyncTask<URL, Integer, DownloadManager.Result>
-    downloadIcon(JSONObject data, DownloadManager.DownloadCallback listener)
+    public static void downloadIcon(JSONObject data, BaseDownloadManager.DownloadCallback listener)
             throws JSONException, MalformedURLException {
 
         String icon = data.getString("icon");
         String url = BASE_ICON_URL + icon + ".png";
-        return new DownloadManager(listener).execute(new URL(url));
+        new BitmapDownloadManager(listener).execute(new URL(url));
     }
 }
