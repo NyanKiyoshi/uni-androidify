@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TP3 Weather</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="city_input_lbl">Enter your city:</string>
+</resources>
