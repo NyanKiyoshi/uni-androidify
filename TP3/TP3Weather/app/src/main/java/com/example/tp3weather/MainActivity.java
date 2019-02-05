@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity implements DownloadManager.J
     }
 
     public void handleError(Exception exception) {
-        String errorMessage;
+        CharSequence errorMessage;
 
         if (exception.getClass() == java.io.FileNotFoundException.class) {
-            errorMessage = "No such city";
+            errorMessage = getText(R.string.no_such_city);
         }
         else {
-            errorMessage = "Please check your connectivity.";
+            errorMessage = getText(R.string.please_check_connectivity);
         }
 
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
