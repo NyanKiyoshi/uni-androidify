@@ -1,14 +1,16 @@
 package com.example.tp3weather;
 
-import com.example.tp3weather.downloadManagers.BaseDownloadManager;
-import com.example.tp3weather.downloadManagers.BitmapDownloadManager;
-import com.example.tp3weather.downloadManagers.JSONDownloadManager;
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.tp3weather.requests.BitmapRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class WeatherQueryManager {
     private static final String BASE_ICON_URL = "http://openweathermap.org/img/w/";
@@ -22,22 +24,23 @@ public class WeatherQueryManager {
             Settings.OPEN_WEATHER_API_KEY);
     }
 
-    public static void getDataByQuery(String query, BaseDownloadManager.DownloadCallback listener) {
+    public static void getDataByQuery(
+            RequestQueue requestQueue,
+            String query,
+            Response.Listener<JSONObject> listener,
+            @Nullable Response.ErrorListener errorListener) {
+
         String url = getEndpointURL("weather") + "&q=" + query;
-
-        try {
-            new JSONDownloadManager(listener).execute(new URL(url));
-        }
-        catch (MalformedURLException ignored) {
-        }
-
+        requestQueue.add(new JsonObjectRequest(url, null, listener, errorListener));
     }
 
-    public static void downloadIcon(JSONObject data, BaseDownloadManager.DownloadCallback listener)
-            throws JSONException, MalformedURLException {
+    public static void downloadIcon(
+            RequestQueue requestQueue,
+            JSONObject data,
+            Response.Listener<Bitmap> listener,
+            @Nullable Response.ErrorListener errorListener) throws JSONException {
 
-        String icon = data.getString("icon");
-        String url = BASE_ICON_URL + icon + ".png";
-        new BitmapDownloadManager(listener).execute(new URL(url));
+        String url = BASE_ICON_URL + data.getString("icon") + ".png";
+        requestQueue.add(new BitmapRequest(url, listener, errorListener));
     }
 }

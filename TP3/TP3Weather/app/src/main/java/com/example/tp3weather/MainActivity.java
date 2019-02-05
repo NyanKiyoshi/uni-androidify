@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tp3weather.downloadManagers.BaseDownloadManager;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     TextView JSONCallbackView;
     ImageView IconImage;
     EditText queryInput;
+
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.IconImage = findViewById(R.id.image_icon);
         this.queryInput = findViewById(R.id.query_input);
 
+        this.requestQueue = Volley.newRequestQueue(this);
+
         Button submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this::onSubmitButtonClick);
     }
@@ -37,56 +43,41 @@ public class MainActivity extends AppCompatActivity {
     public void onSubmitButtonClick(View view) {
         String userQuery = this.queryInput.getText().toString();
         WeatherQueryManager.getDataByQuery(
-                userQuery, this::onWeatherDataReceived);
+                this.requestQueue,
+                userQuery, this::onWeatherDataReceived, this::handleError);
     }
 
-    public void handleError(Exception exception) {
-        int errorMessage;
-
-        if (exception == null) {
-            exception = new UnsupportedOperationException();
-        }
-        if (exception.getClass() == java.io.FileNotFoundException.class) {
-            errorMessage = R.string.no_such_city;
-        }
-        else {
-            errorMessage = R.string.please_check_connectivity;
-        }
-
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-        Log.wtf("Error from weather retrieval", exception);
+    public void handleError(VolleyError error) {
+        this.handleError(error.getCause());
     }
 
-    public void handleImageResponse(BaseDownloadManager.Result result) {
-        this.IconImage.setImageBitmap((Bitmap)result.results);
+    public void handleError(Throwable throwable) {
+        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        Log.wtf("Error from weather retrieval", throwable);
     }
 
-    public void onWeatherDataReceived(BaseDownloadManager.Result results) {
-        Exception exception = results.exception;
-        JSONObject data = (JSONObject)results.results;
+    public void handleImageResponse(Bitmap result) {
+        this.IconImage.setImageBitmap(result);
+    }
 
-        if (exception == null && data != null) {
-            try {
-                Log.d("HH", data.toString(4));
-                JSONObject weatherDescriptions = data.getJSONArray("weather").getJSONObject(0);
-                JSONObject weatherData = data.getJSONObject("main");
+    public void onWeatherDataReceived(JSONObject data) {
+        try {
+            Log.d("HH", data.toString(4));
+            JSONObject weatherDescriptions = data.getJSONArray("weather").getJSONObject(0);
+            JSONObject weatherData = data.getJSONObject("main");
 
-                WeatherQueryManager.downloadIcon(
-                    weatherDescriptions, this::handleImageResponse);
+            WeatherQueryManager.downloadIcon(
+                this.requestQueue,
+                weatherDescriptions, this::handleImageResponse, this::handleError);
 
-                this.JSONCallbackView.setText(String.format(
-                        "%s\n%s°C (%s%%)",
-                        weatherDescriptions.get("description"),
-                        weatherData.get("temp"),
-                        weatherData.get("humidity")));
-
-                return;
-            }
-            catch (Exception e) {
-                exception = e;
-            }
+            this.JSONCallbackView.setText(String.format(
+                    "%s\n%s°C (%s%%)",
+                    weatherDescriptions.get("description"),
+                    weatherData.get("temp"),
+                    weatherData.get("humidity")));
         }
-
-        this.handleError(exception);
+        catch (Exception e) {
+            this.handleError(e);
+        }
     }
 }
