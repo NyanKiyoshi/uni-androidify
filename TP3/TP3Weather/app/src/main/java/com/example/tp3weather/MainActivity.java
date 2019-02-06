@@ -1,6 +1,7 @@
 package com.example.tp3weather;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +20,15 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String SAVED_CITY_KEY = "last_city";
+
     TextView JSONCallbackView;
     ImageView IconImage;
     EditText queryInput;
 
     RequestQueue requestQueue;
     ProgressDialog progressDialog;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,24 @@ public class MainActivity extends AppCompatActivity {
 
         this.requestQueue = Volley.newRequestQueue(this);
         this.progressDialog = new ProgressDialog(this);
+        this.sharedPreferences = this.getSharedPreferences(
+                this.getApplication().getPackageName(), MODE_PRIVATE);
 
         Button submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this::onSubmitButtonClick);
+
+        // Set the default input text to the latest saved input
+        this.queryInput.setText(this.getSavedCity());
+    }
+
+    public String getSavedCity() {
+        return this.sharedPreferences.getString(SAVED_CITY_KEY, "");
+    }
+
+    public void saveCity(String city) {
+        final SharedPreferences.Editor prefEditor = this.sharedPreferences.edit();
+        prefEditor.putString(SAVED_CITY_KEY, city);
+        prefEditor.apply();
     }
 
     // Send the input query to the download manager
@@ -50,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         WeatherQueryManager.getDataByQuery(
                 this.requestQueue,
                 userQuery, this::onWeatherDataReceived, this::handleError);
+
+        // Save the query into the last used city
+        this.saveCity(userQuery);
     }
 
     public void handleError(VolleyError error) {
