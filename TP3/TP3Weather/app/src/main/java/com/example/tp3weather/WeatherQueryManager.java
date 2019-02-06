@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.tp3weather.requests.BitmapRequest;
 
 import org.json.JSONException;

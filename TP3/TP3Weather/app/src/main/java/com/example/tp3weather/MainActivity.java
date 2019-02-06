@@ -1,5 +1,6 @@
 package com.example.tp3weather;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     EditText queryInput;
 
     RequestQueue requestQueue;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         this.queryInput = findViewById(R.id.query_input);
 
         this.requestQueue = Volley.newRequestQueue(this);
+        this.progressDialog = new ProgressDialog(this);
 
         Button submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this::onSubmitButtonClick);
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Send the input query to the download manager
     public void onSubmitButtonClick(View view) {
+        this.progressDialog.show();
+
         String userQuery = this.queryInput.getText().toString();
         WeatherQueryManager.getDataByQuery(
                 this.requestQueue,
@@ -48,12 +53,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleError(VolleyError error) {
-        this.handleError(error.getCause());
+        this.progressDialog.dismiss();
+
+        if (error.networkResponse == null) {
+            Toast.makeText(this, R.string.please_check_connectivity, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            switch (error.networkResponse.statusCode) {
+                case 404:
+                    Toast.makeText(this, R.string.no_such_city, Toast.LENGTH_SHORT).show();
+                    break;
+                case 401:
+                    Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    this.handleException(error);
+            }
+        }
     }
 
-    public void handleError(Throwable throwable) {
+    public void handleException(Exception exception) {
         Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
-        Log.wtf("Error from weather retrieval", throwable);
+        Log.wtf("Error from weather retrieval", exception);
     }
 
     public void handleImageResponse(Bitmap result) {
@@ -61,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onWeatherDataReceived(JSONObject data) {
+        this.progressDialog.dismiss();
+
         try {
-            Log.d("HH", data.toString(4));
+            Log.d("Received weather data", data.toString(4));
             JSONObject weatherDescriptions = data.getJSONArray("weather").getJSONObject(0);
             JSONObject weatherData = data.getJSONObject("main");
 
@@ -71,13 +94,15 @@ public class MainActivity extends AppCompatActivity {
                 weatherDescriptions, this::handleImageResponse, this::handleError);
 
             this.JSONCallbackView.setText(String.format(
-                    "%s\n%s°C (%s%%)",
+                    "%s - %s\n%s°C (%s%% - %s kph)",
+                    data.get("name"),
                     weatherDescriptions.get("description"),
                     weatherData.get("temp"),
-                    weatherData.get("humidity")));
+                    weatherData.get("humidity"),
+                    data.getJSONObject("wind").getDouble("speed")));
         }
         catch (Exception e) {
-            this.handleError(e);
+            this.handleException(e);
         }
     }
 }

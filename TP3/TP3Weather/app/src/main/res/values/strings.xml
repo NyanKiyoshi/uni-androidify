@@ -4,4 +4,5 @@
     <string name="city_input_lbl">Enter your city:</string>
     <string name="please_check_connectivity">Please check your connectivity.</string>
     <string name="no_such_city">No such city</string>
+    <string name="invalid_credentials">There is an issue with this app\'s configuration. Please contact the maintener.</string>
 </resources>
