@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Todo list</string>
+    <string name="card_delete_btn">Delete</string>
+</resources>
