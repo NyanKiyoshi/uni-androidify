@@ -3,6 +3,7 @@ package com.example.todolist.views;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import com.example.todolist.R;
 import com.example.todolist.controllers.DatabaseWrapper;
 import com.example.todolist.models.TodoEntry;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,8 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void addEntryToInterface(TodoEntry entry) {
         FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
-        fragmentTransaction.add(
-                R.id.todo_entries_container, new TodoEntryFragment(entry));
+
+        TodoEntryFragment todoEntryFragment = new TodoEntryFragment(entry);
+        todoEntryFragment.setOnDeleteListener(this::onTodoEntryDeleted);
+        fragmentTransaction.add(R.id.todo_entries_container, todoEntryFragment);
+
+        fragmentTransaction.commit();
+    }
+
+    public void onTodoEntryDeleted(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+        fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.todolist.R;
@@ -15,7 +16,12 @@ import com.example.todolist.models.TodoEntry;
 
 @SuppressLint("ValidFragment")
 public class TodoEntryFragment extends Fragment {
+    public interface OnTodoEntryAction {
+        public void onEntryDeleted(Fragment fragment);
+    }
+
     TodoEntry todoEntry;
+    OnTodoEntryAction deleteCallback;
 
     public TodoEntryFragment(TodoEntry entry) {
         super();
@@ -36,8 +42,19 @@ public class TodoEntryFragment extends Fragment {
                 R.layout.card_fragment, container, false);
 
         TextView todoText = view.findViewById(R.id.todo_text);
+        Button deleteButton = view.findViewById(R.id.delete_btn);
+
         todoText.setText(this.todoEntry.id + ": " + this.todoEntry.text);
+        deleteButton.setOnClickListener(this::OnDeleteClick);
 
         return view;
+    }
+
+    public void setOnDeleteListener(OnTodoEntryAction newCallback) {
+        this.deleteCallback = newCallback;
+    }
+
+    public void OnDeleteClick(View view) {
+        this.deleteCallback.onEntryDeleted(this);
     }
 }

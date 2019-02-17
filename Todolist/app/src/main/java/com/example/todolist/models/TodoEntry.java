@@ -69,4 +69,8 @@ public final class TodoEntry {
 
         this.id = db.insert(MetaData.TABLE_NAME, null, values);;
     }
+
+    public String getIdStr() {
+        return String.valueOf(this.id);
+    }
 }
