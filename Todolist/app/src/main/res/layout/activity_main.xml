@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
-    tools:context=".MainActivity"
+    tools:context=".views.MainActivity"
     android:background="@color/cardview_shadow_end_color">
 
     <android.support.design.widget.FloatingActionButton
@@ -20,4 +20,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
+    <LinearLayout
+        android:id="@+id/todo_entries_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
