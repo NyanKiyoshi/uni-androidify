@@ -5,29 +5,31 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.example.todolist.R;
 import com.example.todolist.controllers.DatabaseWrapper;
+import com.example.todolist.controllers.TodoEntryAdapter;
 import com.example.todolist.models.TodoEntry;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TodoEntryAdapter todoEntryAdapter;
     private EditText dialogEditText;
     private AlertDialog.Builder inputDialog;
-    private DatabaseWrapper database;
-    private LinearLayout todoEntriesContainer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.todoEntryAdapter = new TodoEntryAdapter(new DatabaseWrapper(this));
         this.dialogEditText = new EditText(this);
         this.inputDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.new_entry_title)
@@ -36,28 +38,14 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Create", this::onCreateSubmitClick)
                 .setNegativeButton("Cancel", this::onCreateCancelClick)
                 .setOnDismissListener(this::onCreateDialogDismiss);
-        this.database = new DatabaseWrapper(this);
-        this.todoEntriesContainer = this.findViewById(R.id.todo_entries_container);
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(this.todoEntryAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FloatingActionButton createButton = findViewById(R.id.fab);
         createButton.setOnClickListener(this::onCreateOpenClick);
-
-        for (TodoEntry entry : TodoEntry.getEntries(database)) {
-            this.addEntryToInterface(entry);
-        }
-    }
-
-    public void addEntryToInterface(TodoEntry entry) {
-        TodoEntryFragment todoEntryFragment = new TodoEntryFragment(entry, this.database);
-        todoEntryFragment.setOnDeleteListener(this::onTodoEntryDeleted);
-
-        View view = todoEntryFragment.onCreateView(
-                getLayoutInflater(), this.todoEntriesContainer, null);
-        this.todoEntriesContainer.addView(view, 0);
-    }
-
-    public void onTodoEntryDeleted(View view) {
-        this.todoEntriesContainer.removeView(view);
     }
 
     public void onCreateOpenClick(View v) {
@@ -77,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        TodoEntry newEntry = new TodoEntry(todoText);
-        newEntry.createEntry(this.database);
-        addEntryToInterface(newEntry);
+        // Add the item to the interface
+        this.todoEntryAdapter.onItemCreated(new TodoEntry(todoText));
 
         // Reset the dialog text now that the user created it.
         this.dialogEditText.setText("");

@@ -34,7 +34,7 @@ public final class TodoEntry {
 
     public static ArrayList<TodoEntry> getEntries(DatabaseWrapper database) {
         String sortOrder =
-                MetaData._ID + " ASC";
+                MetaData._ID + " DESC";
 
         Cursor cursor = database.getReadableDatabase().query(
                 MetaData.TABLE_NAME,    // The table to query
@@ -72,14 +72,13 @@ public final class TodoEntry {
 
     /**
      * @param database The database wrapper.
-     * @return The deleted row count.
      */
-    public int deleteEntry(DatabaseWrapper database) {
+    public void deleteEntry(DatabaseWrapper database) {
         SQLiteDatabase db = database.getWritableDatabase();
         String selection = MetaData._ID + " = ?";
         String[] selectionArgs = { this.getIdStr() };
 
-        return db.delete(MetaData.TABLE_NAME, selection, selectionArgs);
+        db.delete(MetaData.TABLE_NAME, selection, selectionArgs);
     }
 
     public String getIdStr() {
