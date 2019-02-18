@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.todolist.R;
+import com.example.todolist.controllers.DatabaseWrapper;
 import com.example.todolist.models.TodoEntry;
 
 @SuppressLint("ValidFragment")
@@ -20,13 +22,16 @@ public class TodoEntryFragment extends Fragment {
         public void onEntryDeleted(View view);
     }
 
-    TodoEntry todoEntry;
-    OnTodoEntryAction deleteCallback;
-    View actualView;
+    private final TodoEntry todoEntry;
+    private final DatabaseWrapper databaseWrapper;
 
-    public TodoEntryFragment(TodoEntry entry) {
+    private OnTodoEntryAction deleteCallback;
+    private View actualView;
+
+    public TodoEntryFragment(TodoEntry entry, DatabaseWrapper databaseWrapper) {
         super();
         this.todoEntry = entry;
+        this.databaseWrapper = databaseWrapper;
     }
 
     @Nullable
@@ -43,10 +48,11 @@ public class TodoEntryFragment extends Fragment {
                 R.layout.card_fragment, container, false);
 
         TextView todoText = view.findViewById(R.id.todo_text);
+        TextView todoIdentifier = view.findViewById(R.id.todo_id);
         Button deleteButton = view.findViewById(R.id.delete_btn);
 
-        todoText.setText(String.format(
-                "%d: %s", this.todoEntry.id, this.todoEntry.text));
+        todoText.setText(this.todoEntry.text);
+        todoIdentifier.setText(this.todoEntry.getIdStr());
         deleteButton.setOnClickListener(this::OnDeleteClick);
 
         this.actualView = view;
@@ -58,6 +64,13 @@ public class TodoEntryFragment extends Fragment {
     }
 
     public void OnDeleteClick(View view) {
+        if (this.todoEntry.deleteEntry(this.databaseWrapper) != 1) {
+            // If didn't delete only one (or any) entry, it's an unexpected error, tell it.
+            Toast.makeText(
+                    this.getContext(), R.string.failed_deleting_entry, Toast.LENGTH_SHORT
+            ).show();
+        }
+
         this.deleteCallback.onEntryDeleted(this.actualView);
     }
 }

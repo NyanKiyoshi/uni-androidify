@@ -3,4 +3,5 @@
     <string name="card_delete_btn">Delete</string>
     <string name="new_entry_title">New Entry</string>
     <string name="new_entry_help_text">Enter the new todo text.</string>
+    <string name="failed_deleting_entry">Failed to delete the entry.</string>
 </resources>

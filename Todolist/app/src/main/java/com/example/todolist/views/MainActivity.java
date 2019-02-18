@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addEntryToInterface(TodoEntry entry) {
-        TodoEntryFragment todoEntryFragment = new TodoEntryFragment(entry);
+        TodoEntryFragment todoEntryFragment = new TodoEntryFragment(entry, this.database);
         todoEntryFragment.setOnDeleteListener(this::onTodoEntryDeleted);
 
         View view = todoEntryFragment.onCreateView(
@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         TodoEntry newEntry = new TodoEntry(todoText);
         newEntry.createEntry(this.database);
         addEntryToInterface(newEntry);
+
+        // Reset the dialog text now that the user created it.
+        this.dialogEditText.setText("");
     }
 
     public void onCreateCancelClick(DialogInterface dialog, int whichButton) {

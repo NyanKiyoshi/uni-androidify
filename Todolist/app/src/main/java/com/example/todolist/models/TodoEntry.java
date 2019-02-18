@@ -70,6 +70,18 @@ public final class TodoEntry {
         this.id = db.insert(MetaData.TABLE_NAME, null, values);;
     }
 
+    /**
+     * @param database The database wrapper.
+     * @return The deleted row count.
+     */
+    public int deleteEntry(DatabaseWrapper database) {
+        SQLiteDatabase db = database.getWritableDatabase();
+        String selection = MetaData._ID + " = ?";
+        String[] selectionArgs = { this.getIdStr() };
+
+        return db.delete(MetaData.TABLE_NAME, selection, selectionArgs);
+    }
+
     public String getIdStr() {
         return String.valueOf(this.id);
     }
