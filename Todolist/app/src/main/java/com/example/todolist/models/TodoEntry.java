@@ -34,7 +34,7 @@ public final class TodoEntry {
 
     public static ArrayList<TodoEntry> getEntries(DatabaseWrapper database) {
         String sortOrder =
-                MetaData._ID + " DESC";
+                MetaData._ID + " ASC";
 
         Cursor cursor = database.getReadableDatabase().query(
                 MetaData.TABLE_NAME,    // The table to query

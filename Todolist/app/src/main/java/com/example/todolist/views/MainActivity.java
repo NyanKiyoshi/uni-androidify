@@ -1,32 +1,27 @@
 package com.example.todolist.views;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.todolist.R;
 import com.example.todolist.controllers.DatabaseWrapper;
 import com.example.todolist.models.TodoEntry;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText dialogEditText;
     private AlertDialog.Builder inputDialog;
     private DatabaseWrapper database;
-    private FragmentManager fragmentManager;
+    private LinearLayout todoEntriesContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", this::onCreateCancelClick)
                 .setOnDismissListener(this::onCreateDialogDismiss);
         this.database = new DatabaseWrapper(this);
-        this.fragmentManager = getSupportFragmentManager();
+        this.todoEntriesContainer = this.findViewById(R.id.todo_entries_container);
 
         FloatingActionButton createButton = findViewById(R.id.fab);
         createButton.setOnClickListener(this::onCreateOpenClick);
@@ -53,19 +48,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addEntryToInterface(TodoEntry entry) {
-        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
-
         TodoEntryFragment todoEntryFragment = new TodoEntryFragment(entry);
         todoEntryFragment.setOnDeleteListener(this::onTodoEntryDeleted);
-        fragmentTransaction.add(R.id.todo_entries_container, todoEntryFragment);
 
-        fragmentTransaction.commit();
+        View view = todoEntryFragment.onCreateView(
+                getLayoutInflater(), this.todoEntriesContainer, null);
+        this.todoEntriesContainer.addView(view, 0);
     }
 
-    public void onTodoEntryDeleted(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
-        fragmentTransaction.remove(fragment);
-        fragmentTransaction.commit();
+    public void onTodoEntryDeleted(View view) {
+        this.todoEntriesContainer.removeView(view);
     }
 
     public void onCreateOpenClick(View v) {

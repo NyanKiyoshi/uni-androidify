@@ -17,11 +17,12 @@ import com.example.todolist.models.TodoEntry;
 @SuppressLint("ValidFragment")
 public class TodoEntryFragment extends Fragment {
     public interface OnTodoEntryAction {
-        public void onEntryDeleted(Fragment fragment);
+        public void onEntryDeleted(View view);
     }
 
     TodoEntry todoEntry;
     OnTodoEntryAction deleteCallback;
+    View actualView;
 
     public TodoEntryFragment(TodoEntry entry) {
         super();
@@ -44,9 +45,11 @@ public class TodoEntryFragment extends Fragment {
         TextView todoText = view.findViewById(R.id.todo_text);
         Button deleteButton = view.findViewById(R.id.delete_btn);
 
-        todoText.setText(this.todoEntry.id + ": " + this.todoEntry.text);
+        todoText.setText(String.format(
+                "%d: %s", this.todoEntry.id, this.todoEntry.text));
         deleteButton.setOnClickListener(this::OnDeleteClick);
 
+        this.actualView = view;
         return view;
     }
 
@@ -55,6 +58,6 @@ public class TodoEntryFragment extends Fragment {
     }
 
     public void OnDeleteClick(View view) {
-        this.deleteCallback.onEntryDeleted(this);
+        this.deleteCallback.onEntryDeleted(this.actualView);
     }
 }
