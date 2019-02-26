@@ -1,5 +1,6 @@
 package com.example.addressbook.views.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,14 +31,19 @@ public class ContactListFragment extends Fragment {
         View view = inflater.inflate(
                 R.layout.contact_list_fragment, container,false);
 
-        ContactAdapter contactAdapter = new ContactAdapter(
-                Volley.newRequestQueue(view.getContext()));
+        // Get the view context
+        Context context = view.getContext();
 
+        // Create the view adapter
+        ContactAdapter contactAdapter = new ContactAdapter(context);
+
+        // Set-up and bind the recycler view
         RecyclerView recyclerView = view.findViewById(R.id.contactListRecyclerView);
         recyclerView.setAdapter(contactAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        // Finally, return the inflated view
         return view;
     }
 }

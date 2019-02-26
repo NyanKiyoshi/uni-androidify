@@ -16,7 +16,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     public TextView lastname;
 
     // Buttons
-    public Button deleteButton;
+    private Button deleteButton;
 
     public ContactViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -33,7 +33,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         this.deleteButton.setOnClickListener(this::OnDeleteClick);
     }
 
-    void OnDeleteClick(View view) {
+    private void OnDeleteClick(View view) {
         throw new UnsupportedOperationException();
     }
 }

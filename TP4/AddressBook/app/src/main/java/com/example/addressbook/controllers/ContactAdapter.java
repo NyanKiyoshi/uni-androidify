@@ -1,8 +1,11 @@
 package com.example.addressbook.controllers;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
@@ -28,9 +32,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     private final ArrayList<ContactModel> items = new ArrayList<>();
     private ContactModel item;
 
-    public ContactAdapter(RequestQueue requestQueue) {
+    private final Context context;
+
+    public ContactAdapter(Context context, RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
+        this.context = context;
         this.getEntries();
+    }
+
+    public ContactAdapter(Context context) {
+        this(context, Volley.newRequestQueue(context));
     }
 
     private void getEntries() {
@@ -94,6 +105,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     }
 
     private void onError(Exception error) {
+        // Log the full error
+        Log.e(this.getClass().getName(),
+                "got an error while getting entries", error);
 
+        // Show a simple error to the user
+        if (this.context != null) {
+            Toast.makeText(
+                    this.context,
+                    "Failed to get entries.",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+
+        // If the app is not in testing mode, stop here.
+        if (!AppConfig.IS_TESTING) {
+            return;
+        }
+
+        // Otherwise, if the app is in testing mode, create dummy data.
+        for (int i = 0; i < 15; ++i) {
+            this.items.add(new ContactModel(
+                    i, "first" + i, "last"+i
+            ));
+        }
     }
 }
