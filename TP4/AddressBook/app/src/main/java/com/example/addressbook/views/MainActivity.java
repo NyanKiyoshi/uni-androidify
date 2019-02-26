@@ -1,7 +1,10 @@
-package com.example.addressbook;
+package com.example.addressbook.views;
 
 import android.os.Bundle;
 
+import com.example.addressbook.R;
+import com.example.addressbook.controllers.ContactAdapter;
+import com.example.addressbook.views.fragments.ContactListFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,19 +21,42 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private FragmentManager fragmentManager;
+
+    private final ContactListFragment contactListFragment =
+            new ContactListFragment();
+
+    private void initFragmentManager() {
+        this.fragmentManager = getSupportFragmentManager();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction =
+                this.fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initFragmentManager();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.add_contact_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,6 +71,8 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        this.replaceFragment(this.contactListFragment);
     }
 
     @Override
@@ -86,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            this.replaceFragment(this.contactListFragment);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
