@@ -94,7 +94,15 @@ public class ContactListFragment extends Fragment {
 
     private void onContactListResponse(JSONArray data) {
         JSONObject contactEntryData;
-        ContactModel contactEntry;
+
+        int dataLength = data.length();
+
+        if (dataLength < 1) {
+            return;
+        }
+
+        // This will contains the parsed entries
+        ContactModel[] contactEntries = new ContactModel[dataLength];
 
         try {
             for (int i = 0; i < data.length(); ++i) {
@@ -102,22 +110,23 @@ public class ContactListFragment extends Fragment {
                 contactEntryData = data.getJSONObject(i);
 
                 // Create a new contact object from the entry data
-                contactEntry = new ContactModel(
+                contactEntries[i] = new ContactModel(
                         contactEntryData.getInt("id"),
                         contactEntryData.getString("firstname"),
                         contactEntryData.getString("lastname"));
-
-                // Append the contact
-                this.contactAdapter.addItem(contactEntry);
             }
-
-            // Stop loading
-            this.pullToRefresh.setRefreshing(false);
         }
         catch (JSONException exc) {
             // On JSON error, dispatch it to the callback
             this.onError(exc);
+            return;
         }
+
+        // Append the contacts
+        this.contactAdapter.addItems(contactEntries);
+
+        // Stop loading
+        this.pullToRefresh.setRefreshing(false);
     }
 
     private void onError(Exception error) {

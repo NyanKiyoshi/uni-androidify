@@ -12,6 +12,7 @@ import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.ContactViewHolder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     public final ArrayList<ContactModel> items = new ArrayList<>();
@@ -42,9 +43,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
         return this.items.size();
     }
 
-    public void addItem(ContactModel contact) {
-        this.items.add(contact);
-        this.notifyItemInserted(this.items.size() - 1);
+    public void addItems(ContactModel[] contact) {
+        if (contact.length == 0) {
+            return;
+        }
+
+        int startpos = this.items.size();
+        this.items.addAll(Arrays.asList(contact));
+        this.notifyItemRangeInserted(startpos, contact.length);
     }
 
     public void clear() {
