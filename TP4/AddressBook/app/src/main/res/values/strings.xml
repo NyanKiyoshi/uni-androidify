@@ -10,4 +10,8 @@
     <string name="menu_contacts">Contacts</string>
     <string name="menu_groups">Groups</string>
     <string name="card_delete_btn">Delete</string>
+    <string name="save_entry">Save</string>
+    <string name="entry_firstname">First name</string>
+    <string name="entry_lastname">Last name</string>
+    <string name="please_fill_form">Please fill the form.</string>
 </resources>

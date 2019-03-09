@@ -11,6 +11,10 @@ import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
+    public ContactAdapter(OnItemClickEvent<ContactModel> listener) {
+        super(listener);
+    }
+
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -22,6 +26,8 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
 
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+
         final ContactModel item = this.items.get(position);
 
         holder.id.setText(item.getIdStr());

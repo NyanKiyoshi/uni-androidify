@@ -1,5 +1,6 @@
 package com.example.addressbook.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.ContactAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.views.contactManagers.ViewContactActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,10 +31,8 @@ public class ContactListFragment extends BaseRecyclerFragment {
     private ContactAdapter contactAdapter;
 
     public ContactListFragment() {
-        super();
-
         // Create the view adapter
-        this.contactAdapter = new ContactAdapter();
+        this.contactAdapter = new ContactAdapter(this::onItemClick);
     }
 
     @Nullable
@@ -140,5 +140,13 @@ public class ContactListFragment extends BaseRecyclerFragment {
                     i, "first" + i, "last"+i
             ));
         }
+    }
+
+    private void onItemClick(ContactModel item, int position) {
+        Intent intent = new Intent(this.context, ViewContactActivity.class);
+        intent.putExtra(ViewContactActivity.EXTRA_ID, item.getId());
+        intent.putExtra(ViewContactActivity.EXTRA_FIRSTNAME, item.getFirstName());
+        intent.putExtra(ViewContactActivity.EXTRA_LASTNAME, item.getLastName());
+        startActivity(intent);
     }
 }

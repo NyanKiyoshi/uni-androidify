@@ -11,6 +11,10 @@ public class ContactModel {
         this.lastName = lastName;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public String getIdStr() {
         return String.valueOf(this.id);
     }

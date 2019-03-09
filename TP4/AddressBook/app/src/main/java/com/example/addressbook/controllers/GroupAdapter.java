@@ -11,6 +11,10 @@ import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.viewholders.GroupViewHolder;
 
 public class GroupAdapter extends BaseAdapter<GroupViewHolder, GroupModel> {
+    public GroupAdapter(OnItemClickEvent<GroupModel> listener) {
+        super(listener);
+    }
+
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -22,6 +26,8 @@ public class GroupAdapter extends BaseAdapter<GroupViewHolder, GroupModel> {
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+
         final GroupModel item = this.items.get(position);
 
         holder.id.setText(item.getIdStr());

@@ -29,10 +29,8 @@ public class GroupListFragment extends BaseRecyclerFragment {
     private GroupAdapter adapter;
 
     public GroupListFragment() {
-        super();
-
         // Create the view adapter
-        this.adapter = new GroupAdapter();
+        this.adapter = new GroupAdapter(this::onItemClick);
     }
 
     @Nullable
@@ -139,5 +137,9 @@ public class GroupListFragment extends BaseRecyclerFragment {
                     i, "Group" + i
             ));
         }
+    }
+
+    private void onItemClick(GroupModel item, int position) {
+        // TODO: implement me
     }
 }

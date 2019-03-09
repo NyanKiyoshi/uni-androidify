@@ -9,6 +9,10 @@ public class GroupModel {
         this.title = title;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public String getIdStr() {
         return String.valueOf(this.id);
     }
