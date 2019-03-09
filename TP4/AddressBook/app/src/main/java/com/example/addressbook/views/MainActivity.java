@@ -3,18 +3,14 @@ package com.example.addressbook.views;
 import android.os.Bundle;
 
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.ContactAdapter;
 import com.example.addressbook.views.fragments.ContactListFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
+import com.example.addressbook.views.fragments.GroupListFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +30,8 @@ public class MainActivity extends AppCompatActivity
 
     private final ContactListFragment contactListFragment =
             new ContactListFragment();
+    private final GroupListFragment groupListFragment =
+            new GroupListFragment();
 
     private void initFragmentManager() {
         this.fragmentManager = getSupportFragmentManager();
@@ -105,18 +103,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_contacts) {
             this.replaceFragment(this.contactListFragment);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_groups) {
+            this.replaceFragment(this.groupListFragment);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

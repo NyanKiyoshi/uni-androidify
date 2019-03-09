@@ -5,21 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.addressbook.R;
 import com.example.addressbook.models.ContactModel;
-import com.example.addressbook.views.ContactViewHolder;
+import com.example.addressbook.views.viewholders.ContactViewHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
-    public final ArrayList<ContactModel> items = new ArrayList<>();
-
-    public ContactAdapter() {
-    }
-
+public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,30 +27,5 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
         holder.id.setText(item.getIdStr());
         holder.firstname.setText(item.getFirstName());
         holder.lastname.setText(item.getLastName());
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.items.size();
-    }
-
-    public void addItems(ContactModel[] contact) {
-        if (contact.length == 0) {
-            return;
-        }
-
-        int startpos = this.items.size();
-        this.items.addAll(Arrays.asList(contact));
-        this.notifyItemRangeInserted(startpos, contact.length);
-    }
-
-    public void clear() {
-        if (this.items.isEmpty()) {
-            return;
-        }
-
-        int removedCount = this.items.size();
-        this.items.clear();
-        this.notifyItemRangeRemoved(0, removedCount);
     }
 }

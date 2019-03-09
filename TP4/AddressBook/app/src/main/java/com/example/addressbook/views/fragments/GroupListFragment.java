@@ -16,23 +16,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.ContactAdapter;
+import com.example.addressbook.controllers.GroupAdapter;
 import com.example.addressbook.models.AppConfig;
-import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.models.GroupModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ContactListFragment extends BaseRecyclerFragment {
-    private final String ENDPOINT = "/persons";
-    private ContactAdapter contactAdapter;
+public class GroupListFragment extends BaseRecyclerFragment {
+    private final String ENDPOINT = "/groups";
+    private GroupAdapter adapter;
 
-    public ContactListFragment() {
+    public GroupListFragment() {
         super();
 
         // Create the view adapter
-        this.contactAdapter = new ContactAdapter();
+        this.adapter = new GroupAdapter();
     }
 
     @Nullable
@@ -46,7 +46,7 @@ public class ContactListFragment extends BaseRecyclerFragment {
 
         // Set-up and bind the recycler view
         RecyclerView recyclerView = view.findViewById(R.id.listRecyclerView);
-        recyclerView.setAdapter(this.contactAdapter);
+        recyclerView.setAdapter(this.adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
@@ -62,7 +62,7 @@ public class ContactListFragment extends BaseRecyclerFragment {
 
         // Create the request object and attach it to the listeners
         Request request = new JsonArrayRequest(
-                requestURL, this::onContactListResponse, this::onError);
+                requestURL, this::onListResponse, this::onError);
 
         // Append the request to the queue
         this.requestQueue.add(request);
@@ -70,13 +70,13 @@ public class ContactListFragment extends BaseRecyclerFragment {
 
     @Override
     void refreshEntries() {
-        this.contactAdapter.clear();
+        this.adapter.clear();
         this.pullToRefresh.setRefreshing(true);
         this.getEntries();
     }
 
-    private void onContactListResponse(JSONArray data) {
-        JSONObject contactEntryData;
+    private void onListResponse(JSONArray data) {
+        JSONObject entryData;
 
         int dataLength = data.length();
 
@@ -85,18 +85,17 @@ public class ContactListFragment extends BaseRecyclerFragment {
         }
 
         // This will contains the parsed entries
-        ContactModel[] contactEntries = new ContactModel[dataLength];
+        GroupModel[] entries = new GroupModel[dataLength];
 
         try {
             for (int i = 0; i < data.length(); ++i) {
-                // Retrieve the next contact
-                contactEntryData = data.getJSONObject(i);
+                // Retrieve the next group
+                entryData = data.getJSONObject(i);
 
-                // Create a new contact object from the entry data
-                contactEntries[i] = new ContactModel(
-                        contactEntryData.getInt("id"),
-                        contactEntryData.getString("firstname"),
-                        contactEntryData.getString("lastname"));
+                // Create a new group object from the entry data
+                entries[i] = new GroupModel(
+                        entryData.getInt("id"),
+                        entryData.getString("title"));
             }
         }
         catch (JSONException exc) {
@@ -105,8 +104,8 @@ public class ContactListFragment extends BaseRecyclerFragment {
             return;
         }
 
-        // Append the contacts
-        this.contactAdapter.addItems(contactEntries);
+        // Append the entries
+        this.adapter.addItems(entries);
 
         // Stop loading
         this.pullToRefresh.setRefreshing(false);
@@ -136,8 +135,8 @@ public class ContactListFragment extends BaseRecyclerFragment {
 
         // Otherwise, if the app is in testing mode, create dummy data.
         for (int i = 0; i < 15; ++i) {
-            this.contactAdapter.items.add(new ContactModel(
-                    i, "first" + i, "last"+i
+            this.adapter.items.add(new GroupModel(
+                    i, "Group" + i
             ));
         }
     }

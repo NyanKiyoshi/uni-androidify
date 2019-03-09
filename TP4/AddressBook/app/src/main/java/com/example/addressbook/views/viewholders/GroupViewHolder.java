@@ -1,4 +1,4 @@
-package com.example.addressbook.views;
+package com.example.addressbook.views.viewholders;
 
 import android.view.View;
 import android.widget.Button;
@@ -9,22 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.addressbook.R;
 
-public class ContactViewHolder extends RecyclerView.ViewHolder {
+public class GroupViewHolder extends RecyclerView.ViewHolder {
     // Text views
     public TextView id;
-    public TextView firstname;
-    public TextView lastname;
+    public TextView title;
 
     // Buttons
     private Button deleteButton;
 
-    public ContactViewHolder(@NonNull View itemView) {
+    public GroupViewHolder(@NonNull View itemView) {
         super(itemView);
 
         // Retrieve text views
         this.id = itemView.findViewById(R.id.id);
-        this.firstname = itemView.findViewById(R.id.firstname);
-        this.lastname = itemView.findViewById(R.id.lastname);
+        this.title = itemView.findViewById(R.id.title);
 
         // Retrieve buttons
         this.deleteButton = itemView.findViewById(R.id.delete_btn);
