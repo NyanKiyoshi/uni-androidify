@@ -3,18 +3,28 @@ package com.example.addressbook.views.listeners;
 import android.content.Context;
 import android.content.Intent;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.contactManagers.AddEditContactActivity;
 import com.example.addressbook.views.contactManagers.ViewContactActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ContactAddEditActivityListener
         extends BaseAddEditActivityListener<ContactModel> {
 
+    final static String ENDPOINT = "/persons";
+
     public ContactAddEditActivityListener(
             Context context,
-            CRUDEvents<ContactModel> CRUDEventsListener) {
+            CRUDEvents<ContactModel> CRUDEventsListener, RequestQueue requestQueue) {
 
-        super(context, CRUDEventsListener);
+        super(ContactModel.class, context, CRUDEventsListener, requestQueue);
     }
 
     @Override
@@ -27,15 +37,21 @@ public class ContactAddEditActivityListener
     }
 
     @Override
-    void updateNewEntry(ContactModel newEntry) {
-        this.listeners.onEntryUpdated(newEntry);
-        // TODO: http request here
+    void updateEntry(ContactModel newEntry) {
+        // Create the request URL
+        String requestURL = AppConfig.getURL(ENDPOINT + "/" + newEntry.getId());
+
+        // Send the update request
+        this.sendRequest(requestURL, Request.Method.PUT, newEntry);
     }
 
     @Override
     void createNewEntry(ContactModel newEntry) {
-        this.listeners.onEntryUpdated(newEntry);
-        // TODO: http request here
+        // Create the request URL
+        String requestURL = AppConfig.getURL(ENDPOINT);
+
+        // Send the update request
+        this.sendRequest(requestURL, Request.Method.POST, newEntry);
     }
 
     @Override

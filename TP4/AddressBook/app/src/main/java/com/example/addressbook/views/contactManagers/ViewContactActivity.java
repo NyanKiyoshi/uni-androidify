@@ -2,14 +2,18 @@ package com.example.addressbook.views.contactManagers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
@@ -32,6 +36,8 @@ public class ViewContactActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_contact);
 
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+
         this.textViewFirstname = findViewById(R.id.edit_text_firstname);
         this.textViewLastname = findViewById(R.id.edit_text_lastname);
 
@@ -50,7 +56,8 @@ public class ViewContactActivity
         this.loadingBar = new ContentLoadingProgressBar(this);
 
         // Create the CRUD activity listener
-        this.activityListener = new ContactAddEditActivityListener(this, this);
+        this.activityListener = new ContactAddEditActivityListener(
+                this, this, requestQueue);
 
         textViewFirstname.setText(this.contactModel.getFirstName());
         textViewLastname.setText(this.contactModel.getLastName());
@@ -81,17 +88,19 @@ public class ViewContactActivity
     }
 
     @Override
+    public void onEntryFailedUpdating() {
+        Toast.makeText(this, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+        this.loadingBar.hide();
+    }
+
+    @Override
     public void onEntryStartUpdating(ContactModel newItem) {
         this.loadingBar.show();
     }
 
     @Override
     public void onIntentReadyToStart(Intent intent, int requestCode) {
-        if (requestCode > 0) {
-            this.startActivityForResult(intent, requestCode);
-        } else {
-            this.startActivity(intent);
-        }
+        this.startActivityForResult(intent, requestCode);
     }
 
     @Override

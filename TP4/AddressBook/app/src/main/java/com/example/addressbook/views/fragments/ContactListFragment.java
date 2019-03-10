@@ -58,7 +58,8 @@ public class ContactListFragment
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
         // Create the activity's listener
-        this.activityListener = new ContactAddEditActivityListener(this.context, this);
+        this.activityListener = new ContactAddEditActivityListener(
+                this.context, this, this.requestQueue);
 
         // Register an handler to the floating button
         final FloatingActionButton fab = view.findViewById(R.id.create_fab);
@@ -104,13 +105,8 @@ public class ContactListFragment
         try {
             for (int i = 0; i < data.length(); ++i) {
                 // Retrieve the next contact
-                contactEntryData = data.getJSONObject(i);
-
-                // Create a new contact object from the entry data
-                contactEntries[i] = new ContactModel(
-                        contactEntryData.getInt("id"),
-                        contactEntryData.getString("firstname"),
-                        contactEntryData.getString("lastname"));
+                // and create a new contact object from it
+                contactEntries[i] = new ContactModel().fromJSON(data.getJSONObject(i));
             }
         }
         catch (JSONException exc) {
@@ -142,39 +138,30 @@ public class ContactListFragment
                     Toast.LENGTH_SHORT
             ).show();
         }
-
-        // If the app is not in testing mode, stop here.
-        if (!AppConfig.IS_TESTING) {
-            return;
-        }
-
-        // Otherwise, if the app is in testing mode, create dummy data.
-        for (int i = 0; i < 15; ++i) {
-            this.contactAdapter.items.add(new ContactModel(
-                    i, "first" + i, "last"+i
-            ));
-        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.activityListener.onActivityResult(requestCode, resultCode, data);
+        this.refreshEntries();
     }
 
     @Override
     public void onIntentReadyToStart(Intent intent, int requestCode) {
-        if (requestCode > 0) {
-            this.startActivityForResult(intent, requestCode);
-        } else {
-            this.startActivity(intent);
-        }
+        this.startActivityForResult(intent, requestCode);
     }
 
     @Override
     public void onEntryUpdated(ContactModel newItem) {
         this.loadingBar.hide();
         this.contactAdapter.addItem(newItem);
+    }
+
+    @Override
+    public void onEntryFailedUpdating() {
+        Toast.makeText(this.context, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+        this.loadingBar.hide();
     }
 
     @Override
