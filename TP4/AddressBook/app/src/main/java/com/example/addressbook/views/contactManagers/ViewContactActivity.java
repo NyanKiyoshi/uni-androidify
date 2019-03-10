@@ -85,6 +85,7 @@ public class ViewContactActivity
         this.textViewFirstname.setText(newItem.getFirstName());
         this.textViewLastname.setText(newItem.getLastName());
         this.loadingBar.hide();
+        Toast.makeText(this, R.string.contact_updated, Toast.LENGTH_SHORT).show();
     }
 
     @Override
