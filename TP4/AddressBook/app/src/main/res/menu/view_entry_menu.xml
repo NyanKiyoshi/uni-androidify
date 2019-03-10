@@ -3,10 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/delete_entry"
+        android:icon="@drawable/ic_trash"
+        android:title="@string/delete_entry"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/edit_entry"
         android:icon="@drawable/ic_pen"
-        android:title="@string/save_entry"
+        android:title="@string/edit_entry"
         app:showAsAction="ifRoom" />
 </menu>

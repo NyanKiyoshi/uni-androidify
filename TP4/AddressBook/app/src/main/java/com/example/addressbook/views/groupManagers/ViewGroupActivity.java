@@ -84,7 +84,7 @@ public class ViewGroupActivity
 
     @Override
     public void onEntryFailedUpdating() {
-        Toast.makeText(this, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
         this.loadingBar.hide();
     }
 
