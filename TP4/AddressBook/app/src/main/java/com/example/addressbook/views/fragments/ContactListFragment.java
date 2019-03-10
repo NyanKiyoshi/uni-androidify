@@ -20,19 +20,26 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.ContactAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
-import com.example.addressbook.views.contactManagers.ViewContactActivity;
+import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ContactListFragment extends BaseRecyclerFragment {
+public class ContactListFragment
+        extends BaseRecyclerFragment
+        implements BaseAddEditActivityListener.CRUDEvents<ContactModel> {
+
     private final String ENDPOINT = "/persons";
     private ContactAdapter contactAdapter;
+    private ContactAddEditActivityListener activityListener;
 
     public ContactListFragment() {
         // Create the view adapter
-        this.contactAdapter = new ContactAdapter(this::onItemClick);
+        this.contactAdapter = new ContactAdapter(
+                (item, pos) -> this.activityListener.startViewEntry(item));
     }
 
     @Nullable
@@ -49,6 +56,13 @@ public class ContactListFragment extends BaseRecyclerFragment {
         recyclerView.setAdapter(this.contactAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+
+        // Create the activity's listener
+        this.activityListener = new ContactAddEditActivityListener(this.context, this);
+
+        // Register an handler to the floating button
+        final FloatingActionButton fab = view.findViewById(R.id.create_fab);
+        fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
         this.refreshEntries();
@@ -142,11 +156,29 @@ public class ContactListFragment extends BaseRecyclerFragment {
         }
     }
 
-    private void onItemClick(ContactModel item, int position) {
-        Intent intent = new Intent(this.context, ViewContactActivity.class);
-        intent.putExtra(ViewContactActivity.EXTRA_ID, item.getId());
-        intent.putExtra(ViewContactActivity.EXTRA_FIRSTNAME, item.getFirstName());
-        intent.putExtra(ViewContactActivity.EXTRA_LASTNAME, item.getLastName());
-        startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.activityListener.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onIntentReadyToStart(Intent intent, int requestCode) {
+        if (requestCode > 0) {
+            this.startActivityForResult(intent, requestCode);
+        } else {
+            this.startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onEntryUpdated(ContactModel newItem) {
+        this.loadingBar.hide();
+        this.contactAdapter.addItem(newItem);
+    }
+
+    @Override
+    public void onEntryStartUpdating(ContactModel newItem) {
+        this.loadingBar.show();
     }
 }

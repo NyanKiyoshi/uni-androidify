@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -16,9 +17,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
 
 public abstract class BaseRecyclerFragment extends Fragment {
-    Context context;
-    RequestQueue requestQueue;
-    SwipeRefreshLayout pullToRefresh;
+    public Context context;
+    public RequestQueue requestQueue;
+    public SwipeRefreshLayout pullToRefresh;
+    public ContentLoadingProgressBar loadingBar;
 
     abstract void refreshEntries();
     abstract void getEntries();
@@ -45,6 +47,9 @@ public abstract class BaseRecyclerFragment extends Fragment {
         // Listen for swipe to refresh data on demand
         this.pullToRefresh = view.findViewById(R.id.pullToRefresh);
         this.pullToRefresh.setOnRefreshListener(this::refreshEntries);
+
+        // Create a loading component from the context
+        this.loadingBar = new ContentLoadingProgressBar(this.context);
 
         return view;
     }

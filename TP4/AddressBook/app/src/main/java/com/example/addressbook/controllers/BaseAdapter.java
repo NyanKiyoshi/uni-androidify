@@ -27,6 +27,11 @@ public abstract class BaseAdapter<VH extends BaseViewHolder, Model>
         return this.items.size();
     }
 
+    public void addItem(Model modelItem) {
+        this.items.add(modelItem);
+        this.notifyItemInserted(this.items.size());
+    }
+
     public void addItems(Model[] modelItems) {
         if (modelItems.length == 0) {
             return;

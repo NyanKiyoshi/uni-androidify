@@ -14,4 +14,7 @@
     <string name="entry_firstname">First name</string>
     <string name="entry_lastname">Last name</string>
     <string name="please_fill_form">Please fill the form.</string>
+    <string name="not_saved">Entry not saved.</string>
+    <string name="contact_saved">The contact has been saved!</string>
+    <string name="contact_created">The contact has been created!</string>
 </resources>
