@@ -25,15 +25,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/firstname"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/colorAccent"/>
-
-            <TextView
-                android:id="@+id/lastname"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
