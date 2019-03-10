@@ -19,4 +19,7 @@
     <string name="contact_created">The contact has been created!</string>
     <string name="failed_to_create">Failed to create a new entry.</string>
     <string name="contact_updated">The contact as been saved!</string>
+    <string name="entry_title">Title</string>
+    <string name="group_created">The group has been created!</string>
+    <string name="group_updated">The group has been updated!</string>
 </resources>

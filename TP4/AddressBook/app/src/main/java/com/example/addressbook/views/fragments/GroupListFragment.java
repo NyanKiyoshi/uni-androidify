@@ -1,5 +1,6 @@
 package com.example.addressbook.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,18 +20,27 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.GroupAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.GroupModel;
+import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GroupListFragment extends BaseRecyclerFragment {
+public class GroupListFragment
+        extends BaseRecyclerFragment
+        implements BaseAddEditActivityListener.CRUDEvents<GroupModel> {
+
     private final String ENDPOINT = "/groups";
     private GroupAdapter adapter;
+    private BaseAddEditActivityListener<GroupModel> activityListener;
 
     public GroupListFragment() {
         // Create the view adapter
-        this.adapter = new GroupAdapter(this::onItemClick);
+        this.adapter = new GroupAdapter(
+                (item, pos) -> this.activityListener.startViewEntry(item)
+        );
     }
 
     @Nullable
@@ -47,6 +57,14 @@ public class GroupListFragment extends BaseRecyclerFragment {
         recyclerView.setAdapter(this.adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+
+        // Create the activity's listener
+        this.activityListener = new GroupAddEditActivityListener(
+                this.context, this, this.requestQueue);
+
+        // Register an handler to the floating button
+        final FloatingActionButton fab = view.findViewById(R.id.create_fab);
+        fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
         this.refreshEntries();
@@ -87,13 +105,9 @@ public class GroupListFragment extends BaseRecyclerFragment {
 
         try {
             for (int i = 0; i < data.length(); ++i) {
-                // Retrieve the next group
-                entryData = data.getJSONObject(i);
-
-                // Create a new group object from the entry data
-                entries[i] = new GroupModel(
-                        entryData.getInt("id"),
-                        entryData.getString("title"));
+                // Retrieve the next group data
+                // and create a new group object from it.
+                entries[i] = new GroupModel().fromJSON(data.getJSONObject(i));
             }
         }
         catch (JSONException exc) {
@@ -125,21 +139,34 @@ public class GroupListFragment extends BaseRecyclerFragment {
                     Toast.LENGTH_SHORT
             ).show();
         }
-
-        // If the app is not in testing mode, stop here.
-        if (!AppConfig.IS_TESTING) {
-            return;
-        }
-
-        // Otherwise, if the app is in testing mode, create dummy data.
-        for (int i = 0; i < 15; ++i) {
-            this.adapter.items.add(new GroupModel(
-                    i, "Group" + i
-            ));
-        }
     }
 
-    private void onItemClick(GroupModel item, int position) {
-        // TODO: implement me
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.activityListener.onActivityResult(requestCode, resultCode, data);
+        this.refreshEntries();
+    }
+
+    @Override
+    public void onIntentReadyToStart(Intent intent, int requestCode) {
+        this.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onEntryUpdated(GroupModel newItem) {
+        this.loadingBar.hide();
+        Toast.makeText(this.context, R.string.group_created, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onEntryFailedUpdating() {
+        Toast.makeText(this.context, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+        this.loadingBar.hide();
+    }
+
+    @Override
+    public void onEntryStartUpdating(GroupModel newItem) {
+        this.loadingBar.show();
     }
 }

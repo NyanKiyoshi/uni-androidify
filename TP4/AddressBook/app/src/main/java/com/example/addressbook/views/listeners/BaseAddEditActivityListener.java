@@ -8,7 +8,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.addressbook.models.BaseModel;
-import com.example.addressbook.models.ContactModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,7 +104,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     abstract Model parseIntentResults(Intent data);
     abstract void updateEntry(Model newEntry);
     abstract void createNewEntry(Model newEntry);
-    abstract public void startViewEntry(ContactModel item);
+    abstract public void startViewEntry(Model item);
     abstract public void startCreateNewEntry();
     abstract public void startUpdateEntry(Model item);
 }
