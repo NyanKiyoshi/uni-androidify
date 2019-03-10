@@ -1,8 +1,7 @@
-package com.example.addressbook.views.contactManagers;
+package com.example.addressbook.views.groupManagers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,52 +14,48 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
-import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
+import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 
-public class ViewContactActivity
-        extends BaseContactActivity
-        implements BaseAddEditActivityListener.CRUDEvents<ContactModel> {
+public class ViewGroupActivity
+        extends BaseGroupActivity
+        implements BaseAddEditActivityListener.CRUDEvents<GroupModel> {
 
-    private ContactAddEditActivityListener activityListener;
-    private TextView textViewFirstname;
-    private TextView textViewLastname;
+    private BaseAddEditActivityListener<GroupModel> activityListener;
+    private TextView textViewTitle;
 
-    private ContactModel contactModel;
+    private GroupModel groupModel;
 
     private ContentLoadingProgressBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_contact);
+        setContentView(R.layout.activity_view_group);
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        this.textViewFirstname = findViewById(R.id.edit_text_firstname);
-        this.textViewLastname = findViewById(R.id.edit_text_lastname);
+        this.textViewTitle = findViewById(R.id.edit_text_title);
 
         // Get the activity's intent object
         final Intent intent = getIntent();
-        setTitle("Viewing Contact");
+        setTitle("Viewing Group");
 
         // Create the item model object
-        this.contactModel = new ContactModel(
+        this.groupModel = new GroupModel(
                 intent.getIntExtra(EXTRA_ID, -1),
-                intent.getStringExtra(EXTRA_FIRSTNAME),
-                intent.getStringExtra(EXTRA_LASTNAME)
+                intent.getStringExtra(EXTRA_TITLE)
         );
 
         // Create a progress bar for HTTP requests
         this.loadingBar = new ContentLoadingProgressBar(this);
 
         // Create the CRUD activity listener
-        this.activityListener = new ContactAddEditActivityListener(
+        this.activityListener = new GroupAddEditActivityListener(
                 this, this, requestQueue);
 
-        textViewFirstname.setText(this.contactModel.getFirstName());
-        textViewLastname.setText(this.contactModel.getLastName());
+        this.textViewTitle.setText(this.groupModel.getTitle());
     }
 
     @Override
@@ -73,19 +68,18 @@ public class ViewContactActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.edit_entry) {
-            this.activityListener.startUpdateEntry(this.contactModel);
+            this.activityListener.startUpdateEntry(this.groupModel);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onEntryUpdated(ContactModel newItem) {
-        this.contactModel = newItem;
-        this.textViewFirstname.setText(newItem.getFirstName());
-        this.textViewLastname.setText(newItem.getLastName());
+    public void onEntryUpdated(GroupModel newItem) {
+        this.groupModel = newItem;
+        this.textViewTitle.setText(newItem.getTitle());
         this.loadingBar.hide();
-        Toast.makeText(this, R.string.contact_updated, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.group_updated, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -95,7 +89,7 @@ public class ViewContactActivity
     }
 
     @Override
-    public void onEntryStartUpdating(ContactModel newItem) {
+    public void onEntryStartUpdating(GroupModel newItem) {
         this.loadingBar.show();
     }
 

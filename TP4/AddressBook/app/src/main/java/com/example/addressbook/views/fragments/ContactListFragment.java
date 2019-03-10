@@ -155,7 +155,6 @@ public class ContactListFragment
     @Override
     public void onEntryUpdated(ContactModel newItem) {
         this.loadingBar.hide();
-        this.contactAdapter.addItem(newItem);
         Toast.makeText(this.context, R.string.contact_created, Toast.LENGTH_SHORT).show();
     }
 
