@@ -10,4 +10,6 @@ public abstract class BaseModel {
 
     public abstract BaseModel fromJSON(JSONObject data) throws JSONException;
     public abstract JSONObject serialize() throws JSONException;
+
+    public abstract int getId();
 }

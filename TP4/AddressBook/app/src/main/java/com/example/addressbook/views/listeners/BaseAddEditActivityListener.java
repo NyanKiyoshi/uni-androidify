@@ -6,7 +6,10 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.BaseModel;
 
 import org.json.JSONException;
@@ -19,6 +22,8 @@ import static android.app.Activity.RESULT_OK;
 public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     static final int CREATE_ENTRY_REQUEST = 1;
     static final int UPDATE_ENTRY_REQUEST = 2;
+
+    final String endpoint;
 
     public interface CRUDEvents<Model> {
         void onEntryUpdated(Model newItem);
@@ -38,6 +43,8 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
             CRUDEvents<Model> CRUDEventsListener,
             RequestQueue requestQueue) {
 
+        this.endpoint = this.getEndpoint();
+
         this.modelClass = modelClass;
         this.context = context;
         this.listeners = CRUDEventsListener;
@@ -45,7 +52,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
+        if (resultCode != RESULT_OK || data == null) {
             return;
         }
 
@@ -78,17 +85,21 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         }
     }
 
+    void sendRequest(String requestURL, int method, JSONObject body) {
+        // Create the request object and attach it to the listeners
+        Request<JSONObject> request = new JsonObjectRequest(
+                method,
+                requestURL,
+                body,
+                this::onServerResponse, this::onError);
+
+        // Append the request to the queue
+        this.requestQueue.add(request);
+    }
+
     void sendRequest(String requestURL, int method, Model entry) {
         try {
-            // Create the request object and attach it to the listeners
-            Request<JSONObject> request = new JsonObjectRequest(
-                    method,
-                    requestURL,
-                    entry.serialize(),
-                    this::onServerResponse, this::onError);
-
-            // Append the request to the queue
-            this.requestQueue.add(request);
+            this.sendRequest(requestURL, method, entry.serialize());
         } catch (JSONException e) {
             this.onError(e);
         }
@@ -101,10 +112,42 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         this.listeners.onEntryFailedUpdating();
     }
 
+    void updateEntry(Model newEntry) {
+        // Create the request URL
+        String requestURL = AppConfig.getURL(this.endpoint + "/" + newEntry.getId());
+
+        // Send the update request
+        this.sendRequest(requestURL, Request.Method.PUT, newEntry);
+    }
+
+    void createNewEntry(Model newEntry) {
+        // Create the request URL
+        String requestURL = AppConfig.getURL(this.endpoint);
+
+        // Send the update request
+        this.sendRequest(requestURL, Request.Method.POST, newEntry);
+    }
+
+    void deleteEntry(Model newEntry, Response.Listener<String> listener) {
+        // Create the request URL
+        String requestURL = AppConfig.getURL(this.endpoint + "/" + newEntry.getId());
+
+        Request request = new StringRequest(
+                Request.Method.DELETE,
+                requestURL,
+                listener, this::onError);
+
+        // Append the request to the queue
+        this.requestQueue.add(request);
+    }
+
+    abstract String getEndpoint();
     abstract Model parseIntentResults(Intent data);
-    abstract void updateEntry(Model newEntry);
-    abstract void createNewEntry(Model newEntry);
     abstract public void startViewEntry(Model item);
     abstract public void startCreateNewEntry();
     abstract public void startUpdateEntry(Model item);
+
+    public void startDeleteEntry(Model item, Response.Listener<String> callback) {
+        this.deleteEntry(item, callback);
+    }
 }
