@@ -1,5 +1,9 @@
 package com.example.addressbook.models;
 
+import android.content.SharedPreferences;
+
+import androidx.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,6 +11,9 @@ public class ContactModel extends BaseModel {
     private int id;
     private String firstName;
     private String lastName;
+
+    private @Nullable String picturePath;
+    private @Nullable SharedPreferences sharedPreferences;
 
     public ContactModel() {
 
@@ -39,6 +46,20 @@ public class ContactModel extends BaseModel {
         return this.id;
     }
 
+    public void save() {
+        if (this.sharedPreferences == null
+                || this.picturePath == null
+                || this.picturePath.isEmpty()
+                || this.id < 0) {
+
+            return;
+        }
+
+        final SharedPreferences.Editor prefEditor = this.sharedPreferences.edit();
+        prefEditor.putString(this.getIdStr(), this.picturePath);
+        prefEditor.apply();
+    }
+
     public String getIdStr() {
         return String.valueOf(this.id);
     }
@@ -49,5 +70,25 @@ public class ContactModel extends BaseModel {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public @Nullable
+    String getPicturePath() {
+        if (this.picturePath == null && this.sharedPreferences != null) {
+            this.picturePath = this.sharedPreferences.getString(this.getIdStr(), null);
+        }
+        return picturePath;
+    }
+
+    public void setPicturePath(@Nullable String picturePath) {
+        this.picturePath = picturePath;
+    }
+
+    public void setSharedPreferences(@Nullable SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    public void setID(int id) {
+        this.id = id;
     }
 }

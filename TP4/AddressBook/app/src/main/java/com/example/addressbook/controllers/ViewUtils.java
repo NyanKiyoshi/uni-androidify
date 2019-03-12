@@ -1,6 +1,8 @@
 package com.example.addressbook.controllers;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 
 import com.android.volley.Response;
@@ -24,6 +26,10 @@ public class ViewUtils {
                 deferrable.getListener().startDeleteEntry(item, wrappedOnDeleted(activity));
             }
         ).show();
+    }
+
+    public static SharedPreferences GetSharedPrefs(Context context) {
+        return context.getSharedPreferences("global", Context.MODE_PRIVATE);
     }
 
     private static Response.Listener<String> wrappedOnDeleted(Activity activity) {
