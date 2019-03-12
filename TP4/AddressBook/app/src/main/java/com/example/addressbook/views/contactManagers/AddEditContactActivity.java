@@ -1,5 +1,6 @@
 package com.example.addressbook.views.contactManagers;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,8 +18,15 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ViewUtils;
+import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.views.IDeferrableActivity;
+import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,15 +35,21 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
-public class AddEditContactActivity extends BaseContactActivity {
+public class AddEditContactActivity
+        extends BaseContactActivity
+        implements IDeferrableActivity, BaseAddEditActivityListener.CRUDEvents<ContactModel>  {
+
     private final static int PICKED_PICTURE = 1;
 
     private EditText editTextFirstname;
     private EditText editTextLastname;
 
     private ImageView picturePreview;
+    private ContentLoadingProgressBar loadingBar;
 
     private Uri pictureURI;
+    private ContactModel item;
+    private ContactAddEditActivityListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +58,10 @@ public class AddEditContactActivity extends BaseContactActivity {
 
         this.editTextFirstname = findViewById(R.id.edit_text_firstname);
         this.editTextLastname = findViewById(R.id.edit_text_lastname);
+
+        this.loadingBar = new ContentLoadingProgressBar(this);
+        this.listener = new ContactAddEditActivityListener(
+                this.getApplicationContext(), this, Volley.newRequestQueue(this));
 
         // Get the picture preview box
         this.picturePreview = findViewById(R.id.picture_preview_box);
@@ -55,10 +73,19 @@ public class AddEditContactActivity extends BaseContactActivity {
         // Get the activity's intent object
         final Intent intent = getIntent();
 
-        if (intent.hasExtra(EXTRA_ID)) {
+        // Get the entry ID
+        final int entryID = intent.getIntExtra(EXTRA_ID, -1);
+
+        if (entryID > -1) {
             setTitle("Edit Contact");
-            editTextFirstname.setText(intent.getStringExtra(EXTRA_FIRSTNAME));
-            editTextLastname.setText(intent.getStringExtra(EXTRA_LASTNAME));
+
+            String firstname = intent.getStringExtra(EXTRA_FIRSTNAME);
+            String lastname = intent.getStringExtra(EXTRA_LASTNAME);
+
+            editTextFirstname.setText(firstname);
+            editTextLastname.setText(lastname);
+
+            this.item = new ContactModel(entryID, firstname, lastname);
         } else {
             setTitle("Add Contact");
         }
@@ -125,15 +152,24 @@ public class AddEditContactActivity extends BaseContactActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_edit_menu, menu);
+        menuInflater.inflate(R.menu.add_edit_contact_menu, menu);
+
+        // If the user is editing an entry, show the delete option on the menu
+        if (this.item != null) {
+            menu.findItem(R.id.delete_entry).setVisible(true);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save_note) {
-            saveEntry();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.save_note:
+                saveEntry();
+                return true;
+            case R.id.delete_entry:
+                ViewUtils.PromptDelete(this, this.item);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -173,5 +209,41 @@ public class AddEditContactActivity extends BaseContactActivity {
 
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), pictureURI);
         this.picturePreview.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public ContentLoadingProgressBar getLoadingBar() {
+        return this.loadingBar;
+    }
+
+    @Override
+    public BaseAddEditActivityListener getListener() {
+        return this.listener;
+    }
+
+    @Override
+    public void onEntryUpdated(ContactModel newItem) {
+
+    }
+
+    @Override
+    public void onEntryFailedUpdating() {
+        Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
+        this.loadingBar.hide();
+    }
+
+    @Override
+    public void onEntryStartUpdating(ContactModel newItem) {
+
+    }
+
+    @Override
+    public void onIntentReadyToStart(Intent intent, int requestCode) {
+
     }
 }

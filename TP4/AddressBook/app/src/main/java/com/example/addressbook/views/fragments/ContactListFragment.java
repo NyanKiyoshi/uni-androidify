@@ -22,7 +22,7 @@ public class ContactListFragment extends BaseRecyclerFragment<ContactModel, Cont
 
         // Create the view adapter
         this.adapter = new ContactAdapter(
-                (item, pos) -> this.activityListener.startViewEntry(item));
+                (item, pos) -> this.activityListener.startUpdateEntry(item));
     }
 
     @Nullable

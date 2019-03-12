@@ -1,5 +1,6 @@
 package com.example.addressbook.views.groupManagers;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,14 +15,15 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.GroupModel;
-import com.example.addressbook.views.dialogs.YesNoDialog;
+import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 
 public class ViewGroupActivity
         extends BaseGroupActivity
-        implements BaseAddEditActivityListener.CRUDEvents<GroupModel> {
+        implements BaseAddEditActivityListener.CRUDEvents<GroupModel>, IDeferrableActivity {
 
     private BaseAddEditActivityListener<GroupModel> activityListener;
     private TextView textViewTitle;
@@ -74,16 +76,7 @@ public class ViewGroupActivity
                 break;
 
             case R.id.delete_entry:
-                YesNoDialog.New(
-                        this,
-                        "Are you sure?",
-                        (dialog, which) -> {
-                            dialog.dismiss();
-                            this.loadingBar.show();
-                            this.activityListener.startDeleteEntry(
-                                    this.groupModel, this::onEntryDeleted);
-                        }
-                ).show();
+                ViewUtils.PromptDelete(this, this.groupModel);
                 break;
 
             default:
@@ -126,5 +119,20 @@ public class ViewGroupActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.activityListener.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public ContentLoadingProgressBar getLoadingBar() {
+        return this.loadingBar;
+    }
+
+    @Override
+    public BaseAddEditActivityListener getListener() {
+        return this.activityListener;
     }
 }

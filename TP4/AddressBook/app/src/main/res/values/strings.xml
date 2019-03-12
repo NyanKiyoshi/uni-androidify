@@ -27,4 +27,7 @@
     <string name="failed_to_update">Failed to update the entry.</string>
     <string name="change_picture">Change Picture</string>
     <string name="selected_picture">Selected Picture</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>
