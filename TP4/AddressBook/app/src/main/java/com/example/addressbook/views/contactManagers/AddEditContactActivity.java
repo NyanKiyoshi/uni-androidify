@@ -235,7 +235,10 @@ public class AddEditContactActivity
 
     @Override
     public void onEntryUpdated(ContactModel newItem) {
-
+        // nop: only the parents are handling those events,
+        // to notify the user of the data update's success,
+        // as this activity is destroyed once data is sent,
+        // it doesn't wait for data to be received.
     }
 
     @Override
@@ -246,11 +249,13 @@ public class AddEditContactActivity
 
     @Override
     public void onEntryStartUpdating(ContactModel newItem) {
-
+        // nop: this event is not used,
+        // this is received by the parent activity.
     }
 
     @Override
     public void onIntentReadyToStart(Intent intent, int requestCode) {
-
+        // nop: this is not used, as this activity
+        // does not start or wait for any activity.
     }
 }

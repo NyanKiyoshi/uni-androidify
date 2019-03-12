@@ -182,7 +182,7 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     @Override
     public void onEntryUpdated(Model newItem) {
         this.loadingBar.hide();
-        Toast.makeText(this.context, R.string.contact_created, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.context, R.string.entry_saved, Toast.LENGTH_SHORT).show();
     }
 
     @Override
