@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
 import com.example.addressbook.models.GroupModel;
+import com.example.addressbook.views.dialogs.YesNoDialog;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 
@@ -67,11 +68,34 @@ public class ViewGroupActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.edit_entry) {
-            this.activityListener.startUpdateEntry(this.groupModel);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.edit_entry:
+                this.activityListener.startUpdateEntry(this.groupModel);
+                break;
+
+            case R.id.delete_entry:
+                YesNoDialog.New(
+                        this,
+                        "Are you sure?",
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            this.loadingBar.show();
+                            this.activityListener.startDeleteEntry(
+                                    this.groupModel, this::onEntryDeleted);
+                        }
+                ).show();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+        return true;
+    }
+
+    public void onEntryDeleted(Object response) {
+        this.setResult(RESULT_OK);
+        this.finish();
     }
 
     @Override
