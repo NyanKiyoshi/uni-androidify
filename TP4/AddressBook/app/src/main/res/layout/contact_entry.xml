@@ -18,21 +18,25 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/picture"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_menu_gallery_gray"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/contact_picture"
+                app:civ_border_color="@color/colorAccent"
+                app:civ_border_width="1dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_weight="1"
-                android:paddingLeft="4dp"
-                android:paddingStart="4dp"
-                android:paddingRight="4dp"
-                android:paddingEnd="4dp">
+                android:paddingLeft="12dp"
+                android:paddingStart="12dp"
+                android:paddingRight="12dp"
+                android:paddingEnd="12dp">
 
                 <TextView
                     app:layout_constraintRight_toLeftOf="parent"

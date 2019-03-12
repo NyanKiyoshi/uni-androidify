@@ -28,6 +28,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     final String endpoint;
 
     public interface CRUDEvents<Model> {
+        void refreshData();
         void onEntryUpdated(Model newItem);
         void onEntryFailedUpdating();
         void onEntryStartUpdating(Model newItem);
@@ -85,6 +86,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         } catch (JSONException|IllegalAccessException|InstantiationException e) {
             this.onError(e);
         }
+        this.listeners.refreshData();
     }
 
     void sendRequest(

@@ -22,6 +22,7 @@ public class ContactListFragment extends BaseRecyclerFragment<ContactModel, Cont
 
         // Create the view adapter
         this.adapter = new ContactAdapter(
+                this,
                 (item, pos) -> this.activityListener.startUpdateEntry(item));
     }
 
@@ -43,7 +44,7 @@ public class ContactListFragment extends BaseRecyclerFragment<ContactModel, Cont
         fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
-        this.refreshEntries();
+        this.refreshData();
 
         return view;
     }

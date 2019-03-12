@@ -74,7 +74,7 @@ public class ContactModel extends BaseModel {
 
     public @Nullable
     String getPicturePath() {
-        if (this.picturePath == null && this.sharedPreferences != null) {
+        if (this.sharedPreferences != null) {
             this.picturePath = this.sharedPreferences.getString(this.getIdStr(), null);
         }
         return picturePath;

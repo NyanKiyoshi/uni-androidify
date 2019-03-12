@@ -140,7 +140,6 @@ public class AddEditContactActivity
         }
 
         if (requestCode == PICKED_PICTURE) {
-            Log.d("WWWOOO", Integer.toString(requestCode));
             try {
                 this.setPickedPicture(data.getData());
             } catch (IOException e) {
@@ -224,6 +223,11 @@ public class AddEditContactActivity
     @Override
     public BaseAddEditActivityListener getListener() {
         return this.listener;
+    }
+
+    @Override
+    public void refreshData() {
+        // nop
     }
 
     @Override

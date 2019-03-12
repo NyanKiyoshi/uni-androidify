@@ -42,9 +42,11 @@ public class ContactAddEditActivityListener
         int id = data.getIntExtra(BaseContactActivity.EXTRA_ID, -1);
         String firstname = data.getStringExtra(BaseContactActivity.EXTRA_FIRSTNAME);
         String lastname = data.getStringExtra(BaseContactActivity.EXTRA_LASTNAME);
+        String picture = data.getStringExtra(BaseContactActivity.EXTRA_FILE_ABS_PATH);
 
         ContactModel newEntry = new ContactModel(id, firstname, lastname);
         newEntry.setSharedPreferences(ViewUtils.GetSharedPrefs(this.context));
+        newEntry.setPicturePath(picture);
 
         return newEntry;
     }

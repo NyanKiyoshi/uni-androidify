@@ -1,5 +1,6 @@
 package com.example.addressbook.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 import com.example.addressbook.views.viewholders.GroupViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import static com.example.addressbook.controllers.ViewUtils.RESULT_DELETED;
 
 public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupViewHolder> {
 
@@ -43,9 +46,19 @@ public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupVie
         fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
-        this.refreshEntries();
+        this.refreshData();
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.activityListener.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_DELETED) {
+            this.refreshData();
+        }
     }
 
     @Override

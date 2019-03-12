@@ -1,6 +1,7 @@
 package com.example.addressbook.views.viewholders;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ public class ContactViewHolder extends BaseViewHolder {
     public TextView firstname;
     public TextView lastname;
 
+    public ImageView pictureBox;
+
     public ContactViewHolder(@NonNull View itemView) {
         super(itemView);
 
@@ -20,5 +23,8 @@ public class ContactViewHolder extends BaseViewHolder {
         this.id = itemView.findViewById(R.id.id);
         this.firstname = itemView.findViewById(R.id.firstname);
         this.lastname = itemView.findViewById(R.id.lastname);
+
+        // Retrieve the picture box
+        this.pictureBox = itemView.findViewById(R.id.picture);
     }
 }

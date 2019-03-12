@@ -1,5 +1,6 @@
 package com.example.addressbook.controllers;
 
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,15 @@ import androidx.annotation.NonNull;
 
 import com.example.addressbook.R;
 import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.views.fragments.BaseRecyclerFragment;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
-    public ContactAdapter(OnItemClickEvent<ContactModel> listener) {
+    private final BaseRecyclerFragment parent;
+
+    public ContactAdapter(BaseRecyclerFragment parent, OnItemClickEvent<ContactModel> listener) {
         super(listener);
+        this.parent = parent;
     }
 
     @NonNull
@@ -33,5 +38,14 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         holder.id.setText(item.getIdStr());
         holder.firstname.setText(item.getFirstName());
         holder.lastname.setText(item.getLastName());
+
+        item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.parent.getContext()));
+        String picturePath = item.getPicturePath();
+        if (picturePath == null) {
+            holder.pictureBox.setImageResource(R.drawable.ic_menu_gallery_gray);
+            return;
+        }
+
+        holder.pictureBox.setImageBitmap(BitmapFactory.decodeFile(picturePath));
     }
 }

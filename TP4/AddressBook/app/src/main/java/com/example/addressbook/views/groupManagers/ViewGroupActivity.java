@@ -92,6 +92,11 @@ public class ViewGroupActivity
     }
 
     @Override
+    public void refreshData() {
+        // nop
+    }
+
+    @Override
     public void onEntryUpdated(GroupModel newItem) {
         this.groupModel = newItem;
         this.textViewTitle.setText(newItem.getTitle());
