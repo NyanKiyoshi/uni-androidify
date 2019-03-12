@@ -85,6 +85,9 @@ public class AddEditContactActivity
             editTextFirstname.setText(firstname);
             editTextLastname.setText(lastname);
 
+            String picture = intent.getStringExtra(EXTRA_FILE_ABS_PATH);
+            ViewUtils.SetImage(this.picturePreview, picture, R.drawable.ic_menu_gallery_gray);
+
             this.item = new ContactModel(entryID, firstname, lastname);
         } else {
             setTitle("Add Contact");

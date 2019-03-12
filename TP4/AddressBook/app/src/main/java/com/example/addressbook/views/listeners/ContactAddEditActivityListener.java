@@ -32,9 +32,12 @@ public class ContactAddEditActivityListener
     }
 
     private void populateIntent(Intent intent, ContactModel item) {
+        item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.context));
+
         intent.putExtra(BaseContactActivity.EXTRA_ID, item.getId());
         intent.putExtra(BaseContactActivity.EXTRA_FIRSTNAME, item.getFirstName());
         intent.putExtra(BaseContactActivity.EXTRA_LASTNAME, item.getLastName());
+        intent.putExtra(BaseContactActivity.EXTRA_FILE_ABS_PATH, item.getPicturePath());
     }
 
     @Override

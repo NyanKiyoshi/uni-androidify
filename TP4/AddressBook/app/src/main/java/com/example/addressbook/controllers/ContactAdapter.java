@@ -40,12 +40,9 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         holder.lastname.setText(item.getLastName());
 
         item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.parent.getContext()));
-        String picturePath = item.getPicturePath();
-        if (picturePath == null) {
-            holder.pictureBox.setImageResource(R.drawable.ic_menu_gallery_gray);
-            return;
-        }
-
-        holder.pictureBox.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        ViewUtils.SetImage(
+                holder.pictureBox,
+                item.getPicturePath(),
+                R.drawable.ic_menu_gallery_gray);
     }
 }
