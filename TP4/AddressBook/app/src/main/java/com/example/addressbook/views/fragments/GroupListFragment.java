@@ -18,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static com.example.addressbook.controllers.ViewUtils.RESULT_DELETED;
 
-public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupViewHolder> {
+public class GroupListFragment extends RefreshableRecyclerFragment<GroupModel, GroupViewHolder> {
 
     public GroupListFragment() {
         super(GroupModel.class);
@@ -42,8 +42,7 @@ public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupVie
                 this.context, this, this.requestQueue);
 
         // Register an handler to the floating button
-        final FloatingActionButton fab = view.findViewById(R.id.create_fab);
-        fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
+        this.fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
         this.refreshData();

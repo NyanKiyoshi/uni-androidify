@@ -15,7 +15,8 @@ import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ContactListFragment extends BaseRecyclerFragment<ContactModel, ContactViewHolder> {
+public class ContactListFragment
+        extends RefreshableRecyclerFragment<ContactModel, ContactViewHolder> {
 
     public ContactListFragment() {
         super(ContactModel.class);
@@ -40,8 +41,7 @@ public class ContactListFragment extends BaseRecyclerFragment<ContactModel, Cont
                 this.context, this, this.requestQueue);
 
         // Register an handler to the floating button
-        final FloatingActionButton fab = view.findViewById(R.id.create_fab);
-        fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
+        this.fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
 
         // Finally, get the data and return the inflated view
         this.refreshData();
