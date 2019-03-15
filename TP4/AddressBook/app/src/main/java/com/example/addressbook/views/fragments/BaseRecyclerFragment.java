@@ -35,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.example.addressbook.controllers.ViewUtils.RESULT_DELETED;
+
 public abstract
 class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         extends Fragment
@@ -95,7 +97,7 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
 
         // Listen for swipe to refresh data on demand
         this.pullToRefresh = view.findViewById(R.id.pullToRefresh);
-        this.pullToRefresh.setOnRefreshListener(this::refreshEntries);
+        this.pullToRefresh.setOnRefreshListener(this::refreshData);
 
         // Create a loading component from the context
         this.loadingBar = new ContentLoadingProgressBar(this.context);
@@ -109,7 +111,8 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         return view;
     }
 
-    void refreshEntries() {
+    @Override
+    public void refreshData() {
         this.adapter.clear();
         this.pullToRefresh.setRefreshing(true);
         this.getEntries();
@@ -133,6 +136,8 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         int dataLength = data.length();
 
         if (dataLength < 1) {
+            // Stop loading
+            this.pullToRefresh.setRefreshing(false);
             return;
         }
 
@@ -163,7 +168,10 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.activityListener.onActivityResult(requestCode, resultCode, data);
-        this.refreshEntries();
+
+        if (resultCode == RESULT_DELETED) {
+            this.refreshData();
+        }
     }
 
     @Override
@@ -174,7 +182,7 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     @Override
     public void onEntryUpdated(Model newItem) {
         this.loadingBar.hide();
-        Toast.makeText(this.context, R.string.contact_created, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.context, R.string.entry_saved, Toast.LENGTH_SHORT).show();
     }
 
     @Override

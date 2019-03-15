@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,6 +28,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     final String endpoint;
 
     public interface CRUDEvents<Model> {
+        void refreshData();
         void onEntryUpdated(Model newItem);
         void onEntryFailedUpdating();
         void onEntryStartUpdating(Model newItem);
@@ -61,11 +64,11 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         switch (requestCode) {
             case CREATE_ENTRY_REQUEST:
                 this.listeners.onEntryStartUpdating(newEntry);
-                this.createNewEntry(newEntry);
+                this.createNewEntry(newEntry, null);
                 break;
             case UPDATE_ENTRY_REQUEST:
                 this.listeners.onEntryStartUpdating(newEntry);
-                this.updateEntry(newEntry);
+                this.updateEntry(newEntry, null);
                 break;
             default:
                 break;
@@ -83,26 +86,42 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         } catch (JSONException|IllegalAccessException|InstantiationException e) {
             this.onError(e);
         }
+        this.listeners.refreshData();
     }
 
-    void sendRequest(String requestURL, int method, JSONObject body) {
+    void sendRequest(
+            String requestURL, int method, JSONObject body,
+            @Nullable Response.Listener<JSONObject> callback) {
+
         // Create the request object and attach it to the listeners
         Request<JSONObject> request = new JsonObjectRequest(
                 method,
                 requestURL,
                 body,
-                this::onServerResponse, this::onError);
+                (JSONObject resp) -> {
+                    if (callback != null) {
+                        callback.onResponse(resp);
+                    }
+                    this.onServerResponse(resp);
+                }, this::onError);
 
         // Append the request to the queue
         this.requestQueue.add(request);
     }
 
-    void sendRequest(String requestURL, int method, Model entry) {
+    void sendRequest(
+            String requestURL, int method, Model entry,
+            @Nullable Response.Listener<JSONObject> callback) {
+
         try {
-            this.sendRequest(requestURL, method, entry.serialize());
+            this.sendRequest(requestURL, method, entry.serialize(), callback);
         } catch (JSONException e) {
             this.onError(e);
         }
+    }
+
+    void sendRequest(String requestURL, int method, Model entry) {
+        this.sendRequest(requestURL, method, entry, null);
     }
 
     void onError(Exception error) {
@@ -112,20 +131,20 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         this.listeners.onEntryFailedUpdating();
     }
 
-    void updateEntry(Model newEntry) {
+    void updateEntry(Model newEntry, @Nullable Response.Listener<JSONObject> callback) {
         // Create the request URL
         String requestURL = AppConfig.getURL(this.endpoint + "/" + newEntry.getId());
 
         // Send the update request
-        this.sendRequest(requestURL, Request.Method.PUT, newEntry);
+        this.sendRequest(requestURL, Request.Method.PUT, newEntry, callback);
     }
 
-    void createNewEntry(Model newEntry) {
+    void createNewEntry(Model newEntry, @Nullable Response.Listener<JSONObject> callback) {
         // Create the request URL
         String requestURL = AppConfig.getURL(this.endpoint);
 
         // Send the update request
-        this.sendRequest(requestURL, Request.Method.POST, newEntry);
+        this.sendRequest(requestURL, Request.Method.POST, newEntry, callback);
     }
 
     void deleteEntry(Model newEntry, Response.Listener<String> listener) {
