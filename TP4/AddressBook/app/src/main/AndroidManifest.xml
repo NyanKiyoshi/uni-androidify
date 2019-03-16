@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".views.groupManagers.AddEditGroupActivity" />
         <activity android:name=".views.groupManagers.ViewGroupActivity" />
+        <activity android:name=".views.groupManagers.SelectContact" />
     </application>
 
 </manifest>

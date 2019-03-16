@@ -16,6 +16,10 @@ public abstract class BaseAdapter<VH extends BaseViewHolder, Model>
         void onItemClick(Model item, int position);
     }
 
+    public interface ISuccessNoResponse {
+        void successCallback();
+    }
+
     private OnItemClickEvent<Model> listener;
     public final ArrayList<Model> items = new ArrayList<>();
 

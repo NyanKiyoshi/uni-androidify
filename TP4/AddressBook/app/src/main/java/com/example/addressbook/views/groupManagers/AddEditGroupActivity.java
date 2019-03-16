@@ -10,11 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.ContactAdapter;
 
-public class AddEditGroupActivity
-        extends BaseGroupActivity
-        implements ContactAdapter.IHasContext {
+public class AddEditGroupActivity extends BaseGroupActivity {
 
     private EditText editTextTitle;
 
