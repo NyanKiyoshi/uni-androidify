@@ -5,8 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 import com.example.addressbook.R;
+import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.viewholders.GroupViewHolder;
 
@@ -32,5 +38,39 @@ public class GroupAdapter extends BaseAdapter<GroupViewHolder, GroupModel> {
 
         holder.id.setText(item.getIdStr());
         holder.title.setText(item.getTitle());
+    }
+
+    private static void manageAssociation(
+            int requestMethod,
+            RequestQueue requestQueue,
+            int groupID, int contactID,
+            ContactAdapter.ISuccessNoResponse callback,
+            @Nullable Response.ErrorListener errorListener) {
+
+        requestQueue.add(new StringRequest(requestMethod,
+                AppConfig.getURL("/persons/" + contactID + "/groups/" + groupID),
+                response -> callback.successCallback(),
+                errorListener
+        ));
+    }
+
+    public static void associateToContact(
+            RequestQueue requestQueue,
+            int groupID, int contactID,
+            ContactAdapter.ISuccessNoResponse callback,
+            @Nullable Response.ErrorListener errorListener) {
+
+        manageAssociation(
+                Request.Method.POST, requestQueue, groupID, contactID, callback, errorListener);
+    }
+
+    public static void deleteAssociation(
+            RequestQueue requestQueue,
+            int groupID, int contactID,
+            ContactAdapter.ISuccessNoResponse callback,
+            @Nullable Response.ErrorListener errorListener) {
+
+        manageAssociation(
+                Request.Method.DELETE, requestQueue, groupID, contactID, callback, errorListener);
     }
 }

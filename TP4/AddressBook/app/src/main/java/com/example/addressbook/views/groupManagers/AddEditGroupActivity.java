@@ -1,5 +1,6 @@
 package com.example.addressbook.views.groupManagers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +31,10 @@ public class AddEditGroupActivity extends BaseGroupActivity {
         } else {
             setTitle("Add Group");
         }
+    }
+
+    public Context getContext() {
+        return this.getBaseContext();
     }
 
     private void saveEntry() {

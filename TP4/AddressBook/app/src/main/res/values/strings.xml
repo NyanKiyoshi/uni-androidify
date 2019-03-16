@@ -32,4 +32,8 @@
     <string name="no">No</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="contact_picture">The contact\'s picture</string>
+    <string name="contacts_in_group">Contacts</string>
+    <string name="select_contacts">Add Contacts</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="already_in_group">The contact is already in this group.</string>
 </resources>
