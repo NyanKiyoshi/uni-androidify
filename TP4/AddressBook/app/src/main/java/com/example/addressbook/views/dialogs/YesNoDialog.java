@@ -15,7 +15,7 @@ public class YesNoDialog {
             final DialogInterface.OnClickListener onAcceptlistener) {
 
         return new AlertDialog.Builder(context)
-                .setTitle(title)
+                .setMessage(title)
                 .setPositiveButton(R.string.yes, onAcceptlistener)
                 .setNegativeButton(R.string.no, YesNoDialog::onCancel);
     }
