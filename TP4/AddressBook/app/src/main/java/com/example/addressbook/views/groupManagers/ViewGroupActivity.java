@@ -3,6 +3,7 @@ package com.example.addressbook.views.groupManagers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,15 +12,23 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.RemoveableContactAdapter;
 import com.example.addressbook.controllers.ViewUtils;
+import com.example.addressbook.models.AppConfig;
+import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
+import com.google.android.material.button.MaterialButton;
 
 public class ViewGroupActivity
         extends BaseGroupActivity
@@ -31,6 +40,7 @@ public class ViewGroupActivity
     private GroupModel groupModel;
 
     private ContentLoadingProgressBar loadingBar;
+    private RemoveableContactAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,37 @@ public class ViewGroupActivity
                 this, this, requestQueue);
 
         this.textViewTitle.setText(this.groupModel.getTitle());
+
+        this.adapter = new RemoveableContactAdapter(this::getActivity, null);
+        this.adapter.setRemoveClickListener((item, pos) -> {
+            this.adapter.removeItem(pos);
+        });
+
+        requestQueue.add(new JsonArrayRequest(
+                AppConfig.getURL("/groups/" + this.groupModel.getId() + "/persons"),
+                response -> {
+                    try {
+                        this.adapter.addItems(
+                                ContactModel.deserialize(ContactModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        // Set-up and bind the recycler view
+        RecyclerView recyclerView = this.findViewById(R.id.listRecyclerView);
+        recyclerView.setAdapter(this.adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        MaterialButton addContactBtn = this.findViewById(R.id.add_contact_btn);
+        addContactBtn.setOnClickListener(v -> openContactSelection());
+    }
+
+    private void openContactSelection() {
+
     }
 
     @Override
@@ -139,5 +180,10 @@ public class ViewGroupActivity
     @Override
     public BaseAddEditActivityListener getListener() {
         return this.activityListener;
+    }
+
+    private void onError(Exception exc) {
+        Log.wtf("Failed to retrieve data", exc);
+        Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

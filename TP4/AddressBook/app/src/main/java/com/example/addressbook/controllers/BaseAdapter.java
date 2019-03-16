@@ -7,6 +7,7 @@ import com.example.addressbook.views.viewholders.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 public abstract class BaseAdapter<VH extends BaseViewHolder, Model>
         extends RecyclerView.Adapter<VH> {
@@ -36,14 +37,18 @@ public abstract class BaseAdapter<VH extends BaseViewHolder, Model>
         this.notifyItemRemoved(pos);
     }
 
+    public void addItems(Collection<? extends Model> modelItems) {
+        int startpos = this.items.size();
+        this.items.addAll(modelItems);
+        this.notifyItemRangeInserted(startpos, modelItems.size());
+    }
+
     public void addItems(Model[] modelItems) {
-        if (modelItems.length == 0) {
+        if (modelItems == null || modelItems.length == 0) {
             return;
         }
 
-        int startpos = this.items.size();
-        this.items.addAll(Arrays.asList(modelItems));
-        this.notifyItemRangeInserted(startpos, modelItems.length);
+        this.addItems(Arrays.asList(modelItems));
     }
 
     public void clear() {

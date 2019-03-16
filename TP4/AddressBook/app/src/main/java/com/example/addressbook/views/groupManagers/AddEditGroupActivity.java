@@ -3,21 +3,14 @@ package com.example.addressbook.views.groupManagers;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.ContactAdapter;
-import com.example.addressbook.controllers.RemoveableContactAdapter;
-import com.example.addressbook.models.ContactModel;
 
 public class AddEditGroupActivity
         extends BaseGroupActivity
@@ -41,18 +34,6 @@ public class AddEditGroupActivity
         } else {
             setTitle("Add Group");
         }
-
-        // Set-up and bind the recycler view
-        RemoveableContactAdapter adapter = new RemoveableContactAdapter(this, null);
-        RecyclerView recyclerView = this.findViewById(R.id.listRecyclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
-        adapter.setRemoveClickListener((item, pos) -> {
-            adapter.removeItem(pos);
-        });
-        adapter.addItem(new ContactModel(1, "abc", "def"));
     }
 
     public Context getContext() {

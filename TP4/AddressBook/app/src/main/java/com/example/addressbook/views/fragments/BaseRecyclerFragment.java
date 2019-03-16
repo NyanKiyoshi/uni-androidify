@@ -131,34 +131,15 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     }
 
     void onListResponse(JSONArray data) {
-        JSONObject entryData;
-
-        int dataLength = data.length();
-
-        if (dataLength < 1) {
-            // Stop loading
-            this.pullToRefresh.setRefreshing(false);
-            return;
-        }
-
-        // This will contains the parsed entries
-        BaseModel[] entries = new BaseModel[dataLength];
-
         try {
-            for (int i = 0; i < data.length(); ++i) {
-                // Retrieve the next group data
-                // and create a new group object from it.
-                entries[i] = this.modelClass.newInstance().fromJSON(data.getJSONObject(i));
-            }
+            // Append the entries
+            this.adapter.addItems(
+                    BaseModel.deserialize(this.modelClass, data));
         }
         catch (JSONException | IllegalAccessException | java.lang.InstantiationException exc) {
             // On JSON error, dispatch it to the callback
             this.onError(exc);
-            return;
         }
-
-        // Append the entries
-        this.adapter.addItems((Model[])entries);
 
         // Stop loading
         this.pullToRefresh.setRefreshing(false);
