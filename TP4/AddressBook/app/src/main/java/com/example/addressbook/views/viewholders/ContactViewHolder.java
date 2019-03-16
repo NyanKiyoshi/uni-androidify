@@ -15,6 +15,7 @@ public class ContactViewHolder extends BaseViewHolder {
     public TextView lastname;
 
     public ImageView pictureBox;
+    public ImageView removeBtn;
 
     public ContactViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -26,5 +27,8 @@ public class ContactViewHolder extends BaseViewHolder {
 
         // Retrieve the picture box
         this.pictureBox = itemView.findViewById(R.id.picture);
+
+        // Retrieve buttons
+        this.removeBtn = itemView.findViewById(R.id.remove_btn);
     }
 }

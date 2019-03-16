@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".views.groupManagers.AddEditGroupActivity">
 
-    <EditText
-        android:id="@+id/edit_text_title"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
         android:layout_height="wrap_content"
-        android:hint="@string/entry_title"
-        android:inputType="text" />
+        android:layout_width="match_parent">
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/edit_text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/entry_title"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contacts_in_group"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:id="@+id/add_contact_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_contacts"
+            android:textColor="#000"
+            android:backgroundTint="#fff"
+            android:textAppearance="@style/TextAppearance.MaterialButton"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

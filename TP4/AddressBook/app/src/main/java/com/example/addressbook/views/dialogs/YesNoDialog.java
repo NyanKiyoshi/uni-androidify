@@ -15,7 +15,8 @@ public class YesNoDialog {
             final DialogInterface.OnClickListener onAcceptlistener) {
 
         return new AlertDialog.Builder(context)
-                .setMessage(title)
+                .setTitle("Tst")
+                .setMultiChoiceItems(new String[]{"hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi","hi",}, null, null)
                 .setPositiveButton(R.string.yes, onAcceptlistener)
                 .setNegativeButton(R.string.no, YesNoDialog::onCancel);
     }

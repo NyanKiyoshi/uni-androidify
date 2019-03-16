@@ -15,7 +15,9 @@ import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ContactListFragment extends BaseRecyclerFragment<ContactModel, ContactViewHolder> {
+public class ContactListFragment
+        extends BaseRecyclerFragment<ContactModel, ContactViewHolder>
+        implements ContactAdapter.IHasContext {
 
     public ContactListFragment() {
         super(ContactModel.class);
