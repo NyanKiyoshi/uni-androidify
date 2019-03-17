@@ -1,6 +1,7 @@
 package com.example.addressbook.views.contactManagers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,14 +20,23 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.RemovableAdapter;
 import com.example.addressbook.controllers.ViewUtils;
+import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
+import com.example.addressbook.models.GroupModel;
+import com.example.addressbook.models.IStringSerializable;
 import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,15 +56,20 @@ public class AddEditContactActivity
 
     private ImageView picturePreview;
     private ContentLoadingProgressBar loadingBar;
+    private RequestQueue requestQueue;
 
     private Uri pictureURI;
     private ContactModel item;
     private ContactAddEditActivityListener listener;
 
+    private RemovableAdapter groupsAdapter = new RemovableAdapter();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_contact);
+
+        this.requestQueue = Volley.newRequestQueue(this);
 
         this.editTextFirstname = findViewById(R.id.edit_text_firstname);
         this.editTextLastname = findViewById(R.id.edit_text_lastname);
@@ -69,6 +84,9 @@ public class AddEditContactActivity
         // Set-up the 'select picture' button
         final AppCompatButton changePictureBtn = findViewById(R.id.change_picture);
         changePictureBtn.setOnClickListener(this::onChangePictureBtnPressed);
+
+        final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
+        manageGroupsBtn.setOnClickListener(this::selectGroup);
 
         // Get the activity's intent object
         final Intent intent = getIntent();
@@ -92,6 +110,32 @@ public class AddEditContactActivity
         } else {
             setTitle("Add Contact");
         }
+
+        this.createRecyclerViews();
+    }
+
+    private void createRecyclerViews() {
+        final RecyclerView groupView = this.findViewById(R.id.groupListRecyclerView);
+        groupView.setAdapter(this.groupsAdapter);
+        groupView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (this.item == null) {
+            return;
+        }
+
+        this.requestQueue.add(new JsonArrayRequest(
+                AppConfig.getURL("/persons/" + this.item.getId() + "/groups"),
+                response -> {
+                    try {
+                        this.groupsAdapter.clear();
+                        this.groupsAdapter.addItems(
+                                GroupModel.deserialize(GroupModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
     }
 
     private void saveEntry() {
@@ -211,6 +255,58 @@ public class AddEditContactActivity
 
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), pictureURI);
         this.picturePreview.setImageBitmap(bitmap);
+    }
+
+    private void selectGroup(View view) {
+        this.loadingBar.show();
+        this.requestQueue.add(new JsonArrayRequest(
+                AppConfig.getURL("/groups/"),
+                response -> {
+                    this.loadingBar.hide();
+                    try {
+                        this.openGroupSelection(
+                                GroupModel.deserialize(GroupModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+    }
+
+    private void openGroupSelection(IStringSerializable[] groups) {
+        String[] sequences = new String[groups.length];
+        boolean[] booleans = new boolean[groups.length];
+
+        int i = 0;
+        for (IStringSerializable group: groups) {
+            sequences[i] = group.toString();
+
+            for (IStringSerializable selectedGroup : this.groupsAdapter.items) {
+                if (selectedGroup.getId() == group.getId()) {
+                    groups[i] = selectedGroup;
+                    booleans[i] = true;
+                    break;
+                }
+            }
+
+            ++i;
+        }
+
+        (new AlertDialog.Builder(this)
+                .setMultiChoiceItems(sequences, booleans, (dialog, which, isChecked) -> {
+                    if (!isChecked) {
+                        this.groupsAdapter.removeItem(groups[which]);
+                    } else {
+                        this.groupsAdapter.addItem(groups[which]);
+                    }
+                })
+                .setPositiveButton(R.string.close, (dialog, which) -> {})).show();
+    }
+
+    private void onError(Exception exc) {
+        Log.wtf("Failed to retrieve data", exc);
+        Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override

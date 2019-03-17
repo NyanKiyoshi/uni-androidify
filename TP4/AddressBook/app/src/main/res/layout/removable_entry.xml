@@ -12,21 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/picture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_menu_gallery_gray"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/contact_picture"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="1dp" />
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -48,32 +38,17 @@
                     android:textSize="12sp"
                     android:textAlignment="viewEnd"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_dark_close" />
+                    android:src="@drawable/ic_dark_close"
+                    android:contentDescription="@string/remove_button" />
 
-                <LinearLayout
+                <TextView
                     app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_gravity="center_vertical|start">
-
-                    <TextView
-                        android:id="@+id/firstname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorAccent"/>
-
-                    <TextView
-                        android:id="@+id/lastname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorAccent"/>
-
-                </LinearLayout>
+                    android:layout_gravity="center_vertical|start"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorAccent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

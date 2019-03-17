@@ -36,9 +36,18 @@ public abstract class BaseAdapter<VH extends BaseViewHolder, Model>
         this.items.add(modelItem);
         this.notifyItemInserted(this.items.size());
     }
+
     public void removeItem(int pos) {
         this.items.remove(pos);
         this.notifyItemRemoved(pos);
+    }
+
+    public void removeItem(Model obj) {
+        int pos = this.items.indexOf(obj);
+        if (pos < 0) {
+            return;
+        }
+        this.removeItem(pos);
     }
 
     public void addItems(Collection<? extends Model> modelItems) {
