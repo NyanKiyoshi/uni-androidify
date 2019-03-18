@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

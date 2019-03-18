@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,39 +38,5 @@ public class GroupAdapter extends BaseAdapter<GroupViewHolder, GroupModel> {
 
         holder.id.setText(item.getIdStr());
         holder.title.setText(item.getTitle());
-    }
-
-    private static void manageAssociation(
-            int requestMethod,
-            RequestQueue requestQueue,
-            int groupID, int contactID,
-            ContactAdapter.ISuccessNoResponse callback,
-            @Nullable Response.ErrorListener errorListener) {
-
-        requestQueue.add(new StringRequest(requestMethod,
-                AppConfig.getURL("/persons/" + contactID + "/groups/" + groupID),
-                response -> callback.successCallback(),
-                errorListener
-        ));
-    }
-
-    public static void associateToContact(
-            RequestQueue requestQueue,
-            int groupID, int contactID,
-            ContactAdapter.ISuccessNoResponse callback,
-            @Nullable Response.ErrorListener errorListener) {
-
-        manageAssociation(
-                Request.Method.POST, requestQueue, groupID, contactID, callback, errorListener);
-    }
-
-    public static void deleteAssociation(
-            RequestQueue requestQueue,
-            int groupID, int contactID,
-            ContactAdapter.ISuccessNoResponse callback,
-            @Nullable Response.ErrorListener errorListener) {
-
-        manageAssociation(
-                Request.Method.DELETE, requestQueue, groupID, contactID, callback, errorListener);
     }
 }

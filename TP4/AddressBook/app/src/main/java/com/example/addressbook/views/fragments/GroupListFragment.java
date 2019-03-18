@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.GroupAdapter;
+import com.example.addressbook.controllers.adapters.GroupAdapter;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 import com.example.addressbook.views.viewholders.GroupViewHolder;

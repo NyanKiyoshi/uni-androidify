@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ContactModel extends BaseModel {
     private int id;
     private String firstName;
@@ -14,6 +16,10 @@ public class ContactModel extends BaseModel {
 
     private @Nullable String picturePath;
     private @Nullable SharedPreferences sharedPreferences;
+
+    public @Nullable IStringSerializable[] groups;
+    public @Nullable ArrayList<Integer> newGroups;
+    public @Nullable ArrayList<Integer> removedGroups;
 
     public ContactModel() {
 

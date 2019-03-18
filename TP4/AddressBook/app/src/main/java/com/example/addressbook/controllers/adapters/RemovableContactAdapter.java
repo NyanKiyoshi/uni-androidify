@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.adapters;
 
 import android.view.View;
 import android.view.ViewGroup;

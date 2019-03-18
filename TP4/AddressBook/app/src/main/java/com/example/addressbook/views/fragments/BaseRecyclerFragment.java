@@ -23,17 +23,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.BaseAdapter;
+import com.example.addressbook.controllers.adapters.BaseAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
-import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
 import com.example.addressbook.views.viewholders.BaseViewHolder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.example.addressbook.controllers.ViewUtils.RESULT_DELETED;
 

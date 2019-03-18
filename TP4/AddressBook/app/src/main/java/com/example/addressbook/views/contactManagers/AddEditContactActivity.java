@@ -27,7 +27,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.RemovableAdapter;
+import com.example.addressbook.controllers.GroupAssociations;
+import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
@@ -43,6 +44,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Set;
 import java.util.UUID;
 
 public class AddEditContactActivity
@@ -63,6 +65,7 @@ public class AddEditContactActivity
     private ContactAddEditActivityListener listener;
 
     private RemovableAdapter groupsAdapter = new RemovableAdapter();
+    private IStringSerializable[] groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,9 +130,12 @@ public class AddEditContactActivity
                 AppConfig.getURL("/persons/" + this.item.getId() + "/groups"),
                 response -> {
                     try {
+                        // Copy the base groups to protect them against edition
+                        this.item.groups = GroupModel.deserialize(GroupModel.class, response);
+
+                        // Add the groups to the adapter to put them on the view
                         this.groupsAdapter.clear();
-                        this.groupsAdapter.addItems(
-                                GroupModel.deserialize(GroupModel.class, response));
+                        this.groupsAdapter.addItems(this.item.groups);
                     } catch (Exception e) {
                         this.onError(e);
                     }
@@ -161,6 +167,10 @@ public class AddEditContactActivity
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }
+
+        // Add groups data
+        data.putExtras(
+                GroupAssociations.applyGroups(this.groupsAdapter, this.item));
 
         setResult(RESULT_OK, data);
         finish();
@@ -258,14 +268,20 @@ public class AddEditContactActivity
     }
 
     private void selectGroup(View view) {
+        // If the groups are cached, just use them, don't request again
+        if (this.groups != null) {
+            this.openGroupSelection();
+            return;
+        }
+
         this.loadingBar.show();
         this.requestQueue.add(new JsonArrayRequest(
                 AppConfig.getURL("/groups/"),
                 response -> {
                     this.loadingBar.hide();
                     try {
-                        this.openGroupSelection(
-                                GroupModel.deserialize(GroupModel.class, response));
+                        this.groups = GroupModel.deserialize(GroupModel.class, response);
+                        this.openGroupSelection();
                     } catch (Exception e) {
                         this.onError(e);
                     }
@@ -274,17 +290,17 @@ public class AddEditContactActivity
         ));
     }
 
-    private void openGroupSelection(IStringSerializable[] groups) {
-        String[] sequences = new String[groups.length];
-        boolean[] booleans = new boolean[groups.length];
+    private void openGroupSelection() {
+        String[] sequences = new String[this.groups.length];
+        boolean[] booleans = new boolean[this.groups.length];
 
         int i = 0;
-        for (IStringSerializable group: groups) {
+        for (IStringSerializable group: this.groups) {
             sequences[i] = group.toString();
 
             for (IStringSerializable selectedGroup : this.groupsAdapter.items) {
                 if (selectedGroup.getId() == group.getId()) {
-                    groups[i] = selectedGroup;
+                    this.groups[i] = selectedGroup;
                     booleans[i] = true;
                     break;
                 }
@@ -295,13 +311,20 @@ public class AddEditContactActivity
 
         (new AlertDialog.Builder(this)
                 .setMultiChoiceItems(sequences, booleans, (dialog, which, isChecked) -> {
+                    IStringSerializable selectedItem = this.groups[which];
                     if (!isChecked) {
-                        this.groupsAdapter.removeItem(groups[which]);
+                        this.groupsAdapter.removeItem(selectedItem);
                     } else {
-                        this.groupsAdapter.addItem(groups[which]);
+                        this.groupsAdapter.addItem(selectedItem);
                     }
                 })
                 .setPositiveButton(R.string.close, (dialog, which) -> {})).show();
+    }
+
+    private static void removeOrAdd(Set set, Object o) {
+        if (!set.remove(o)) {
+            set.add(o);
+        }
     }
 
     private void onError(Exception exc) {
