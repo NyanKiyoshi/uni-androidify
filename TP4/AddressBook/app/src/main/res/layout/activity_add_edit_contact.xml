@@ -102,6 +102,32 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:background="@drawable/stroke_background"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:id="@+id/add_postal_address_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_postal_address_btn"
+                    android:textColor="#000"
+                    android:backgroundTint="#fff"
+                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/postalAddressListRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
