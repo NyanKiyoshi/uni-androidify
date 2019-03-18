@@ -5,20 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.IStringSerializable;
 import com.example.addressbook.views.viewholders.RemovableViewHolder;
 
-public class RemovableAdapter
-        extends BaseAdapter<RemovableViewHolder, IStringSerializable>
-        implements ViewUtils.IRemoveClickListener<IStringSerializable> {
+public class RemovableAdapter<Cls extends IStringSerializable>
+        extends BaseAdapter<RemovableViewHolder, Cls>
+        implements ViewUtils.IRemoveClickListener<Cls> {
 
-    private ViewUtils.IOnClickEvent<IStringSerializable> removeClickListener;
+    private ViewUtils.IOnClickEvent<Cls> removeClickListener;
 
-    public RemovableAdapter(ViewUtils.IOnClickEvent<IStringSerializable> removeClickListener) {
+    public RemovableAdapter(ViewUtils.IOnClickEvent<Cls> removeClickListener) {
         super(null);
         this.removeClickListener = removeClickListener;
     }
@@ -46,12 +45,12 @@ public class RemovableAdapter
     }
 
     @Override
-    public ViewUtils.IOnClickEvent<IStringSerializable> getRemoveCallback() {
+    public ViewUtils.IOnClickEvent<Cls> getRemoveCallback() {
         return this.removeClickListener;
     }
 
     @Override
-    public IStringSerializable getItem(int pos) {
+    public Cls getItem(int pos) {
         return this.items.get(pos);
     }
 }

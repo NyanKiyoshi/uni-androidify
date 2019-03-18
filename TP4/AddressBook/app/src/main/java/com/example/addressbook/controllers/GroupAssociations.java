@@ -77,7 +77,9 @@ public final class GroupAssociations {
         bundle.putIntegerArrayList(EXTRA_GROUPS_TO_REMOVE, toRemove);
     }
 
-    public static Bundle applyGroups(RemovableAdapter adapter, ContactModel contact) {
+    public static Bundle applyGroups(
+            RemovableAdapter<IStringSerializable> adapter, ContactModel contact) {
+
         Bundle results = new Bundle();
 
         ArrayList<Integer> toRemove = new ArrayList<>();

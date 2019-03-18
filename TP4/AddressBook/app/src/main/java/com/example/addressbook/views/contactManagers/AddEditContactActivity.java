@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,7 +35,9 @@ import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.models.IStringSerializable;
+import com.example.addressbook.models.PostalAddressModel;
 import com.example.addressbook.views.IDeferrableActivity;
+import com.example.addressbook.views.SelectAddressOrNew;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 import com.google.android.material.button.MaterialButton;
@@ -64,7 +67,7 @@ public class AddEditContactActivity
     private ContactModel item;
     private ContactAddEditActivityListener listener;
 
-    private RemovableAdapter groupsAdapter = new RemovableAdapter();
+    private RemovableAdapter<IStringSerializable> groupsAdapter = new RemovableAdapter<>();
     private IStringSerializable[] groups;
 
     private boolean isPictureDeleted;
@@ -124,9 +127,17 @@ public class AddEditContactActivity
     }
 
     private void createRecyclerViews() {
+        final ViewGroup viewGroup = this.findViewById(android.R.id.content);
+
         final RecyclerView groupView = this.findViewById(R.id.groupListRecyclerView);
         groupView.setAdapter(this.groupsAdapter);
         groupView.setLayoutManager(new LinearLayoutManager(this));
+
+        new SelectAddressOrNew<>(
+                PostalAddressModel.class,
+                viewGroup, this, R.id.postalAddressListRecyclerView,
+                R.id.add_postal_address_btn, R.layout.create_postal_address_alert,
+                (item1, pos) -> {});
 
         if (this.item == null) {
             return;
