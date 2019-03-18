@@ -42,7 +42,7 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="create_new_address">New Address</string>
-    <string name="add_postal_address_btn">Add Address</string>
+    <string name="add_postal_address_btn">Add Postal Address</string>
     <string name="postal_address">Postal Address</string>
 
     <string-array name="address_type">

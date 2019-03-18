@@ -47,6 +47,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -69,6 +70,9 @@ public class AddEditContactActivity
 
     private RemovableAdapter<IStringSerializable> groupsAdapter = new RemovableAdapter<>();
     private IStringSerializable[] groups;
+
+    private SelectAddressOrNew<PostalAddressModel> postalAdapter;
+    private ArrayList<PostalAddressModel> removedPostals = new ArrayList<>();
 
     private boolean isPictureDeleted;
 
@@ -133,11 +137,13 @@ public class AddEditContactActivity
         groupView.setAdapter(this.groupsAdapter);
         groupView.setLayoutManager(new LinearLayoutManager(this));
 
-        new SelectAddressOrNew<>(
+        this.postalAdapter = new SelectAddressOrNew<>(
                 PostalAddressModel.class,
                 viewGroup, this, R.id.postalAddressListRecyclerView,
                 R.id.add_postal_address_btn, R.layout.create_postal_address_alert,
-                (item1, pos) -> {});
+                (removedItem, pos) -> {
+                    this.removedPostals.add(removedItem);
+                });
 
         if (this.item == null) {
             return;
@@ -153,6 +159,21 @@ public class AddEditContactActivity
                         // Add the groups to the adapter to put them on the view
                         this.groupsAdapter.clear();
                         this.groupsAdapter.addItems(this.item.groups);
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                AppConfig.getURL("/persons/" + this.item.getId() + "/postalAddresses"),
+                response -> {
+                    try {
+                        // Add the postals to the adapter to put them on the view
+                        this.postalAdapter.clear();
+                        this.postalAdapter.addItems(PostalAddressModel.deserialize(
+                                PostalAddressModel.class, response));
                     } catch (Exception e) {
                         this.onError(e);
                     }

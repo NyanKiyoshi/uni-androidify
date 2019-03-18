@@ -1,7 +1,6 @@
 package com.example.addressbook.controllers;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 

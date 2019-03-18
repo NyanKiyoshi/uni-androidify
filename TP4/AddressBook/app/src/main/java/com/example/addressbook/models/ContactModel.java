@@ -21,6 +21,9 @@ public class ContactModel extends BaseModel {
     public @Nullable ArrayList<Integer> newGroups;
     public @Nullable ArrayList<Integer> removedGroups;
 
+    public @Nullable ArrayList<PostalAddressModel> newPostals;
+    public @Nullable ArrayList<Integer> removedPostals;
+
     public ContactModel() {
 
     }
