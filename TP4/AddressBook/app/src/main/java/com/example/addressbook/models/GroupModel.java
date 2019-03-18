@@ -1,5 +1,7 @@
 package com.example.addressbook.models;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +43,12 @@ public class GroupModel extends BaseModel {
     }
 
     public String getTitle() {
+        return this.title;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
         return this.title;
     }
 }

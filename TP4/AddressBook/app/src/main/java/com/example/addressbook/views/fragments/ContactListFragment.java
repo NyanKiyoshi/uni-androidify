@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.ContactAdapter;
+import com.example.addressbook.controllers.adapters.ContactAdapter;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 import com.example.addressbook.views.viewholders.ContactViewHolder;

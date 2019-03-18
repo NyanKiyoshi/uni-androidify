@@ -36,7 +36,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     }
 
     private Class<Model> modelClass;
-    private RequestQueue requestQueue;
+    RequestQueue requestQueue;
     Context context;
     CRUDEvents<Model> listeners;
 

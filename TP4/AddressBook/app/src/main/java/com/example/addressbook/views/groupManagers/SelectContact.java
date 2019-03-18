@@ -10,7 +10,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.ContactAdapter;
+import com.example.addressbook.controllers.adapters.ContactAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
 

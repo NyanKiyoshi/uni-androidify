@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class BaseModel {
+public abstract class BaseModel implements IStringSerializable {
     public BaseModel() {
 
     }

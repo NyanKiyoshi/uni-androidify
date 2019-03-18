@@ -3,7 +3,6 @@ package com.example.addressbook.views.groupManagers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,8 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.GroupAdapter;
-import com.example.addressbook.controllers.RemoveableContactAdapter;
+import com.example.addressbook.controllers.GroupAssociations;
+import com.example.addressbook.controllers.adapters.RemovableContactAdapter;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
@@ -44,7 +43,7 @@ public class ViewGroupActivity
     private GroupModel groupModel;
 
     private ContentLoadingProgressBar loadingBar;
-    private RemoveableContactAdapter adapter;
+    private RemovableContactAdapter adapter;
 
     private RequestQueue requestQueue;
 
@@ -75,9 +74,9 @@ public class ViewGroupActivity
 
         this.textViewTitle.setText(this.groupModel.getTitle());
 
-        this.adapter = new RemoveableContactAdapter(this::getActivity, null);
+        this.adapter = new RemovableContactAdapter(this::getActivity, null);
         this.adapter.setRemoveClickListener((item, pos) -> {
-            GroupAdapter.deleteAssociation(
+            GroupAssociations.deleteAssociation(
                     this.requestQueue,
                     this.groupModel.getId(), item.getId(),
                     this::refreshData, this::onError);
@@ -177,7 +176,7 @@ public class ViewGroupActivity
         }
 
         if (requestCode == REQUEST_SELECT_CONTACT) {
-            GroupAdapter.associateToContact(
+            GroupAssociations.associateToContact(
                     this.requestQueue,
                     this.groupModel.getId(), resultCode,
                     this::refreshData, this::onAssociateError);

@@ -1,6 +1,7 @@
 package com.example.addressbook.controllers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
@@ -23,13 +24,13 @@ public class ViewUtils {
         Activity activity = deferrable.getActivity();
 
         YesNoDialog.New(
-            activity,
-            R.string.are_you_sure,
-            (dialog, which) -> {
-                dialog.dismiss();
-                deferrable.getLoadingBar().show();
-                deferrable.getListener().startDeleteEntry(item, wrappedOnDeleted(activity));
-            }
+                activity,
+                R.string.are_you_sure,
+                (dialog, which) -> {
+                    dialog.dismiss();
+                    deferrable.getLoadingBar().show();
+                    deferrable.getListener().startDeleteEntry(item, wrappedOnDeleted(activity));
+                }
         ).show();
     }
 

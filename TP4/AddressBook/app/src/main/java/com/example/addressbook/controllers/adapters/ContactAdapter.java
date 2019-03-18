@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 

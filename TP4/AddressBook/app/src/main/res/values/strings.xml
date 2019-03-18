@@ -36,4 +36,9 @@
     <string name="select_contacts">Add Contacts</string>
     <string name="select_contact">Select Contact</string>
     <string name="already_in_group">The contact is already in this group.</string>
+    <string name="select_group">Manage Groups</string>
+    <string name="remove_button">The remove button</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
 </resources>

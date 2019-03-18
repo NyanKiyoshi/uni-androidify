@@ -1,11 +1,8 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.adapters;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +10,7 @@ import com.example.addressbook.R;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
-public class RemoveableContactAdapter extends ContactAdapter {
+public class RemovableContactAdapter extends ContactAdapter {
     public interface IOnClickEvent {
         void onRemoveClick(ContactModel item, int pos);
     }
@@ -21,14 +18,14 @@ public class RemoveableContactAdapter extends ContactAdapter {
     private RecyclerView.ViewHolder holder;
     private IOnClickEvent removeClickListener;
 
-    public RemoveableContactAdapter(IHasContext parent, OnItemClickEvent<ContactModel> listener) {
+    public RemovableContactAdapter(IHasContext parent, OnItemClickEvent<ContactModel> listener) {
         super(parent, listener);
     }
 
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return this.onCreateViewHolder(parent, viewType, R.layout.contact_removeable_entry);
+        return this.onCreateViewHolder(parent, viewType, R.layout.contact_removable_entry);
     }
 
     @Override
