@@ -84,7 +84,7 @@ public final class GroupAssociations {
         ArrayList<Integer> toAdd = new ArrayList<>();
 
         // If the groups were not initialized (should not happen, but could)
-        if (contact.groups == null) {
+        if (contact == null || contact.groups == null) {
             populateSelectedGroupsBundle(results, toAdd, toRemove);
             return results;
         }
