@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     app:contentPadding="15dp"
     app:cardCornerRadius="1dp"
-    app:cardBackgroundColor="@color/cardview_light_background">
+    app:cardBackgroundColor="@color/cardview_light_background"
+    app:elevation="5dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -23,9 +24,7 @@
                 android:layout_height="50dp"
                 android:src="@drawable/ic_icon_contact"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/contact_picture"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="1dp" />
+                android:contentDescription="@string/contact_picture" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
