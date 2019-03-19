@@ -9,81 +9,78 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_text_firstname"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/entry_firstname"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/edit_text_lastname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/entry_lastname"
-            android:inputType="textMultiLine" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/stroke_background"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="300dp"
+            android:background="@color/colorPrimary">
 
             <ImageView
                 android:id="@+id/picture_preview_box"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@drawable/ic_menu_gallery_gray"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/selected_picture" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_person_white" />
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button"
+            <ImageView
                 android:id="@+id/change_picture"
-                app:icon="@drawable/ic_camera_alt_black_24dp"
-                app:iconTint="#000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:gravity="center_vertical|end"
-                android:textColor="#000"
-                android:contentDescription="@string/change_picture"
-                android:backgroundTint="#fff"
-                android:textAppearance="@style/TextAppearance.MaterialButton" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="bottom|end"
+                android:gravity="bottom|end"
+                android:src="@drawable/ic_camera_alt_white"
+                android:scaleType="fitCenter"/>
 
-        </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:orientation="vertical"
-            android:background="@drawable/stroke_background"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button"
-                android:id="@+id/manage_group_btn"
+            <EditText
+                android:id="@+id/edit_text_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/select_group"
-                android:textColor="#000"
-                android:backgroundTint="#fff"
-                android:textAppearance="@style/TextAppearance.MaterialButton"/>
+                android:hint="@string/entry_firstname"
+                android:inputType="text" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/groupListRecyclerView"
+            <EditText
+                android:id="@+id/edit_text_lastname"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/entry_lastname"
+                android:inputType="textMultiLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:background="@drawable/stroke_background"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:id="@+id/manage_group_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_group"
+                    android:textColor="#000"
+                    android:backgroundTint="#fff"
+                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/groupListRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

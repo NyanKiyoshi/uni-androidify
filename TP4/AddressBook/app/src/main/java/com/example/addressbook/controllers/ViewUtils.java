@@ -46,7 +46,7 @@ public class ViewUtils {
             ImageView imageView, @Nullable String path, @DrawableRes int placeholder) {
 
         if (path == null) {
-            imageView.setImageResource(R.drawable.ic_menu_gallery_gray);
+            imageView.setImageResource(R.drawable.ic_icon_contact);
             return;
         }
 
