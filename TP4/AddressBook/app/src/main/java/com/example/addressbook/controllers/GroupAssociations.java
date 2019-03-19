@@ -11,6 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.addressbook.controllers.adapters.ContactAdapter;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.models.AppConfig;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.IStringSerializable;
 
@@ -77,7 +78,7 @@ public final class GroupAssociations {
     }
 
     public static Bundle applyGroups(
-            RemovableAdapter<IStringSerializable> adapter, ContactModel contact) {
+            RemovableAdapter<BaseModel> adapter, ContactModel contact) {
 
         Bundle results = new Bundle();
 

@@ -28,10 +28,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ContactAssociations;
 import com.example.addressbook.controllers.GroupAssociations;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.AppConfig;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.models.IStringSerializable;
@@ -41,6 +43,8 @@ import com.example.addressbook.views.SelectAddressOrNew;
 import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,11 +72,11 @@ public class AddEditContactActivity
     private ContactModel item;
     private ContactAddEditActivityListener listener;
 
-    private RemovableAdapter<IStringSerializable> groupsAdapter = new RemovableAdapter<>();
-    private IStringSerializable[] groups;
+    private RemovableAdapter<BaseModel> groupsAdapter = new RemovableAdapter<>();
+    private BaseModel[] groups;
 
     private SelectAddressOrNew<PostalAddressModel> postalAdapter;
-    private ArrayList<PostalAddressModel> removedPostals = new ArrayList<>();
+    private ArrayList<Integer> removedPostals = new ArrayList<>();
 
     private boolean isPictureDeleted;
 
@@ -142,7 +146,11 @@ public class AddEditContactActivity
                 viewGroup, this, R.id.postalAddressListRecyclerView,
                 R.id.add_postal_address_btn, R.layout.create_postal_address_alert,
                 (removedItem, pos) -> {
-                    this.removedPostals.add(removedItem);
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedPostals.add(removedItem.getId());
+                    }
+                    this.postalAdapter.removeItem(pos);
                 });
 
         if (this.item == null) {
@@ -210,6 +218,13 @@ public class AddEditContactActivity
         // Add groups data
         data.putExtras(
                 GroupAssociations.applyGroups(this.groupsAdapter, this.item));
+
+        try {
+            ContactAssociations.applyPostalAddresses(this.postalAdapter, this.removedPostals, data);
+        } catch (JSONException e) {
+            Log.wtf("Failed to commit postals", e);
+            Toast.makeText(this, R.string.failed_to_add_postals, Toast.LENGTH_LONG).show();
+        }
 
         setResult(RESULT_OK, data);
         finish();
@@ -343,7 +358,7 @@ public class AddEditContactActivity
         for (IStringSerializable group: this.groups) {
             sequences[i] = group.toString();
 
-            for (IStringSerializable selectedGroup : this.groupsAdapter.items) {
+            for (BaseModel selectedGroup : this.groupsAdapter.items) {
                 if (selectedGroup.getId() == group.getId()) {
                     this.groups[i] = selectedGroup;
                     booleans[i] = true;
@@ -356,7 +371,7 @@ public class AddEditContactActivity
 
         (new AlertDialog.Builder(this)
                 .setMultiChoiceItems(sequences, booleans, (dialog, which, isChecked) -> {
-                    IStringSerializable selectedItem = this.groups[which];
+                    BaseModel selectedItem = this.groups[which];
                     if (!isChecked) {
                         this.groupsAdapter.removeItem(selectedItem);
                     } else {
