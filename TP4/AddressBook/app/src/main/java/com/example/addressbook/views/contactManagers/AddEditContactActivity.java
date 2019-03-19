@@ -67,7 +67,7 @@ public class AddEditContactActivity
     private RemovableAdapter groupsAdapter = new RemovableAdapter();
     private IStringSerializable[] groups;
 
-    private boolean isPictureDeleted = false;
+    private boolean isPictureDeleted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

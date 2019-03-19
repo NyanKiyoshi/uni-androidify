@@ -72,13 +72,12 @@ public class ContactAddEditActivityListener
 
         // Picture
         newEntry.setSharedPreferences(ViewUtils.GetSharedPrefs(this.context));
-        if(isDeletedPicture) {
+        if (isDeletedPicture) {
             String oldPicturePath = newEntry.getPicturePath();
 
             if (oldPicturePath != null) {
                 File oldPicture = new File(oldPicturePath);
                 oldPicture.delete();
-                newEntry.setPicturePath(null);
             }
         }
         newEntry.setPicturePath(picture);

@@ -53,6 +53,7 @@ public class ContactModel extends BaseModel {
     }
 
     public void save() {
+        // We require the ID to be passed
         if (this.sharedPreferences == null || this.id < 0) {
             return;
         }
