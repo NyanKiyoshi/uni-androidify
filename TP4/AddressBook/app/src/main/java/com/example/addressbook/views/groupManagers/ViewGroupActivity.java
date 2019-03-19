@@ -86,7 +86,6 @@ public class ViewGroupActivity
         // Set-up and bind the recycler view
         RecyclerView recyclerView = this.findViewById(R.id.listRecyclerView);
         recyclerView.setAdapter(this.adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         MaterialButton addContactBtn = this.findViewById(R.id.add_contact_btn);
