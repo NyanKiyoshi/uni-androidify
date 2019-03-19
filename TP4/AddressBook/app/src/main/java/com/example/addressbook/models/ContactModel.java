@@ -15,11 +15,15 @@ public class ContactModel extends BaseModel {
     private String lastName;
 
     private @Nullable String picturePath;
+    private boolean pictureIsUnsaved;
     private @Nullable SharedPreferences sharedPreferences;
 
-    public @Nullable IStringSerializable[] groups;
+    public @Nullable BaseModel[] groups;
     public @Nullable ArrayList<Integer> newGroups;
     public @Nullable ArrayList<Integer> removedGroups;
+
+    public @Nullable ArrayList<String> newPostalPayloads;
+    public @Nullable ArrayList<Integer> removedPostalsIDs;
 
     public @Nullable ArrayList<PostalAddressModel> newPostals;
     public @Nullable ArrayList<Integer> removedPostals;
@@ -57,7 +61,7 @@ public class ContactModel extends BaseModel {
 
     public void save() {
         // We require the ID to be passed
-        if (this.sharedPreferences == null || this.id < 0) {
+        if (this.sharedPreferences == null || !this.pictureIsUnsaved || this.id < 0) {
             return;
         }
 
@@ -69,6 +73,7 @@ public class ContactModel extends BaseModel {
             prefEditor.putString(this.getIdStr(), this.picturePath);
         }
 
+        pictureIsUnsaved = false;
         prefEditor.apply();
     }
 
@@ -94,6 +99,7 @@ public class ContactModel extends BaseModel {
 
     public void setPicturePath(@Nullable String picturePath) {
         this.picturePath = picturePath;
+        this.pictureIsUnsaved = true;
     }
 
     public void setSharedPreferences(@Nullable SharedPreferences sharedPreferences) {

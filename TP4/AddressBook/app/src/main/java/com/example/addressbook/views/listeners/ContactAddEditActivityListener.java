@@ -3,13 +3,13 @@ package com.example.addressbook.views.listeners;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.example.addressbook.controllers.ContactAssociations;
 import com.example.addressbook.controllers.GroupAssociations;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.ContactModel;
@@ -45,6 +45,11 @@ public class ContactAddEditActivityListener
         intent.putExtra(BaseContactActivity.EXTRA_FILE_ABS_PATH, item.getPicturePath());
     }
 
+    private void commit(@NonNull ContactModel entry) {
+        this.commitGroups(entry);
+        this.commitPostals(entry);
+    }
+
     private void commitGroups(@NonNull ContactModel entry) {
 
         for (Integer newGroupID : entry.newGroups){
@@ -55,6 +60,23 @@ public class ContactAddEditActivityListener
         for (Integer remGroupID : entry.removedGroups){
             GroupAssociations.deleteAssociation(
                     this.requestQueue, remGroupID, entry.getId(), () -> {}, null);
+        }
+    }
+
+    private void commitPostals(@NonNull ContactModel entry) {
+
+        if (entry.newPostalPayloads != null) {
+            for (String payload : entry.newPostalPayloads) {
+                ContactAssociations.createPostal(
+                        this.requestQueue, payload, entry.getId(), null, null);
+            }
+        }
+
+        if (entry.removedPostalsIDs != null) {
+            for (Integer remGroupID : entry.removedPostalsIDs) {
+                ContactAssociations.deletePostal(
+                        this.requestQueue, remGroupID, entry.getId(), null, null);
+            }
         }
     }
 
@@ -79,8 +101,12 @@ public class ContactAddEditActivityListener
                 File oldPicture = new File(oldPicturePath);
                 oldPicture.delete();
             }
+            newEntry.setPicturePath(null);
         }
-        newEntry.setPicturePath(picture);
+
+        if (picture != null) {
+            newEntry.setPicturePath(picture);
+        }
 
         // Groups
         newEntry.newGroups =
@@ -88,14 +114,20 @@ public class ContactAddEditActivityListener
         newEntry.removedGroups =
                 data.getIntegerArrayListExtra(GroupAssociations.EXTRA_GROUPS_TO_REMOVE);
 
+        // Postals
+        newEntry.newPostalPayloads =
+                data.getStringArrayListExtra(ContactAssociations.EXTRA_POSTAL_TO_ADD);
+        newEntry.removedPostalsIDs =
+                data.getIntegerArrayListExtra(ContactAssociations.EXTRA_POSTAL_TO_REMOVE);
+
         return newEntry;
     }
 
     @Override
     void updateEntry(ContactModel newEntry, @Nullable Response.Listener<JSONObject> callback) {
         super.updateEntry(newEntry, response -> {
-            // Commit groups
-            this.commitGroups(newEntry);
+            // Commit all
+            this.commit(newEntry);
 
             newEntry.save();
         });
@@ -111,8 +143,8 @@ public class ContactAddEditActivityListener
                 Log.wtf("Failed to get ID of contact", exc);
             }
 
-            // Commit groups
-            this.commitGroups(newEntry);
+            // Commit all
+            this.commit(newEntry);
 
             // Save the entry
             newEntry.save();

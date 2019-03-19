@@ -1,18 +1,21 @@
 package com.example.addressbook.controllers;
 
+import android.content.Intent;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.example.addressbook.controllers.adapters.ContactAdapter;
+import com.example.addressbook.controllers.http.RawJsonRequest;
 import com.example.addressbook.models.AppConfig;
-import com.example.addressbook.models.PostalAddressModel;
+import com.example.addressbook.models.BaseModel;
+import com.example.addressbook.views.SelectAddressOrNew;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public final class ContactAssociations {
     public static final String EXTRA_POSTAL_TO_REMOVE =
@@ -24,26 +27,44 @@ public final class ContactAssociations {
         return AppConfig.getURL("/persons/" + contactID + "/postalAddresses");
     }
 
+    public static void applyPostalAddresses(
+            SelectAddressOrNew adapter, ArrayList<Integer> toDelete, Intent intent)
+            throws JSONException {
+
+        ArrayList<String> payloads = new ArrayList<>();
+
+        BaseModel item;
+        for (Object o: adapter.items) {
+            item = (BaseModel) o;
+            if (item.getId() < 1) {
+                payloads.add(item.serialize().toString());
+            }
+        }
+        intent.putExtra(EXTRA_POSTAL_TO_ADD, payloads);
+        intent.putStringArrayListExtra(EXTRA_POSTAL_TO_ADD, payloads);
+        intent.putIntegerArrayListExtra(EXTRA_POSTAL_TO_REMOVE, toDelete);
+    }
+
     public static void createPostal(
             RequestQueue requestQueue,
-            PostalAddressModel address, int contactID,
-            Response.Listener<JSONObject> listener,
-            @Nullable Response.ErrorListener errorListener) throws JSONException {
+            String payload, int contactID,
+            Response.Listener<String> listener,
+            @Nullable Response.ErrorListener errorListener) {
 
-        requestQueue.add(new JsonObjectRequest(
+        requestQueue.add(new RawJsonRequest(
                 Request.Method.POST, getPostalURL(contactID),
-                address.serialize(),
+                payload,
                 listener, errorListener));
     }
 
     public static void deletePostal(
             RequestQueue requestQueue,
             int postalID, int contactID,
-            ContactAdapter.ISuccessNoResponse callback,
+            Response.Listener<String> listener,
             @Nullable Response.ErrorListener errorListener) {
 
         requestQueue.add(new StringRequest(
                 Request.Method.DELETE, getPostalURL(contactID) + "/" + postalID,
-                response -> callback.successCallback(), errorListener));
+                listener, errorListener));
     }
 }

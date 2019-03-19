@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
-import com.example.addressbook.models.IStringSerializable;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.views.viewholders.RemovableViewHolder;
 
-public class RemovableAdapter<Cls extends IStringSerializable>
+public class RemovableAdapter<Cls extends BaseModel>
         extends BaseAdapter<RemovableViewHolder, Cls>
         implements ViewUtils.IRemoveClickListener<Cls> {
 

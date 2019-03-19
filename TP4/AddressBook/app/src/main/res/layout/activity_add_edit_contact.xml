@@ -22,7 +22,8 @@
                 android:id="@+id/picture_preview_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_person_white" />
+                android:src="@drawable/ic_person_white"
+                android:scaleType="centerCrop"/>
 
             <ImageView
                 android:id="@+id/change_picture"
