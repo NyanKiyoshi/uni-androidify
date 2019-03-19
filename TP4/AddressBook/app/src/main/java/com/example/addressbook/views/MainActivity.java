@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.replaceFragment(this.contactListFragment);
+        navigationView.setCheckedItem(R.id.nav_contacts);
     }
 
     @Override

@@ -21,11 +21,9 @@
                 android:id="@+id/picture"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_menu_gallery_gray"
+                android:src="@drawable/ic_icon_contact"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/contact_picture"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="1dp" />
+                android:contentDescription="@string/contact_picture" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"

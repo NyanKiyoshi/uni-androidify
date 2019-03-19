@@ -55,6 +55,6 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         ViewUtils.SetImage(
                 holder.pictureBox,
                 item.getPicturePath(),
-                R.drawable.ic_menu_gallery_gray);
+                R.drawable.ic_icon_contact);
     }
 }

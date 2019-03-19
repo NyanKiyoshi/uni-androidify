@@ -85,7 +85,7 @@ public class AddEditContactActivity
         this.picturePreview = findViewById(R.id.picture_preview_box);
 
         // Set-up the 'select picture' button
-        final AppCompatButton changePictureBtn = findViewById(R.id.change_picture);
+        final ImageView changePictureBtn = findViewById(R.id.change_picture);
         changePictureBtn.setOnClickListener(this::onChangePictureBtnPressed);
 
         final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
@@ -107,7 +107,7 @@ public class AddEditContactActivity
             editTextLastname.setText(lastname);
 
             String picture = intent.getStringExtra(EXTRA_FILE_ABS_PATH);
-            ViewUtils.SetImage(this.picturePreview, picture, R.drawable.ic_menu_gallery_gray);
+            ViewUtils.SetImage(this.picturePreview, picture, R.drawable.ic_person);
 
             this.item = new ContactModel(entryID, firstname, lastname);
         } else {
