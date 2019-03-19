@@ -53,16 +53,19 @@ public class ContactModel extends BaseModel {
     }
 
     public void save() {
-        if (this.sharedPreferences == null
-                || this.picturePath == null
-                || this.picturePath.isEmpty()
-                || this.id < 0) {
-
+        // We require the ID to be passed
+        if (this.sharedPreferences == null || this.id < 0) {
             return;
         }
 
         final SharedPreferences.Editor prefEditor = this.sharedPreferences.edit();
-        prefEditor.putString(this.getIdStr(), this.picturePath);
+
+        if (this.picturePath == null) {
+            prefEditor.remove(this.getIdStr());
+        } else {
+            prefEditor.putString(this.getIdStr(), this.picturePath);
+        }
+
         prefEditor.apply();
     }
 

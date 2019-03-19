@@ -67,6 +67,8 @@ public class AddEditContactActivity
     private RemovableAdapter groupsAdapter = new RemovableAdapter();
     private IStringSerializable[] groups;
 
+    private boolean isPictureDeleted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,10 @@ public class AddEditContactActivity
         // Set-up the 'select picture' button
         final ImageView changePictureBtn = findViewById(R.id.change_picture);
         changePictureBtn.setOnClickListener(this::onChangePictureBtnPressed);
+
+        // Set-up the 'delete picture' button
+        final ImageView deletePictureBtn = findViewById(R.id.delete_picture);
+        deletePictureBtn.setOnClickListener(this::onDeletePictureBtnPressed);
 
         final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
         manageGroupsBtn.setOnClickListener(this::selectGroup);
@@ -157,6 +163,7 @@ public class AddEditContactActivity
         Intent data = new Intent();
         data.putExtra(EXTRA_FIRSTNAME, firstName);
         data.putExtra(EXTRA_LASTNAME, lastName);
+        data.putExtra(EXTRA_IS_PICTURE_DELETED, this.isPictureDeleted);
         try {
             data.putExtra(EXTRA_FILE_ABS_PATH, this.savePictureToStorage());
         } catch (IOException exc) {
@@ -186,6 +193,11 @@ public class AddEditContactActivity
         // Always show the chooser (if there are multiple options available)
         startActivityForResult(
                 Intent.createChooser(intent, "Select Picture"), PICKED_PICTURE);
+    }
+
+    public void onDeletePictureBtnPressed(View view) {
+        this.isPictureDeleted = true;
+        picturePreview.setImageResource(R.drawable.ic_person_white);
     }
 
     @Override
