@@ -14,7 +14,9 @@ public abstract class BaseGroupActivity extends BaseChildActivity {
 
     void onError(Exception exc) {
         Log.wtf("Failed to retrieve data", exc);
-        Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
+        if (exc.getMessage() != null) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
 }
