@@ -201,6 +201,7 @@ public class AddEditContactActivity
                 this.setPickedPicture(data.getData());
             } catch (IOException e) {
                 Log.wtf("Failed to get the picture", e);
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }
