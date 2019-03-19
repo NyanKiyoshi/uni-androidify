@@ -102,7 +102,6 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         // Set-up and bind the recycler view
         RecyclerView recyclerView = view.findViewById(R.id.listRecyclerView);
         recyclerView.setAdapter(this.adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
         return view;

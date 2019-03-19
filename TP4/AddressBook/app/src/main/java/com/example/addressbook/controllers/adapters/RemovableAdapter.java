@@ -8,18 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.IStringSerializable;
 import com.example.addressbook.views.viewholders.RemovableViewHolder;
 
-public class RemovableAdapter extends BaseAdapter<RemovableViewHolder, IStringSerializable> {
-    public interface IOnClickEvent {
-        void onRemoveClick(IStringSerializable item, int pos);
-    }
+public class RemovableAdapter
+        extends BaseAdapter<RemovableViewHolder, IStringSerializable>
+        implements ViewUtils.IRemoveClickListener<IStringSerializable> {
 
-    private RecyclerView.ViewHolder holder;
-    private IOnClickEvent removeClickListener;
+    private ViewUtils.IOnClickEvent<IStringSerializable> removeClickListener;
 
-    public RemovableAdapter(IOnClickEvent removeClickListener) {
+    public RemovableAdapter(ViewUtils.IOnClickEvent<IStringSerializable> removeClickListener) {
         super(null);
         this.removeClickListener = removeClickListener;
     }
@@ -42,20 +41,17 @@ public class RemovableAdapter extends BaseAdapter<RemovableViewHolder, IStringSe
     public void onBindViewHolder(@NonNull RemovableViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        this.holder = holder;
-        final IStringSerializable item = this.items.get(position);
-
-        holder.text.setText(item.toString());
-        holder.removeBtn.setOnClickListener(this::onRemoveClick);
+        holder.text.setText(this.items.get(position).toString());
+        holder.removeBtn.setOnClickListener(ViewUtils.wrapRecyclerRemoveItem(this, holder));
     }
 
-    private void onRemoveClick(View view) {
-        int pos = this.holder.getAdapterPosition();
+    @Override
+    public ViewUtils.IOnClickEvent<IStringSerializable> getRemoveCallback() {
+        return this.removeClickListener;
+    }
 
-        if (pos == RecyclerView.NO_POSITION || this.removeClickListener == null) {
-            return;
-        }
-
-        this.removeClickListener.onRemoveClick(this.items.get(pos), pos);
+    @Override
+    public IStringSerializable getItem(int pos) {
+        return this.items.get(pos);
     }
 }

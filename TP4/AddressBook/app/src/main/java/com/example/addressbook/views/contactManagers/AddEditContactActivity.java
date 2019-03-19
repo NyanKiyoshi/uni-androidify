@@ -160,7 +160,7 @@ public class AddEditContactActivity
         try {
             data.putExtra(EXTRA_FILE_ABS_PATH, this.savePictureToStorage());
         } catch (IOException exc) {
-            Log.wtf("Skipping copy of picture", exc);
+            this.onError(exc);
         }
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
