@@ -3,6 +3,7 @@ package com.example.addressbook.views.listeners;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,8 @@ import com.example.addressbook.views.contactManagers.BaseContactActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 public class ContactAddEditActivityListener
         extends BaseAddEditActivityListener<ContactModel> {
@@ -62,11 +65,22 @@ public class ContactAddEditActivityListener
         String firstname = data.getStringExtra(BaseContactActivity.EXTRA_FIRSTNAME);
         String lastname = data.getStringExtra(BaseContactActivity.EXTRA_LASTNAME);
         String picture = data.getStringExtra(BaseContactActivity.EXTRA_FILE_ABS_PATH);
+        boolean isDeletedPicture = data.getBooleanExtra(
+                BaseContactActivity.EXTRA_IS_PICTURE_DELETED, false);
 
         ContactModel newEntry = new ContactModel(id, firstname, lastname);
 
         // Picture
         newEntry.setSharedPreferences(ViewUtils.GetSharedPrefs(this.context));
+        if(isDeletedPicture) {
+            String oldPicturePath = newEntry.getPicturePath();
+
+            if (oldPicturePath != null) {
+                File oldPicture = new File(oldPicturePath);
+                oldPicture.delete();
+                newEntry.setPicturePath(null);
+            }
+        }
         newEntry.setPicturePath(picture);
 
         // Groups
