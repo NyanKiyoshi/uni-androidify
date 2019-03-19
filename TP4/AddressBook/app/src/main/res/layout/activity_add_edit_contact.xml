@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/entry_lastname"
-                android:inputType="textMultiLine" />
+                android:inputType="text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
