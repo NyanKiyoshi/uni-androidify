@@ -88,7 +88,7 @@ public class ViewGroupActivity
         recyclerView.setAdapter(this.adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        MaterialButton addContactBtn = this.findViewById(R.id.add_contact_btn);
+        TextView addContactBtn = this.findViewById(R.id.add_contact_btn);
         addContactBtn.setOnClickListener(v -> openContactSelection());
 
         this.refreshData();

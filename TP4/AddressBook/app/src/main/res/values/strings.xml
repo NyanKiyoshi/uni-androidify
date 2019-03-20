@@ -39,6 +39,7 @@
     <string name="select_group">Manage Groups</string>
     <string name="remove_button">The remove button</string>
     <string name="ok">OK</string>
+    <string name="add">ADD</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="create_new_address">New Address</string>
@@ -51,6 +52,7 @@
     <string name="add_mail_btn">Add Mail Address</string>
     <string name="duplicate_entry">Cannot create duplicates.</string>
     <string name="duplicate_group">This group was a duplicate.</string>
+    <string name="type">Type : </string>
 
     <string-array name="address_type">
         <item>work</item>

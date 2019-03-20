@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -112,7 +113,7 @@ public class AddEditContactActivity
         final ImageView deletePictureBtn = findViewById(R.id.delete_picture);
         deletePictureBtn.setOnClickListener(this::onDeletePictureBtnPressed);
 
-        final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
+        final TextView manageGroupsBtn = findViewById(R.id.manage_group_btn);
         manageGroupsBtn.setOnClickListener(this::selectGroup);
 
         // Get the activity's intent object

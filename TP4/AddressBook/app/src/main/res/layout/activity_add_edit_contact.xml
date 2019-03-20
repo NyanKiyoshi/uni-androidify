@@ -86,104 +86,196 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:orientation="vertical"
-                android:background="@drawable/stroke_background"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/manage_group_btn"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_group"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+                    android:text="@string/menu_groups"
+                    android:textSize="20sp"
+                    android:textColor="#3E3E3B"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/groupListRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/lightGrey"/>
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp" >
+
+                    <TextView
+                        android:id="@+id/manage_group_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="end"/>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:orientation="vertical"
-                android:background="@drawable/stroke_background"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_postal_address_btn"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_postal_address_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+                    android:text="@string/postal_address"
+                    android:textSize="20sp"
+                    android:textColor="#3E3E3B"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/postalAddressListRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/lightGrey"/>
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp" >
+
+                    <TextView
+                        android:id="@+id/add_postal_address_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="end"/>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:orientation="vertical"
-                android:background="@drawable/stroke_background"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_phone_btn"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_phone_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+                    android:text="@string/phone_number"
+                    android:textSize="20sp"
+                    android:textColor="#3E3E3B"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/phoneListRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/lightGrey"/>
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp" >
+
+                    <TextView
+                        android:id="@+id/add_phone_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="end"/>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:orientation="vertical"
-                android:background="@drawable/stroke_background"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_mail_btn"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_mail_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
+                    android:text="@string/email_address"
+                    android:textSize="20sp"
+                    android:textColor="#3E3E3B"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mailListRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/lightGrey"/>
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp" >
+
+                    <TextView
+                        android:id="@+id/add_mail_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="end"/>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             </LinearLayout>
 
