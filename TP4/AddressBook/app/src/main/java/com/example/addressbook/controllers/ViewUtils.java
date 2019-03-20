@@ -54,17 +54,6 @@ public class ViewUtils {
         return null;
     }
 
-    public static void SetImage(
-            ImageView imageView, @Nullable String path, @DrawableRes int placeholder) {
-
-        if (path == null) {
-            imageView.setImageResource(R.drawable.ic_icon_contact);
-            return;
-        }
-
-        imageView.setImageBitmap(BitmapFactory.decodeFile(path));
-    }
-
     private static Response.Listener<String> wrappedOnDeleted(Activity activity) {
         return response -> {
             activity.setResult(RESULT_DELETED);

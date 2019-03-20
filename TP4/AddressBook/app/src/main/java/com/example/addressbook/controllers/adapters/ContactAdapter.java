@@ -1,19 +1,29 @@
 package com.example.addressbook.controllers.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
+import com.example.addressbook.controllers.files.ImageProcessor;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
+import static com.example.addressbook.models.Drawables.DefaultContactPic;
+import static com.example.addressbook.models.Drawables.ResolutionThumbnail;
+
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
+    private final Handler handler = new Handler();
+
     public interface IHasContext {
         Context getContext();
     }
@@ -23,6 +33,24 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
     public ContactAdapter(IHasContext parent, OnItemClickEvent<ContactModel> listener) {
         super(listener);
         this.parent = parent;
+    }
+
+    public static void setImage(String path, ImageView destView, boolean resize) {
+        if (path == null) {
+            destView.setImageResource(DefaultContactPic);
+            return;
+        }
+
+        Bitmap bitmap = resize
+                ? ImageProcessor.decodeSampledBitmap(
+                path, ResolutionThumbnail, ResolutionThumbnail)
+                : BitmapFactory.decodeFile(path);
+
+        destView.setImageBitmap(bitmap);
+    }
+
+    public static void setImage(String path, ImageView destView) {
+        setImage(path, destView, true);
     }
 
     @NonNull
@@ -52,9 +80,10 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         holder.lastname.setText(item.getLastName());
 
         item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.parent.getContext()));
-        ViewUtils.SetImage(
-                holder.pictureBox,
-                item.getPicturePath(),
-                R.drawable.ic_icon_contact);
+        String picturePath = item.getPicturePath();
+
+        if (picturePath != null) {
+            this.handler.post(() -> setImage(picturePath, holder.pictureBox));
+        }
     }
 }
