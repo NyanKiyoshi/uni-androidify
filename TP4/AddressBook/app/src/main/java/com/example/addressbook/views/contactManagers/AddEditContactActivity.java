@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +25,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.files.FileOperation;
+import com.example.addressbook.controllers.files.ImageProcessor;
+import com.example.addressbook.controllers.files.RandomFile;
 import com.example.addressbook.controllers.http.ContactAssociations;
 import com.example.addressbook.controllers.http.GroupAssociations;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
@@ -47,20 +48,18 @@ import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 public class AddEditContactActivity
         extends BaseContactActivity
         implements IDeferrableActivity, BaseAddEditActivityListener.CRUDEvents<ContactModel>  {
 
     private final static int PICKED_PICTURE = 1;
+    private final ImageProcessor imageProcessor = new ImageProcessor();
+
+    private @Nullable Bitmap selectedPicture;
 
     private EditText editTextFirstname;
     private EditText editTextLastname;
@@ -69,7 +68,6 @@ public class AddEditContactActivity
     private ContentLoadingProgressBar loadingBar;
     private RequestQueue requestQueue;
 
-    private Uri pictureURI;
     private ContactModel item;
     private ContactAddEditActivityListener listener;
 
@@ -265,10 +263,15 @@ public class AddEditContactActivity
         data.putExtra(EXTRA_FIRSTNAME, firstName);
         data.putExtra(EXTRA_LASTNAME, lastName);
         data.putExtra(EXTRA_IS_PICTURE_DELETED, this.isPictureDeleted);
-        try {
-            data.putExtra(EXTRA_FILE_ABS_PATH, this.savePictureToStorage());
-        } catch (IOException exc) {
-            this.onError(exc);
+
+        if (this.selectedPicture != null) {
+            String pictureCopyPath = RandomFile.sfromBase(this.getFilesDir());
+            try {
+                data.putExtra(EXTRA_FILE_ABS_PATH, pictureCopyPath);
+                FileOperation.saveBitmapAsync(selectedPicture, pictureCopyPath);
+            } catch (IOException exc) {
+                this.onError(exc);
+            }
         }
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
@@ -353,41 +356,10 @@ public class AddEditContactActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private String savePictureToStorage() throws IOException {
-        if (this.pictureURI == null) {
-            return null;
-        }
-
-        // Get the copy destination
-        File destinationFile = new File(
-                this.getFilesDir().getAbsolutePath(), UUID.randomUUID().toString());
-        FileChannel destination =
-                new FileOutputStream(destinationFile).getChannel();
-
-        // Get the source file's path
-        ParcelFileDescriptor sourcefd =
-                this.getContentResolver().openFileDescriptor(pictureURI, "r");
-        FileChannel source =
-                new FileInputStream(sourcefd.getFileDescriptor()).getChannel();
-
-        // Copy the source file to our destination
-        try {
-            destination.transferFrom(source, 0, source.size());
-        }
-        catch (Exception exc) {
-            source.close();
-            destination.close();
-            throw exc;
-        }
-
-        return destinationFile.getAbsolutePath();
-    }
-
     private void setPickedPicture(Uri pictureURI) throws IOException {
-        this.pictureURI = pictureURI;
-
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), pictureURI);
-        this.picturePreview.setImageBitmap(bitmap);
+        // TODO: async
+        this.picturePreview.setImageBitmap(
+                this.imageProcessor.processPicture(this.getContentResolver(), pictureURI));
     }
 
     private void selectGroup(View view) {
