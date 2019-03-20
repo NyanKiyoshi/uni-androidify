@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ErrorUtils;
 import com.example.addressbook.controllers.http.GroupAssociations;
 import com.example.addressbook.controllers.adapters.RemovableContactAdapter;
 import com.example.addressbook.controllers.ViewUtils;
@@ -149,9 +150,17 @@ public class ViewGroupActivity
     }
 
     @Override
-    public void onEntryFailedUpdating() {
-        Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
+    public void onEntryFailedUpdating(Exception exc) {
         this.loadingBar.hide();
+
+        switch (ErrorUtils.parseError(exc)) {
+            case DUPLICATE:
+                Toast.makeText(this, R.string.duplicate_group, Toast.LENGTH_SHORT).show();
+                break;
+            case UNKNOWN:
+                Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

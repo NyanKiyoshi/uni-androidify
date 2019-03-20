@@ -484,7 +484,7 @@ public class AddEditContactActivity
     }
 
     @Override
-    public void onEntryFailedUpdating() {
+    public void onEntryFailedUpdating(Exception exc) {
         Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
         this.loadingBar.hide();
     }
