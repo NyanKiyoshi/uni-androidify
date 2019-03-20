@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +59,7 @@ public class AddEditContactActivity
 
     private final static int PICKED_PICTURE = 1;
     private final ImageProcessor imageProcessor = new ImageProcessor();
+    private final Handler handler = new Handler();
 
     private @Nullable Bitmap selectedPicture;
 
@@ -138,7 +140,8 @@ public class AddEditContactActivity
     }
 
     private void updatePreviewPicture(String picture) {
-        ContactAdapter.setImage(picture, this.picturePreview, false);
+        this.handler.post(() ->
+                ContactAdapter.setImage(picture, this.picturePreview, false));
     }
 
     private void createRecyclerViews() {
@@ -268,12 +271,14 @@ public class AddEditContactActivity
 
         if (this.selectedPicture != null) {
             String pictureCopyPath = RandomFile.sfromBase(this.getFilesDir());
-            try {
-                data.putExtra(EXTRA_FILE_ABS_PATH, pictureCopyPath);
-                FileOperation.saveBitmapAsync(selectedPicture, pictureCopyPath);
-            } catch (IOException exc) {
-                this.onError(exc);
-            }
+            data.putExtra(EXTRA_FILE_ABS_PATH, pictureCopyPath);
+            this.handler.post(() -> {
+                try {
+                    FileOperation.saveBitmap(selectedPicture, pictureCopyPath);
+                } catch (IOException exc) {
+                    this.onError(exc);
+                }
+            });
         }
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
@@ -324,12 +329,7 @@ public class AddEditContactActivity
         }
 
         if (requestCode == PICKED_PICTURE) {
-            try {
-                this.setPickedPicture(data.getData());
-            } catch (IOException e) {
-                Log.wtf("Failed to get the picture", e);
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            this.setPickedPicture(data.getData());
         }
     }
 
@@ -358,11 +358,17 @@ public class AddEditContactActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void setPickedPicture(Uri pictureURI) throws IOException {
-        // TODO: async
-        this.selectedPicture = this.imageProcessor.compress(
-                this.getContentResolver(), pictureURI);
-        this.picturePreview.setImageBitmap(this.selectedPicture);
+    private void setPickedPicture(Uri pictureURI) {
+        this.handler.post(() -> {
+            try {
+                this.selectedPicture = this.imageProcessor.compress(
+                        this.getContentResolver(), pictureURI);
+                this.picturePreview.setImageBitmap(this.selectedPicture);
+            } catch (IOException e) {
+                Log.wtf("Failed to get the picture", e);
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void selectGroup(View view) {

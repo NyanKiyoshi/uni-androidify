@@ -6,11 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public final class FileOperation {
-    public static void saveBitmapAsync(Bitmap bitmap, String dest) throws IOException {
-        // TODO
-        saveBitmap(bitmap, dest);
-    }
-
     public static void saveBitmap(Bitmap bitmap, String dest) throws IOException {
         FileOutputStream fos = new FileOutputStream(dest);
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);

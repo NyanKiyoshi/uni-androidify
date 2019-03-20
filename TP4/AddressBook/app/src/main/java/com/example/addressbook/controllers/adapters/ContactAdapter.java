@@ -3,6 +3,7 @@ package com.example.addressbook.controllers.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import static com.example.addressbook.models.Drawables.DefaultContactPic;
 import static com.example.addressbook.models.Drawables.ResolutionThumbnail;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
+    private final Handler handler = new Handler();
+
     public interface IHasContext {
         Context getContext();
     }
@@ -77,6 +80,10 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         holder.lastname.setText(item.getLastName());
 
         item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.parent.getContext()));
-        setImage(item.getPicturePath(), holder.pictureBox);
+        String picturePath = item.getPicturePath();
+
+        if (picturePath != null) {
+            this.handler.post(() -> setImage(picturePath, holder.pictureBox));
+        }
     }
 }
