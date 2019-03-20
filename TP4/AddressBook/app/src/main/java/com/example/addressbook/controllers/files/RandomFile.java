@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public final class RandomFile {
     public static File fromBase(File base) {
-        return fromBase(base.getAbsoluteFile());
+        return fromBase(base.getAbsolutePath());
     }
 
     public static File fromBase(String base) {

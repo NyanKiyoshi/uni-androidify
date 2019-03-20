@@ -1,9 +1,11 @@
 package com.example.addressbook.controllers.adapters;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -12,6 +14,8 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
+
+import static com.example.addressbook.models.Drawables.DefaultContactPic;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
     public interface IHasContext {
@@ -23,6 +27,15 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
     public ContactAdapter(IHasContext parent, OnItemClickEvent<ContactModel> listener) {
         super(listener);
         this.parent = parent;
+    }
+
+    public static void setImage(String path, ImageView destView) {
+        if (path == null) {
+            destView.setImageResource(DefaultContactPic);
+            return;
+        }
+
+        destView.setImageBitmap(BitmapFactory.decodeFile(path));
     }
 
     @NonNull
@@ -52,9 +65,6 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         holder.lastname.setText(item.getLastName());
 
         item.setSharedPreferences(ViewUtils.GetSharedPrefs(this.parent.getContext()));
-        ViewUtils.SetImage(
-                holder.pictureBox,
-                item.getPicturePath(),
-                R.drawable.ic_icon_contact);
+        setImage(item.getPicturePath(), holder.pictureBox);
     }
 }

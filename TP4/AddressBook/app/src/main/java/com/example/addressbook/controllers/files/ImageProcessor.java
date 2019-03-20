@@ -23,7 +23,7 @@ public class ImageProcessor {
         this(DEFAULT_MAX_IMAGE_SIZE);
     }
 
-    public Bitmap processPicture(
+    public Bitmap compress(
             ContentResolver resolver, Uri source) throws IOException {
 
         // Get the source file's path
@@ -74,7 +74,7 @@ public class ImageProcessor {
         return b;
     }
 
-    public int calculateInSampleSize(
+    public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
 
         // Raw height and width of image
@@ -98,7 +98,7 @@ public class ImageProcessor {
         return inSampleSize;
     }
 
-    public Bitmap decodeSampledBitmapFromResource(
+    public static Bitmap decodeSampledBitmapFromResource(
             String path, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions

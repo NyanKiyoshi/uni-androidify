@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.adapters.ContactAdapter;
 import com.example.addressbook.controllers.files.FileOperation;
 import com.example.addressbook.controllers.files.ImageProcessor;
 import com.example.addressbook.controllers.files.RandomFile;
@@ -50,7 +51,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class AddEditContactActivity
         extends BaseContactActivity
@@ -129,7 +129,7 @@ public class AddEditContactActivity
             editTextLastname.setText(lastname);
 
             String picture = intent.getStringExtra(EXTRA_FILE_ABS_PATH);
-            ViewUtils.SetImage(this.picturePreview, picture, R.drawable.ic_person);
+            ContactAdapter.setImage(picture, this.picturePreview);
 
             this.item = new ContactModel(entryID, firstname, lastname);
         } else {
@@ -310,7 +310,7 @@ public class AddEditContactActivity
 
     public void onDeletePictureBtnPressed(View view) {
         this.isPictureDeleted = true;
-        picturePreview.setImageResource(R.drawable.ic_person_white);
+        ContactAdapter.setImage(null, this.picturePreview);
     }
 
     @Override
@@ -358,8 +358,9 @@ public class AddEditContactActivity
 
     private void setPickedPicture(Uri pictureURI) throws IOException {
         // TODO: async
-        this.picturePreview.setImageBitmap(
-                this.imageProcessor.processPicture(this.getContentResolver(), pictureURI));
+        this.selectedPicture = this.imageProcessor.compress(
+                this.getContentResolver(), pictureURI);
+        this.picturePreview.setImageBitmap(this.selectedPicture);
     }
 
     private void selectGroup(View view) {
@@ -414,12 +415,6 @@ public class AddEditContactActivity
                     }
                 })
                 .setPositiveButton(R.string.close, (dialog, which) -> {})).show();
-    }
-
-    private static void removeOrAdd(Set set, Object o) {
-        if (!set.remove(o)) {
-            set.add(o);
-        }
     }
 
     private void onError(Exception exc) {
