@@ -25,23 +25,29 @@
                 android:src="@drawable/ic_person_white"
                 android:scaleType="centerCrop"/>
 
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/change_picture"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_gravity="bottom|end"
                 android:gravity="bottom|end"
+                android:backgroundTint="#27000000"
+                app:elevation="0dp"
+                app:borderWidth="0dp"
                 android:src="@drawable/ic_camera_alt_white" />
 
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/delete_picture"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_gravity="bottom|start"
                 android:gravity="bottom|start"
-                android:src="@drawable/ic_delete" />
+                android:backgroundTint="#27000000"
+                app:elevation="0dp"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_delete"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
