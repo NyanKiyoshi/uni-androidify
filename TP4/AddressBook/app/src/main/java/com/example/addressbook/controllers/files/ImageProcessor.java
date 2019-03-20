@@ -98,7 +98,7 @@ public class ImageProcessor {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(
+    public static Bitmap decodeSampledBitmap(
             String path, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions

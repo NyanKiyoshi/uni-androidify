@@ -1,7 +1,6 @@
 package com.example.addressbook.controllers.adapters;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,12 @@ import androidx.annotation.NonNull;
 
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
+import com.example.addressbook.controllers.files.ImageProcessor;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
 import static com.example.addressbook.models.Drawables.DefaultContactPic;
+import static com.example.addressbook.models.Drawables.ResolutionThumbnail;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
     public interface IHasContext {
@@ -35,7 +36,8 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
             return;
         }
 
-        destView.setImageBitmap(BitmapFactory.decodeFile(path));
+        destView.setImageBitmap(
+                ImageProcessor.decodeSampledBitmap(path, ResolutionThumbnail, ResolutionThumbnail));
     }
 
     @NonNull
