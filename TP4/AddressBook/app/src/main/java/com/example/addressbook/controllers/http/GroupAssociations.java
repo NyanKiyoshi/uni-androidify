@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.http;
 
 import android.os.Bundle;
 

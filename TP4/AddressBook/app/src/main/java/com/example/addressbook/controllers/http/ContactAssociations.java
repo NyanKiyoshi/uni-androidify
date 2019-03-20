@@ -1,4 +1,4 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.http;
 
 import android.content.Intent;
 
@@ -19,19 +19,19 @@ import java.util.ArrayList;
 
 public final class ContactAssociations {
     public static final String EXTRA_POSTAL_TO_REMOVE =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_POSTAL_TO_REMOVE";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_POSTAL_TO_REMOVE";
     public static final String EXTRA_POSTAL_TO_ADD =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_POSTAL_TO_ADD";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_POSTAL_TO_ADD";
 
     public static final String EXTRA_NUMBER_TO_REMOVE =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_NUMBER_TO_REMOVE";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_NUMBER_TO_REMOVE";
     public static final String EXTRA_NUMBER_TO_ADD =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_NUMBER_TO_ADD";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_NUMBER_TO_ADD";
 
     public static final String EXTRA_MAIL_TO_REMOVE =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_MAIL_TO_REMOVE";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_MAIL_TO_REMOVE";
     public static final String EXTRA_MAIL_TO_ADD =
-            "com.example.addressbook.controllers.ContactAssociations.EXTRA_MAIL_TO_ADD";
+            "com.example.addressbook.controllers.http.ContactAssociations.EXTRA_MAIL_TO_ADD";
 
     public static String getPostalURL(int contactID) {
         return AppConfig.getURL("/persons/" + contactID + "/postalAddresses");

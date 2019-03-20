@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,7 +25,7 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.adapters.BaseAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.BaseModel;
-import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.viewholders.BaseViewHolder;
 
 import org.json.JSONArray;

@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,15 +19,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.GroupAssociations;
+import com.example.addressbook.controllers.http.GroupAssociations;
 import com.example.addressbook.controllers.adapters.RemovableContactAdapter;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.IDeferrableActivity;
-import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
-import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
+import com.example.addressbook.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.listeners.GroupAddEditActivityListener;
 import com.google.android.material.button.MaterialButton;
 
 public class ViewGroupActivity

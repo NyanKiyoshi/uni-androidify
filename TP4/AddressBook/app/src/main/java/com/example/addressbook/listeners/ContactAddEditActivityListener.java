@@ -1,4 +1,4 @@
-package com.example.addressbook.views.listeners;
+package com.example.addressbook.listeners;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.example.addressbook.controllers.ContactAssociations;
-import com.example.addressbook.controllers.GroupAssociations;
+import com.example.addressbook.controllers.http.ContactAssociations;
+import com.example.addressbook.controllers.http.GroupAssociations;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.contactManagers.AddEditContactActivity;
