@@ -128,15 +128,17 @@ public class AddEditContactActivity
             editTextFirstname.setText(firstname);
             editTextLastname.setText(lastname);
 
-            String picture = intent.getStringExtra(EXTRA_FILE_ABS_PATH);
-            ContactAdapter.setImage(picture, this.picturePreview);
-
+            this.updatePreviewPicture(intent.getStringExtra(EXTRA_FILE_ABS_PATH));
             this.item = new ContactModel(entryID, firstname, lastname);
         } else {
             setTitle("Add Contact");
         }
 
         this.createRecyclerViews();
+    }
+
+    private void updatePreviewPicture(String picture) {
+        ContactAdapter.setImage(picture, this.picturePreview, false);
     }
 
     private void createRecyclerViews() {
@@ -310,7 +312,7 @@ public class AddEditContactActivity
 
     public void onDeletePictureBtnPressed(View view) {
         this.isPictureDeleted = true;
-        ContactAdapter.setImage(null, this.picturePreview);
+        this.updatePreviewPicture(null);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 
 public class ImageProcessor {
-    private final static int DEFAULT_MAX_IMAGE_SIZE = 100000;  // 0.128MP
+    private final static int DEFAULT_MAX_IMAGE_SIZE = 150000;  // 0.15MP
     private final int MAX_IMAGE_SIZE;
 
     public ImageProcessor(int maxImageSize) {

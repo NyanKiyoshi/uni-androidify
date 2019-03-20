@@ -1,6 +1,8 @@
 package com.example.addressbook.controllers.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +32,22 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         this.parent = parent;
     }
 
-    public static void setImage(String path, ImageView destView) {
+    public static void setImage(String path, ImageView destView, boolean resize) {
         if (path == null) {
             destView.setImageResource(DefaultContactPic);
             return;
         }
 
-        destView.setImageBitmap(
-                ImageProcessor.decodeSampledBitmap(path, ResolutionThumbnail, ResolutionThumbnail));
+        Bitmap bitmap = resize
+                ? ImageProcessor.decodeSampledBitmap(
+                path, ResolutionThumbnail, ResolutionThumbnail)
+                : BitmapFactory.decodeFile(path);
+
+        destView.setImageBitmap(bitmap);
+    }
+
+    public static void setImage(String path, ImageView destView) {
+        setImage(path, destView, true);
     }
 
     @NonNull
