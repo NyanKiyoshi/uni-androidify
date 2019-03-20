@@ -1,7 +1,6 @@
-package com.example.addressbook.controllers;
+package com.example.addressbook.controllers.http;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -12,6 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.addressbook.controllers.adapters.ContactAdapter;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.models.AppConfig;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.IStringSerializable;
 
@@ -25,6 +25,10 @@ public final class GroupAssociations {
     public static final String EXTRA_GROUPS_TO_ADD =
             "com.example.addressbook.controllers.adapters.GroupAdapter.EXTRA_GROUPS_TO_ADD";
 
+    public static String getPersonGroupURL(int contactID) {
+        return AppConfig.getURL("/persons/" + contactID + "/groups");
+    }
+
     private static void manageAssociation(
             int requestMethod,
             RequestQueue requestQueue,
@@ -33,7 +37,7 @@ public final class GroupAssociations {
             @Nullable Response.ErrorListener errorListener) {
 
         requestQueue.add(new StringRequest(requestMethod,
-                AppConfig.getURL("/persons/" + contactID + "/groups/" + groupID),
+                getPersonGroupURL(contactID) + "/" + groupID,
                 response -> callback.successCallback(),
                 errorListener
         ));
@@ -77,7 +81,9 @@ public final class GroupAssociations {
         bundle.putIntegerArrayList(EXTRA_GROUPS_TO_REMOVE, toRemove);
     }
 
-    public static Bundle applyGroups(RemovableAdapter adapter, ContactModel contact) {
+    public static Bundle applyGroups(
+            RemovableAdapter<BaseModel> adapter, ContactModel contact) {
+
         Bundle results = new Bundle();
 
         ArrayList<Integer> toRemove = new ArrayList<>();

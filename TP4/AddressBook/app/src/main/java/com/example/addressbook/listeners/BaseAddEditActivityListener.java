@@ -1,4 +1,4 @@
-package com.example.addressbook.views.listeners;
+package com.example.addressbook.listeners;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +30,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
     public interface CRUDEvents<Model> {
         void refreshData();
         void onEntryUpdated(Model newItem);
-        void onEntryFailedUpdating();
+        void onEntryFailedUpdating(Exception exc);
         void onEntryStartUpdating(Model newItem);
         void onIntentReadyToStart(Intent intent, int requestCode);
     }
@@ -128,7 +128,7 @@ public abstract class BaseAddEditActivityListener<Model extends BaseModel> {
         // Log the full error
         Log.e(this.getClass().getName(),
                 "got an error while getting entries", error);
-        this.listeners.onEntryFailedUpdating();
+        this.listeners.onEntryFailedUpdating(error);
     }
 
     void updateEntry(Model newEntry, @Nullable Response.Listener<JSONObject> callback) {

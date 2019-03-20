@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -23,10 +22,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
+import com.example.addressbook.controllers.ErrorUtils;
 import com.example.addressbook.controllers.adapters.BaseAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.BaseModel;
-import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.views.viewholders.BaseViewHolder;
 
 import org.json.JSONArray;
@@ -163,9 +163,17 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     }
 
     @Override
-    public void onEntryFailedUpdating() {
-        Toast.makeText(this.context, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+    public void onEntryFailedUpdating(Exception exc) {
         this.loadingBar.hide();
+
+        switch (ErrorUtils.parseError(exc)) {
+            case DUPLICATE:
+                Toast.makeText(this.context, R.string.duplicate_entry, Toast.LENGTH_SHORT).show();
+                break;
+            case UNKNOWN:
+                Toast.makeText(this.context, R.string.failed_to_create, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

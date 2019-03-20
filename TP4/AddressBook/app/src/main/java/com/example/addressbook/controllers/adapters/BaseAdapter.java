@@ -3,14 +3,14 @@ package com.example.addressbook.controllers.adapters;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.addressbook.models.IStringSerializable;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.views.viewholders.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public abstract class BaseAdapter<VH extends BaseViewHolder, Model extends IStringSerializable>
+public abstract class BaseAdapter<VH extends BaseViewHolder, Model extends BaseModel>
         extends RecyclerView.Adapter<VH> {
 
     public interface OnItemClickEvent<Model> {

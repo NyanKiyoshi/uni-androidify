@@ -13,12 +13,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,23 +27,32 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.addressbook.R;
-import com.example.addressbook.controllers.GroupAssociations;
+import com.example.addressbook.controllers.http.ContactAssociations;
+import com.example.addressbook.controllers.http.GroupAssociations;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.models.AppConfig;
+import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.models.IStringSerializable;
+import com.example.addressbook.models.MailAddressModel;
+import com.example.addressbook.models.PhoneNumberModel;
+import com.example.addressbook.models.PostalAddressModel;
 import com.example.addressbook.views.IDeferrableActivity;
-import com.example.addressbook.views.listeners.BaseAddEditActivityListener;
-import com.example.addressbook.views.listeners.ContactAddEditActivityListener;
+import com.example.addressbook.views.SelectAddressOrNew;
+import com.example.addressbook.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.listeners.ContactAddEditActivityListener;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,8 +73,19 @@ public class AddEditContactActivity
     private ContactModel item;
     private ContactAddEditActivityListener listener;
 
-    private RemovableAdapter groupsAdapter = new RemovableAdapter();
-    private IStringSerializable[] groups;
+    private RemovableAdapter<BaseModel> groupsAdapter = new RemovableAdapter<>();
+    private BaseModel[] groups;
+
+    private SelectAddressOrNew<PostalAddressModel> postalAdapter;
+    private ArrayList<Integer> removedPostals = new ArrayList<>();
+
+    private SelectAddressOrNew<PhoneNumberModel> phonesAdapter;
+    private ArrayList<Integer> removedPhones = new ArrayList<>();
+
+    private SelectAddressOrNew<MailAddressModel> emailsAdapter;
+    private ArrayList<Integer> removedEmails = new ArrayList<>();
+
+    private boolean isPictureDeleted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +107,10 @@ public class AddEditContactActivity
         // Set-up the 'select picture' button
         final ImageView changePictureBtn = findViewById(R.id.change_picture);
         changePictureBtn.setOnClickListener(this::onChangePictureBtnPressed);
+
+        // Set-up the 'delete picture' button
+        final ImageView deletePictureBtn = findViewById(R.id.delete_picture);
+        deletePictureBtn.setOnClickListener(this::onDeletePictureBtnPressed);
 
         final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
         manageGroupsBtn.setOnClickListener(this::selectGroup);
@@ -118,16 +142,54 @@ public class AddEditContactActivity
     }
 
     private void createRecyclerViews() {
+        final ViewGroup viewGroup = this.findViewById(android.R.id.content);
+
         final RecyclerView groupView = this.findViewById(R.id.groupListRecyclerView);
         groupView.setAdapter(this.groupsAdapter);
         groupView.setLayoutManager(new LinearLayoutManager(this));
+
+        this.postalAdapter = new SelectAddressOrNew<>(
+                PostalAddressModel.class,
+                viewGroup, this, R.id.postalAddressListRecyclerView,
+                R.id.add_postal_address_btn, R.layout.create_postal_address_alert,
+                (removedItem, pos) -> {
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedPostals.add(removedItem.getId());
+                    }
+                    this.postalAdapter.removeItem(pos);
+                });
+
+        this.phonesAdapter = new SelectAddressOrNew<>(
+                PhoneNumberModel.class,
+                viewGroup, this, R.id.phoneListRecyclerView,
+                R.id.add_phone_btn, R.layout.create_phone_address_alert,
+                (removedItem, pos) -> {
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedPhones.add(removedItem.getId());
+                    }
+                    this.phonesAdapter.removeItem(pos);
+                });
+
+        this.emailsAdapter = new SelectAddressOrNew<>(
+                MailAddressModel.class,
+                viewGroup, this, R.id.mailListRecyclerView,
+                R.id.add_mail_btn, R.layout.create_email_address_alert,
+                (removedItem, pos) -> {
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedEmails.add(removedItem.getId());
+                    }
+                    this.emailsAdapter.removeItem(pos);
+                });
 
         if (this.item == null) {
             return;
         }
 
         this.requestQueue.add(new JsonArrayRequest(
-                AppConfig.getURL("/persons/" + this.item.getId() + "/groups"),
+                GroupAssociations.getPersonGroupURL(this.item.getId()),
                 response -> {
                     try {
                         // Copy the base groups to protect them against edition
@@ -136,6 +198,51 @@ public class AddEditContactActivity
                         // Add the groups to the adapter to put them on the view
                         this.groupsAdapter.clear();
                         this.groupsAdapter.addItems(this.item.groups);
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                ContactAssociations.getPostalURL(this.item.getId()),
+                response -> {
+                    try {
+                        // Add the postals to the adapter to put them on the view
+                        this.postalAdapter.clear();
+                        this.postalAdapter.addItems(PostalAddressModel.deserialize(
+                                PostalAddressModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                ContactAssociations.getPhoneURL(this.item.getId()),
+                response -> {
+                    try {
+                        // Add the phone numbers to the adapter to put them on the view
+                        this.phonesAdapter.clear();
+                        this.phonesAdapter.addItems(PhoneNumberModel.deserialize(
+                                PhoneNumberModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                ContactAssociations.getMailURL(this.item.getId()),
+                response -> {
+                    try {
+                        // Add the phone numbers to the adapter to put them on the view
+                        this.emailsAdapter.clear();
+                        this.emailsAdapter.addItems(MailAddressModel.deserialize(
+                                MailAddressModel.class, response));
                     } catch (Exception e) {
                         this.onError(e);
                     }
@@ -157,6 +264,7 @@ public class AddEditContactActivity
         Intent data = new Intent();
         data.putExtra(EXTRA_FIRSTNAME, firstName);
         data.putExtra(EXTRA_LASTNAME, lastName);
+        data.putExtra(EXTRA_IS_PICTURE_DELETED, this.isPictureDeleted);
         try {
             data.putExtra(EXTRA_FILE_ABS_PATH, this.savePictureToStorage());
         } catch (IOException exc) {
@@ -172,6 +280,15 @@ public class AddEditContactActivity
         data.putExtras(
                 GroupAssociations.applyGroups(this.groupsAdapter, this.item));
 
+        try {
+            ContactAssociations.applyPostalAddresses(this.postalAdapter, this.removedPostals, data);
+            ContactAssociations.applyPhoneNumbers(this.phonesAdapter, this.removedPhones, data);
+            ContactAssociations.applyEmails(this.emailsAdapter, this.removedEmails, data);
+        } catch (JSONException e) {
+            Log.wtf("Failed to commit data from contact", e);
+            Toast.makeText(this, R.string.failed_to_add_postals, Toast.LENGTH_LONG).show();
+        }
+
         setResult(RESULT_OK, data);
         finish();
     }
@@ -186,6 +303,11 @@ public class AddEditContactActivity
         // Always show the chooser (if there are multiple options available)
         startActivityForResult(
                 Intent.createChooser(intent, "Select Picture"), PICKED_PICTURE);
+    }
+
+    public void onDeletePictureBtnPressed(View view) {
+        this.isPictureDeleted = true;
+        picturePreview.setImageResource(R.drawable.ic_person_white);
     }
 
     @Override
@@ -299,7 +421,7 @@ public class AddEditContactActivity
         for (IStringSerializable group: this.groups) {
             sequences[i] = group.toString();
 
-            for (IStringSerializable selectedGroup : this.groupsAdapter.items) {
+            for (BaseModel selectedGroup : this.groupsAdapter.items) {
                 if (selectedGroup.getId() == group.getId()) {
                     this.groups[i] = selectedGroup;
                     booleans[i] = true;
@@ -312,7 +434,7 @@ public class AddEditContactActivity
 
         (new AlertDialog.Builder(this)
                 .setMultiChoiceItems(sequences, booleans, (dialog, which, isChecked) -> {
-                    IStringSerializable selectedItem = this.groups[which];
+                    BaseModel selectedItem = this.groups[which];
                     if (!isChecked) {
                         this.groupsAdapter.removeItem(selectedItem);
                     } else {
@@ -362,7 +484,7 @@ public class AddEditContactActivity
     }
 
     @Override
-    public void onEntryFailedUpdating() {
+    public void onEntryFailedUpdating(Exception exc) {
         Toast.makeText(this, R.string.failed_to_update, Toast.LENGTH_SHORT).show();
         this.loadingBar.hide();
     }
