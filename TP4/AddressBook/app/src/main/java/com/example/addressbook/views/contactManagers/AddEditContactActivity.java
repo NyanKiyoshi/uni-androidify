@@ -37,6 +37,8 @@ import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.models.IStringSerializable;
+import com.example.addressbook.models.MailAddressModel;
+import com.example.addressbook.models.PhoneNumberModel;
 import com.example.addressbook.models.PostalAddressModel;
 import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.views.SelectAddressOrNew;
@@ -77,6 +79,12 @@ public class AddEditContactActivity
 
     private SelectAddressOrNew<PostalAddressModel> postalAdapter;
     private ArrayList<Integer> removedPostals = new ArrayList<>();
+
+    private SelectAddressOrNew<PhoneNumberModel> phonesAdapter;
+    private ArrayList<Integer> removedPhones = new ArrayList<>();
+
+    private SelectAddressOrNew<MailAddressModel> emailsAdapter;
+    private ArrayList<Integer> removedEmails = new ArrayList<>();
 
     private boolean isPictureDeleted;
 
@@ -153,12 +161,36 @@ public class AddEditContactActivity
                     this.postalAdapter.removeItem(pos);
                 });
 
+        this.phonesAdapter = new SelectAddressOrNew<>(
+                PhoneNumberModel.class,
+                viewGroup, this, R.id.phoneListRecyclerView,
+                R.id.add_phone_btn, R.layout.create_phone_address_alert,
+                (removedItem, pos) -> {
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedPhones.add(removedItem.getId());
+                    }
+                    this.phonesAdapter.removeItem(pos);
+                });
+
+        this.emailsAdapter = new SelectAddressOrNew<>(
+                MailAddressModel.class,
+                viewGroup, this, R.id.mailListRecyclerView,
+                R.id.add_mail_btn, R.layout.create_email_address_alert,
+                (removedItem, pos) -> {
+                    // Only append to the item to deletion list if it is stored on the server
+                    if (removedItem.getId() > 0) {
+                        this.removedEmails.add(removedItem.getId());
+                    }
+                    this.emailsAdapter.removeItem(pos);
+                });
+
         if (this.item == null) {
             return;
         }
 
         this.requestQueue.add(new JsonArrayRequest(
-                AppConfig.getURL("/persons/" + this.item.getId() + "/groups"),
+                GroupAssociations.getPersonGroupURL(this.item.getId()),
                 response -> {
                     try {
                         // Copy the base groups to protect them against edition
@@ -175,13 +207,43 @@ public class AddEditContactActivity
         ));
 
         this.requestQueue.add(new JsonArrayRequest(
-                AppConfig.getURL("/persons/" + this.item.getId() + "/postalAddresses"),
+                ContactAssociations.getPostalURL(this.item.getId()),
                 response -> {
                     try {
                         // Add the postals to the adapter to put them on the view
                         this.postalAdapter.clear();
                         this.postalAdapter.addItems(PostalAddressModel.deserialize(
                                 PostalAddressModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                ContactAssociations.getPhoneURL(this.item.getId()),
+                response -> {
+                    try {
+                        // Add the phone numbers to the adapter to put them on the view
+                        this.phonesAdapter.clear();
+                        this.phonesAdapter.addItems(PhoneNumberModel.deserialize(
+                                PhoneNumberModel.class, response));
+                    } catch (Exception e) {
+                        this.onError(e);
+                    }
+                },
+                this::onError
+        ));
+
+        this.requestQueue.add(new JsonArrayRequest(
+                ContactAssociations.getMailURL(this.item.getId()),
+                response -> {
+                    try {
+                        // Add the phone numbers to the adapter to put them on the view
+                        this.emailsAdapter.clear();
+                        this.emailsAdapter.addItems(MailAddressModel.deserialize(
+                                MailAddressModel.class, response));
                     } catch (Exception e) {
                         this.onError(e);
                     }
@@ -221,8 +283,10 @@ public class AddEditContactActivity
 
         try {
             ContactAssociations.applyPostalAddresses(this.postalAdapter, this.removedPostals, data);
+            ContactAssociations.applyPhoneNumbers(this.phonesAdapter, this.removedPhones, data);
+            ContactAssociations.applyEmails(this.emailsAdapter, this.removedEmails, data);
         } catch (JSONException e) {
-            Log.wtf("Failed to commit postals", e);
+            Log.wtf("Failed to commit data from contact", e);
             Toast.makeText(this, R.string.failed_to_add_postals, Toast.LENGTH_LONG).show();
         }
 

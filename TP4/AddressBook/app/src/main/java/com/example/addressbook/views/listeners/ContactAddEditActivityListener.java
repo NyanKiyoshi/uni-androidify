@@ -48,18 +48,24 @@ public class ContactAddEditActivityListener
     private void commit(@NonNull ContactModel entry) {
         this.commitGroups(entry);
         this.commitPostals(entry);
+        this.commitPhone(entry);
+        this.commitMails(entry);
     }
 
     private void commitGroups(@NonNull ContactModel entry) {
 
-        for (Integer newGroupID : entry.newGroups){
-            GroupAssociations.associateToContact(
-                    this.requestQueue, newGroupID, entry.getId(), () -> {}, null);
+        if (entry.newGroups != null) {
+            for (Integer newGroupID : entry.newGroups) {
+                GroupAssociations.associateToContact(
+                        this.requestQueue, newGroupID, entry.getId(), () -> {}, null);
+            }
         }
 
-        for (Integer remGroupID : entry.removedGroups){
-            GroupAssociations.deleteAssociation(
-                    this.requestQueue, remGroupID, entry.getId(), () -> {}, null);
+        if (entry.removedGroups != null) {
+            for (Integer remGroupID : entry.removedGroups) {
+                GroupAssociations.deleteAssociation(
+                        this.requestQueue, remGroupID, entry.getId(), () -> {}, null);
+            }
         }
     }
 
@@ -75,6 +81,40 @@ public class ContactAddEditActivityListener
         if (entry.removedPostalsIDs != null) {
             for (Integer remGroupID : entry.removedPostalsIDs) {
                 ContactAssociations.deletePostal(
+                        this.requestQueue, remGroupID, entry.getId(), null, null);
+            }
+        }
+    }
+
+    private void commitPhone(@NonNull ContactModel entry) {
+
+        if (entry.newPhonesPayloads != null) {
+            for (String payload : entry.newPhonesPayloads) {
+                ContactAssociations.createPhone(
+                        this.requestQueue, payload, entry.getId(), null, null);
+            }
+        }
+
+        if (entry.removedPhonesIDs != null) {
+            for (Integer remGroupID : entry.removedPhonesIDs) {
+                ContactAssociations.deletePhone(
+                        this.requestQueue, remGroupID, entry.getId(), null, null);
+            }
+        }
+    }
+
+    private void commitMails(@NonNull ContactModel entry) {
+
+        if (entry.newMailsPayloads != null) {
+            for (String payload : entry.newMailsPayloads) {
+                ContactAssociations.createMail(
+                        this.requestQueue, payload, entry.getId(), null, null);
+            }
+        }
+
+        if (entry.removedMailIDs != null) {
+            for (Integer remGroupID : entry.removedMailIDs) {
+                ContactAssociations.deleteMail(
                         this.requestQueue, remGroupID, entry.getId(), null, null);
             }
         }
@@ -119,6 +159,18 @@ public class ContactAddEditActivityListener
                 data.getStringArrayListExtra(ContactAssociations.EXTRA_POSTAL_TO_ADD);
         newEntry.removedPostalsIDs =
                 data.getIntegerArrayListExtra(ContactAssociations.EXTRA_POSTAL_TO_REMOVE);
+
+        // Phones
+        newEntry.newPhonesPayloads =
+                data.getStringArrayListExtra(ContactAssociations.EXTRA_NUMBER_TO_ADD);
+        newEntry.removedPhonesIDs =
+                data.getIntegerArrayListExtra(ContactAssociations.EXTRA_NUMBER_TO_REMOVE);
+
+        // Mails
+        newEntry.newMailsPayloads =
+                data.getStringArrayListExtra(ContactAssociations.EXTRA_MAIL_TO_ADD);
+        newEntry.removedMailIDs =
+                data.getIntegerArrayListExtra(ContactAssociations.EXTRA_MAIL_TO_REMOVE);
 
         return newEntry;
     }

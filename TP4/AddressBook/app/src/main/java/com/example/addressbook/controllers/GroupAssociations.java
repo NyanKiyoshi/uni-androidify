@@ -25,6 +25,10 @@ public final class GroupAssociations {
     public static final String EXTRA_GROUPS_TO_ADD =
             "com.example.addressbook.controllers.adapters.GroupAdapter.EXTRA_GROUPS_TO_ADD";
 
+    public static String getPersonGroupURL(int contactID) {
+        return AppConfig.getURL("/persons/" + contactID + "/groups");
+    }
+
     private static void manageAssociation(
             int requestMethod,
             RequestQueue requestQueue,
@@ -33,7 +37,7 @@ public final class GroupAssociations {
             @Nullable Response.ErrorListener errorListener) {
 
         requestQueue.add(new StringRequest(requestMethod,
-                AppConfig.getURL("/persons/" + contactID + "/groups/" + groupID),
+                getPersonGroupURL(contactID) + "/" + groupID,
                 response -> callback.successCallback(),
                 errorListener
         ));
