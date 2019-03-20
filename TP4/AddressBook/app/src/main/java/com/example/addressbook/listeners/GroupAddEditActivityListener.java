@@ -1,4 +1,4 @@
-package com.example.addressbook.views.listeners;
+package com.example.addressbook.listeners;
 
 import android.content.Context;
 import android.content.Intent;

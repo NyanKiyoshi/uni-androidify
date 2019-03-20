@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.addressbook.R;
 import com.example.addressbook.controllers.adapters.GroupAdapter;
 import com.example.addressbook.models.GroupModel;
-import com.example.addressbook.views.listeners.GroupAddEditActivityListener;
+import com.example.addressbook.listeners.GroupAddEditActivityListener;
 import com.example.addressbook.views.viewholders.GroupViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
