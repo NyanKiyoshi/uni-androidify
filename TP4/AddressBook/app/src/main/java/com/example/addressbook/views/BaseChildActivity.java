@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.addressbook.R;
+import com.r0adkll.slidr.Slidr;
 
 public abstract class BaseChildActivity extends AppCompatActivity {
     @Override
@@ -18,6 +19,9 @@ public abstract class BaseChildActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
+
+        // Slidr
+        Slidr.attach(this);
     }
 
     @Override
