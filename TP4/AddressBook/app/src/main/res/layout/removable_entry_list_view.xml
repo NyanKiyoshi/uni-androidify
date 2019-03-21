@@ -30,20 +30,14 @@
         android:layout_marginTop="4dp"
         android:background="@color/lightGrey"/>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <TextView
+        android:id="@+id/add_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="7dp">
-
-        <TextView
-            android:id="@+id/add_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_btn"
-            android:textColor="@color/colorPrimary"
-            android:layout_gravity="center_horizontal"/>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:padding="7dp"
+        android:text="@string/add_btn"
+        android:textColor="@color/colorPrimary"
+        android:textAlignment="center" />
 
 </LinearLayout>
