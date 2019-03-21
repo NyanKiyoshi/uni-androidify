@@ -18,5 +18,4 @@ public abstract class BaseGroupActivity extends BaseChildActivity {
             Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
 }
