@@ -12,12 +12,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.example.addressbook.views.components.EmptyRecyclerView
                 android:id="@+id/listRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/empty_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/darkerGrey"
+                android:textAlignment="center"
+                android:text="@string/no_entries_add_one"
+                android:textSize="16sp"
+                android:padding="16dp" />
 
         </LinearLayout>
 

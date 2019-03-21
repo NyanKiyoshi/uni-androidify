@@ -27,6 +27,7 @@ import com.example.addressbook.controllers.adapters.BaseAdapter;
 import com.example.addressbook.models.AppConfig;
 import com.example.addressbook.models.BaseModel;
 import com.example.addressbook.listeners.BaseAddEditActivityListener;
+import com.example.addressbook.views.components.EmptyRecyclerView;
 import com.example.addressbook.views.viewholders.BaseViewHolder;
 
 import org.json.JSONArray;
@@ -40,6 +41,8 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         implements BaseAddEditActivityListener.CRUDEvents<Model> {
 
     private Class<Model> modelClass;
+    private RecyclerView recyclerView;
+    private View emptyRecyclerView;
 
     RequestQueue requestQueue;
     SwipeRefreshLayout pullToRefresh;
@@ -48,7 +51,6 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
     BaseAddEditActivityListener<Model> activityListener;
 
     public Context context;
-
     abstract String getEndpoint();
 
     BaseRecyclerFragment(Class<Model> modelClass) {
@@ -100,9 +102,10 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         this.loadingBar = new ContentLoadingProgressBar(this.context);
 
         // Set-up and bind the recycler view
-        RecyclerView recyclerView = view.findViewById(R.id.listRecyclerView);
-        recyclerView.setAdapter(this.adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+        this.recyclerView = view.findViewById(R.id.listRecyclerView);
+        this.recyclerView.setAdapter(this.adapter);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+        this.emptyRecyclerView = view.findViewById(R.id.empty_recycler);
 
         return view;
     }
@@ -136,6 +139,10 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
             // On JSON error, dispatch it to the callback
             this.onError(exc);
         }
+
+        // Check the empty state of the recycler
+        EmptyRecyclerView.checkEmpty(
+                this.recyclerView, this.adapter, this.emptyRecyclerView);
 
         // Stop loading
         this.pullToRefresh.setRefreshing(false);

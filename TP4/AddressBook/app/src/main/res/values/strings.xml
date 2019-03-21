@@ -61,6 +61,8 @@
     <string name="postal_addresses">Postal Addresses</string>
     <string name="groups">Groups</string>
     <string name="contacts">Contacts</string>
+    <string name="no_entries">No entries.</string>
+    <string name="no_entries_add_one">No entries. Start by adding one!</string>
 
     <string-array name="address_type">
         <item>work</item>
