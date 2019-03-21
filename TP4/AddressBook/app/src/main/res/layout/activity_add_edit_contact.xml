@@ -83,109 +83,29 @@
                     android:hint="@string/entry_lastname" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/group_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:background="@drawable/stroke_background"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                app:title="@string/select_group_title" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/manage_group_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/select_group"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/groupListRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/postal_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:background="@drawable/stroke_background"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                app:title="@string/new_postal_address" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_postal_address_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_postal_address_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/postalAddressListRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/phone_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:background="@drawable/stroke_background"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                app:title="@string/new_phone_address" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_phone_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_phone_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/phoneListRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/mail_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:background="@drawable/stroke_background"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:id="@+id/add_mail_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_mail_btn"
-                    android:textColor="#000"
-                    android:backgroundTint="#fff"
-                    android:textAppearance="@style/TextAppearance.MaterialButton"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mailListRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+                app:title="@string/new_mail_address" />
 
         </LinearLayout>
 

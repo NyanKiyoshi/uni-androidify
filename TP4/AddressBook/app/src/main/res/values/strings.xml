@@ -51,6 +51,11 @@
     <string name="add_mail_btn">Add Mail Address</string>
     <string name="duplicate_entry">Cannot create duplicates.</string>
     <string name="duplicate_group">This group was a duplicate.</string>
+    <string name="select_group_title">Select Group</string>
+    <string name="new_postal_address">New Postal Address</string>
+    <string name="new_phone_address">New Phone Number</string>
+    <string name="new_mail_address">New Email Address</string>
+    <string name="add_btn">ADD</string>
 
     <string-array name="address_type">
         <item>work</item>
