@@ -59,6 +59,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true">
@@ -87,25 +88,29 @@
                 android:id="@+id/group_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/select_group_title" />
+                app:title="@string/groups"
+                app:alert_title="@string/select_group_title" />
 
             <com.example.addressbook.views.components.EntryListView
                 android:id="@+id/postal_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/new_postal_address" />
+                app:title="@string/postal_addresses"
+                app:alert_title="@string/new_postal_address" />
 
             <com.example.addressbook.views.components.EntryListView
                 android:id="@+id/phone_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/new_phone_address" />
+                app:title="@string/phone_numbers"
+                app:alert_title="@string/new_phone_address" />
 
             <com.example.addressbook.views.components.EntryListView
                 android:id="@+id/mail_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/new_mail_address" />
+                app:title="@string/mails"
+                app:alert_title="@string/new_mail_address" />
 
         </LinearLayout>
 

@@ -56,6 +56,11 @@
     <string name="new_phone_address">New Phone Number</string>
     <string name="new_mail_address">New Email Address</string>
     <string name="add_btn">ADD</string>
+    <string name="mails">Email Addresses</string>
+    <string name="phone_numbers">Phone Numbers</string>
+    <string name="postal_addresses">Postal Addresses</string>
+    <string name="groups">Groups</string>
+    <string name="contacts">Contacts</string>
 
     <string-array name="address_type">
         <item>work</item>

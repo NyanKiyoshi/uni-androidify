@@ -5,8 +5,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +15,7 @@ import com.example.addressbook.R;
 
 public class EntryListView extends LinearLayout {
     private RecyclerView recyclerView;
-    private Button addButton;
+    private View addButton;
     private String title;
 
     public EntryListView(Context context) {
@@ -44,7 +44,10 @@ public class EntryListView extends LinearLayout {
             TypedArray a = context.obtainStyledAttributes(
                     attrs, R.styleable.EntryListView, defStyleAttr, 0);
 
-            this.title = a.getString(R.styleable.EntryListView_title);
+            this.title = a.getString(R.styleable.EntryListView_alert_title);
+            ((TextView)this.findViewById(R.id.title)).setText(
+                    a.getString(R.styleable.EntryListView_title));
+
             a.recycle();
         }
     }
@@ -53,7 +56,7 @@ public class EntryListView extends LinearLayout {
         return this.recyclerView;
     }
 
-    public Button getAddButton() {
+    public View getAddButton() {
         return this.addButton;
     }
 

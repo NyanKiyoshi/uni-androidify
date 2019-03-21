@@ -25,6 +25,7 @@
     </style>
 
     <declare-styleable name="EntryListView">
+        <attr name="alert_title" format="string" />
         <attr name="title" format="string" />
     </declare-styleable>
 </resources>

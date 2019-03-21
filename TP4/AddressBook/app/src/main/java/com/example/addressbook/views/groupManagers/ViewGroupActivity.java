@@ -29,7 +29,7 @@ import com.example.addressbook.models.GroupModel;
 import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.listeners.GroupAddEditActivityListener;
-import com.google.android.material.button.MaterialButton;
+import com.example.addressbook.views.components.EntryListView;
 
 public class ViewGroupActivity
         extends BaseGroupActivity
@@ -84,12 +84,11 @@ public class ViewGroupActivity
         });
 
         // Set-up and bind the recycler view
-        RecyclerView recyclerView = this.findViewById(R.id.listRecyclerView);
+        final EntryListView contactManager = this.findViewById(R.id.contact_manager);
+        final RecyclerView recyclerView = contactManager.getRecyclerView();
         recyclerView.setAdapter(this.adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        MaterialButton addContactBtn = this.findViewById(R.id.add_contact_btn);
-        addContactBtn.setOnClickListener(v -> openContactSelection());
+        contactManager.getAddButton().setOnClickListener(v -> openContactSelection());
 
         this.refreshData();
     }

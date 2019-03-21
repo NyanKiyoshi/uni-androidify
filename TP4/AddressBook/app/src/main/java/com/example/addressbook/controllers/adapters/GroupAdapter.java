@@ -27,10 +27,6 @@ public class GroupAdapter extends BaseAdapter<GroupViewHolder, GroupModel> {
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-
-        final GroupModel item = this.items.get(position);
-
-        holder.id.setText(item.getIdStr());
-        holder.title.setText(item.getTitle());
+        holder.title.setText(this.items.get(position).getTitle());
     }
 }
