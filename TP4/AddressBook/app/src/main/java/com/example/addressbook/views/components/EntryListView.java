@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.addressbook.R;
 
 public class EntryListView extends LinearLayout {
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
     private View addButton;
     private String title;
 
@@ -38,6 +38,7 @@ public class EntryListView extends LinearLayout {
                 R.layout.removable_entry_list_view, this, true);
 
         this.recyclerView = view.findViewById(R.id.itemListRecyclerView);
+        this.recyclerView.setEmptyView(view.findViewById(R.id.empty_recycler));
         this.addButton = view.findViewById(R.id.add_btn);
 
         if (attrs != null) {

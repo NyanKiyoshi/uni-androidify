@@ -17,12 +17,28 @@
         android:textSize="20sp"
         android:textColor="@color/lightBlack" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemListRecyclerView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
+        android:layout_height="wrap_content">
+
+        <com.example.addressbook.views.components.EmptyRecyclerView
+            android:id="@+id/itemListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp" />
+
+        <TextView
+            android:id="@+id/empty_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkGrey"
+            android:text="@string/no_entries"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
