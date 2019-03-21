@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -46,7 +45,7 @@ import com.example.addressbook.views.IDeferrableActivity;
 import com.example.addressbook.views.SelectAddressOrNew;
 import com.example.addressbook.listeners.BaseAddEditActivityListener;
 import com.example.addressbook.listeners.ContactAddEditActivityListener;
-import com.google.android.material.button.MaterialButton;
+import com.example.addressbook.views.components.EntryListView;
 
 import org.json.JSONException;
 
@@ -112,9 +111,6 @@ public class AddEditContactActivity
         final ImageView deletePictureBtn = findViewById(R.id.delete_picture);
         deletePictureBtn.setOnClickListener(this::onDeletePictureBtnPressed);
 
-        final MaterialButton manageGroupsBtn = findViewById(R.id.manage_group_btn);
-        manageGroupsBtn.setOnClickListener(this::selectGroup);
-
         // Get the activity's intent object
         final Intent intent = getIntent();
 
@@ -147,14 +143,15 @@ public class AddEditContactActivity
     private void createRecyclerViews() {
         final ViewGroup viewGroup = this.findViewById(android.R.id.content);
 
-        final RecyclerView groupView = this.findViewById(R.id.groupListRecyclerView);
-        groupView.setAdapter(this.groupsAdapter);
-        groupView.setLayoutManager(new LinearLayoutManager(this));
+        final EntryListView groupView = this.findViewById(R.id.group_manager);
+        groupView.getRecyclerView().setAdapter(this.groupsAdapter);
+        groupView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this));
+        groupView.getAddButton().setOnClickListener(this::selectGroup);
 
         this.postalAdapter = new SelectAddressOrNew<>(
                 PostalAddressModel.class,
-                viewGroup, this, R.id.postalAddressListRecyclerView,
-                R.id.add_postal_address_btn, R.layout.create_postal_address_alert,
+                viewGroup, this, this.findViewById(R.id.postal_manager),
+                R.layout.create_postal_address_alert,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {
@@ -165,8 +162,8 @@ public class AddEditContactActivity
 
         this.phonesAdapter = new SelectAddressOrNew<>(
                 PhoneNumberModel.class,
-                viewGroup, this, R.id.phoneListRecyclerView,
-                R.id.add_phone_btn, R.layout.create_phone_address_alert,
+                viewGroup, this, this.findViewById(R.id.phone_manager),
+                R.layout.create_phone_address_alert,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {
@@ -177,8 +174,8 @@ public class AddEditContactActivity
 
         this.emailsAdapter = new SelectAddressOrNew<>(
                 MailAddressModel.class,
-                viewGroup, this, R.id.mailListRecyclerView,
-                R.id.add_mail_btn, R.layout.create_email_address_alert,
+                viewGroup, this, this.findViewById(R.id.mail_manager),
+                R.layout.create_email_address_alert,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {

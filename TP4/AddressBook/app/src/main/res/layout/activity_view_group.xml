@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.groupManagers.ViewGroupActivity">
 
     <LinearLayout
@@ -12,31 +12,36 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/entry_title" />
-
-        <TextView
-            android:id="@+id/edit_text_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
-            android:id="@+id/add_contact_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_contacts"
-            android:textColor="#000"
+            android:padding="16dp"
+            android:orientation="vertical"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#fff"
-            android:textAppearance="@style/TextAppearance.MaterialButton"/>
+            android:layout_marginBottom="16dp"
+            android:background="#FFFFFF"
+            android:elevation="1dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listRecyclerView"
+            <TextView
+                android:id="@+id/title"
+                android:text="@string/entry_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/lightBlack" />
+
+            <TextView
+                android:id="@+id/edit_text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <com.example.addressbook.views.components.EntryListView
+            android:id="@+id/contact_manager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:title="@string/contacts"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

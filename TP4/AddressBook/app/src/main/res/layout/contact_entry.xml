@@ -58,7 +58,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:textSize="16sp"
-                        android:textColor="@color/colorAccent"/>
+                        android:textColor="@color/lightBlack"/>
 
                     <TextView
                         android:id="@+id/lastname"
@@ -66,7 +66,8 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:textSize="16sp"
-                        android:textColor="@color/colorAccent"/>
+                        android:textAllCaps="true"
+                        android:textColor="@color/lightBlack"/>
 
                 </LinearLayout>
 

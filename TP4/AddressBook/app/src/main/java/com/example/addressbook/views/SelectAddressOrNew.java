@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +19,7 @@ import com.example.addressbook.R;
 import com.example.addressbook.controllers.ViewUtils;
 import com.example.addressbook.controllers.adapters.RemovableAdapter;
 import com.example.addressbook.models.AddressModel;
+import com.example.addressbook.views.components.EntryListView;
 
 /**
  * Allows the user to select from a list of addresses
@@ -29,12 +30,13 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
     private final ViewGroup view;
     private final Context context;
     private final @LayoutRes int layoutID;
+    private final @Nullable String title;
 
     public SelectAddressOrNew(
             Class<ModelCls> modelClass,
             ViewGroup view,
             Context context,
-            @IdRes int recyclerID, @IdRes int addButtonID, @LayoutRes int layoutID,
+            EntryListView entryManager, @LayoutRes int layoutID,
             ViewUtils.IOnClickEvent<ModelCls> removeClickListener) {
 
         super(removeClickListener);
@@ -43,17 +45,18 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
         this.view = view;
         this.context = context;
         this.layoutID = layoutID;
+        this.title = entryManager.getTitle();
 
-        RecyclerView recyclerView = view.findViewById(recyclerID);
+        RecyclerView recyclerView = entryManager.getRecyclerView();
         recyclerView.setAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
-        view.findViewById(addButtonID).setOnClickListener(this::onNewButtonClick);
+        entryManager.getAddButton().setOnClickListener(this::onNewButtonClick);
     }
 
     public void createNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.create_new_address);
+        builder.setTitle(this.title);
         View inflated = LayoutInflater.from(context).inflate(layoutID, view, false);
         builder.setView(inflated);
 
