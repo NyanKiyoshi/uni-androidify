@@ -19,6 +19,7 @@ import com.example.addressbook.models.ContactModel;
 import com.example.addressbook.views.viewholders.ContactViewHolder;
 
 import static com.example.addressbook.models.Drawables.DefaultContactPic;
+import static com.example.addressbook.models.Drawables.DefaultContactPicDark;
 import static com.example.addressbook.models.Drawables.ResolutionThumbnail;
 
 public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel> {
@@ -35,9 +36,17 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
         this.parent = parent;
     }
 
+    private static void setDefaultImage(ImageView destView) {
+        destView.setImageResource(DefaultContactPic);
+    }
+
+    private static void setDefaultImageDark(ImageView destView) {
+        destView.setImageResource(DefaultContactPicDark);
+    }
+
     public static void setImage(String path, ImageView destView, boolean resize) {
         if (path == null) {
-            destView.setImageResource(DefaultContactPic);
+            setDefaultImage(destView);
             return;
         }
 
@@ -84,6 +93,8 @@ public class ContactAdapter extends BaseAdapter<ContactViewHolder, ContactModel>
 
         if (picturePath != null) {
             this.handler.post(() -> setImage(picturePath, holder.pictureBox));
+        } else {
+            setDefaultImageDark(holder.pictureBox);
         }
     }
 }
