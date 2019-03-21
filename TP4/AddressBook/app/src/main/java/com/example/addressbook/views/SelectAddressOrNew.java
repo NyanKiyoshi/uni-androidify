@@ -29,14 +29,14 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
     private final Class<ModelCls> modelClass;
     private final ViewGroup view;
     private final Context context;
-    private final @LayoutRes int layoutID;
     private final @Nullable String title;
+    private final int inputType;
 
     public SelectAddressOrNew(
             Class<ModelCls> modelClass,
             ViewGroup view,
             Context context,
-            EntryListView entryManager, @LayoutRes int layoutID,
+            EntryListView entryManager, int inputType,
             ViewUtils.IOnClickEvent<ModelCls> removeClickListener) {
 
         super(removeClickListener);
@@ -44,8 +44,8 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
         this.modelClass = modelClass;
         this.view = view;
         this.context = context;
-        this.layoutID = layoutID;
         this.title = entryManager.getTitle();
+        this.inputType = inputType;
 
         RecyclerView recyclerView = entryManager.getRecyclerView();
         recyclerView.setAdapter(this);
@@ -57,7 +57,7 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
     public void createNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(this.title);
-        View inflated = LayoutInflater.from(context).inflate(layoutID, view, false);
+        View inflated = LayoutInflater.from(context).inflate(R.layout.address_alert, view, false);
         builder.setView(inflated);
 
         final String[] selectedType = {null};
@@ -78,6 +78,9 @@ public class SelectAddressOrNew<ModelCls extends AddressModel> extends Removable
                 });
 
         EditText editAddress = inflated.findViewById(R.id.address);
+        editAddress.setHint(this.title);
+        editAddress.setInputType(this.inputType);
+
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             // Retrieve the input text
             String inputText = editAddress.getText().toString();

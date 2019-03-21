@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -151,7 +152,7 @@ public class AddEditContactActivity
         this.postalAdapter = new SelectAddressOrNew<>(
                 PostalAddressModel.class,
                 viewGroup, this, this.findViewById(R.id.postal_manager),
-                R.layout.create_postal_address_alert,
+                InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {
@@ -163,7 +164,7 @@ public class AddEditContactActivity
         this.phonesAdapter = new SelectAddressOrNew<>(
                 PhoneNumberModel.class,
                 viewGroup, this, this.findViewById(R.id.phone_manager),
-                R.layout.create_phone_address_alert,
+                InputType.TYPE_CLASS_PHONE,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {
@@ -175,7 +176,7 @@ public class AddEditContactActivity
         this.emailsAdapter = new SelectAddressOrNew<>(
                 MailAddressModel.class,
                 viewGroup, this, this.findViewById(R.id.mail_manager),
-                R.layout.create_email_address_alert,
+                InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
                 (removedItem, pos) -> {
                     // Only append to the item to deletion list if it is stored on the server
                     if (removedItem.getId() > 0) {
