@@ -90,6 +90,10 @@ public class ViewGroupActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         contactManager.getAddButton().setOnClickListener(v -> openContactSelection());
 
+        // Set-up the edit title button
+        this.findViewById(R.id.edit_btn).setOnClickListener(
+                v -> this.activityListener.startUpdateEntry(this.groupModel));
+
         this.refreshData();
     }
 
@@ -108,10 +112,6 @@ public class ViewGroupActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.edit_entry:
-                this.activityListener.startUpdateEntry(this.groupModel);
-                break;
-
             case R.id.delete_entry:
                 ViewUtils.PromptDelete(this, this.groupModel);
                 break;

@@ -12,30 +12,50 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
             android:background="#FFFFFF"
+            android:clipToPadding="false"
             android:elevation="1dp">
 
-            <TextView
-                android:id="@+id/title"
-                android:text="@string/entry_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/lightBlack" />
+            <ImageButton
+                android:id="@+id/edit_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                android:layout_gravity="end"
+                android:background="@drawable/ic_pen_black"
+                android:contentDescription="@string/edit_entry" />
 
-            <TextView
-                android:id="@+id/edit_text_title"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/title"
+                    android:text="@string/entry_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/lightBlack" />
+
+                <TextView
+                    android:id="@+id/edit_text_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.example.addressbook.views.components.EntryListView
             android:id="@+id/contact_manager"
