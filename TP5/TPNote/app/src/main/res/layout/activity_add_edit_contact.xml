@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.contactManagers.AddEditContactActivity"
+    android:background="@color/windowBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/colorPrimary">
+
+            <com.example.addressbook.views.components.TopCropImageView
+                android:id="@+id/picture_preview_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_person_white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/change_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="bottom|end"
+                android:gravity="bottom|end"
+                android:backgroundTint="#27000000"
+                app:elevation="0dp"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_camera_alt_white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/delete_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="bottom|start"
+                android:gravity="bottom|start"
+                android:backgroundTint="#27000000"
+                app:elevation="0dp"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_delete"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/entry_firstname" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/entry_lastname" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/group_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/groups"
+                app:alert_title="@string/select_group_title" />
+
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/postal_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/postal_addresses"
+                app:alert_title="@string/new_postal_address" />
+
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/phone_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/phone_numbers"
+                app:alert_title="@string/new_phone_address" />
+
+            <com.example.addressbook.views.components.EntryListView
+                android:id="@+id/mail_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/mails"
+                app:alert_title="@string/new_mail_address" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
