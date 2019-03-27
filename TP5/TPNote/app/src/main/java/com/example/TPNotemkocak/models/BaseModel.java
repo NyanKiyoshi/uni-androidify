@@ -5,4 +5,5 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class BaseModel {
+    abstract public int getId();
 }

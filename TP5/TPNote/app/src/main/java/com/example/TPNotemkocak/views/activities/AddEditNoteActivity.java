@@ -22,18 +22,19 @@ import com.example.TPNotemkocak.views.components.EntryListView;
 
 public class AddEditNoteActivity extends BaseChildActivity {
 
-    public static final String EXTRA_IS_EDIT =
-            ".noteManagers.EXTRA_ID";
     public static final String EXTRA_TITLE =
             ".noteManagers.EXTRA_TITLE";
     public static final String EXTRA_BODY =
             ".noteManagers.EXTRA_BODY";
 
+    public final static int RESULT_UPDATED = 2;
+    public final static int RESULT_CREATED = 3;
+
+    private int entryID;
     private EditText editTextTitle;
     private EditText editTextBody;
 
     private NoteModel item;
-    private boolean isEditing;
 
     private RemovableAdapter<CategoryModel> categoriesAdapter = new RemovableAdapter<>();
     private CategoryModel[] selectedCategories;
@@ -48,9 +49,9 @@ public class AddEditNoteActivity extends BaseChildActivity {
 
         // Get the passed data
         Intent intent = this.getIntent();
-        this.isEditing = intent.getBooleanExtra(EXTRA_IS_EDIT, false);
+        this.entryID = intent.getIntExtra(ViewUtils.EXTRA_ID, -1);
 
-        if (this.isEditing) {
+        if (this.entryID > -1) {
             this.setTitle("Edit Note");
 
             String title = intent.getStringExtra(EXTRA_TITLE);
@@ -59,7 +60,7 @@ public class AddEditNoteActivity extends BaseChildActivity {
             this.editTextTitle.setText(title);
             this.editTextBody.setText(body);
 
-            this.item = new NoteModel(title, body);
+            this.item = new NoteModel(this.entryID, title, body);
         } else {
             this.setTitle("Add Note");
         }
@@ -85,6 +86,7 @@ public class AddEditNoteActivity extends BaseChildActivity {
         }
 
         Intent data = new Intent();
+        data.putExtra(ViewUtils.EXTRA_ID, this.entryID);
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_BODY, body);
 
@@ -92,7 +94,7 @@ public class AddEditNoteActivity extends BaseChildActivity {
 //        data.putExtras(
 //                GroupAssociations.applyGroups(this.categoriesAdapter, this.item));
 
-        setResult(RESULT_OK, data);
+        setResult(this.item == null ? RESULT_CREATED : RESULT_UPDATED, data);
         finish();
     }
 
@@ -132,7 +134,6 @@ public class AddEditNoteActivity extends BaseChildActivity {
 
             for (CategoryModel selectedCat : this.categoriesAdapter.items) {
                 if (selectedCat.getId() == category.getId()) {
-                    this.selectedCategories[i] = selectedCat;
                     booleans[i] = true;
                     break;
                 }
@@ -143,7 +144,7 @@ public class AddEditNoteActivity extends BaseChildActivity {
 
         (new AlertDialog.Builder(this)
                 .setMultiChoiceItems(sequences, booleans, (dialog, which, isChecked) -> {
-                    CategoryModel selectedItem = this.selectedCategories[which];
+                    CategoryModel selectedItem = availableCategories[which];
                     if (!isChecked) {
                         this.categoriesAdapter.removeItem(selectedItem);
                     } else {

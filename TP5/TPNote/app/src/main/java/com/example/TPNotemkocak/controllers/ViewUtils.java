@@ -1,5 +1,6 @@
 package com.example.TPNotemkocak.controllers;
 
+import android.content.Intent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +11,9 @@ import com.example.TPNotemkocak.models.BaseModel;
 import com.example.TPNotemkocak.views.dialogs.YesNoDialog;
 
 public class ViewUtils {
-    public final static int RESULT_DELETED = 2;
+    public static final String EXTRA_ID =
+            ".ViewUtils.EXTRA_ID";
+    public final static int RESULT_DELETED = 404;
 
     public interface IOnClickEvent<Model extends BaseModel> {
         void onRemoveClick(Model item, int pos);
@@ -29,8 +32,11 @@ public class ViewUtils {
                     // Close the dialog
                     dialog.dismiss();
 
+                    Intent data = new Intent();
+                    data.putExtra(ViewUtils.EXTRA_ID, item.getId());
+
                     // Close the activity, and dispatch the deletion event
-                    activity.setResult(RESULT_DELETED);
+                    activity.setResult(RESULT_DELETED, data);
                     activity.finish();
                 }
         ).show();
