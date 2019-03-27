@@ -20,12 +20,16 @@ import com.example.TPNotemkocak.models.CategoryModel;
 import com.example.TPNotemkocak.views.BaseChildActivity;
 import com.example.TPNotemkocak.views.components.EntryListView;
 
+import java.util.ArrayList;
+
 public class AddEditNoteActivity extends BaseChildActivity {
 
     public static final String EXTRA_TITLE =
             ".noteManagers.EXTRA_TITLE";
     public static final String EXTRA_BODY =
             ".noteManagers.EXTRA_BODY";
+    public static final String EXTRA_CATEGORY_IDS =
+            ".noteManagers.EXTRA_CATEGORY_IDS";
 
     public final static int RESULT_UPDATED = 2;
     public final static int RESULT_CREATED = 3;
@@ -37,7 +41,6 @@ public class AddEditNoteActivity extends BaseChildActivity {
     private NoteModel item;
 
     private RemovableAdapter<CategoryModel> categoriesAdapter = new RemovableAdapter<>();
-    private CategoryModel[] selectedCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class AddEditNoteActivity extends BaseChildActivity {
             this.editTextBody.setText(body);
 
             this.item = new NoteModel(this.entryID, title, body);
+            this.item.setCategories(intent.getIntegerArrayListExtra(EXTRA_CATEGORY_IDS));
         } else {
             this.setTitle("Add Note");
         }
@@ -73,6 +77,16 @@ public class AddEditNoteActivity extends BaseChildActivity {
         groupView.getRecyclerView().setAdapter(this.categoriesAdapter);
         groupView.getRecyclerView().setLayoutManager(new LinearLayoutManager(this));
         groupView.getAddButton().setOnClickListener((v) -> this.openGroupSelection());
+
+        if (this.item == null) {
+            return;
+        }
+
+        ArrayList<CategoryModel> categoriesToAdd = new ArrayList<>(this.item.categories.size());
+        for (int id : this.item.categories) {
+            categoriesToAdd.add(CategoryModel.getAvailableCategories()[id]);
+        }
+        this.categoriesAdapter.addItems(categoriesToAdd);
     }
 
     private void saveEntry() {
@@ -90,9 +104,13 @@ public class AddEditNoteActivity extends BaseChildActivity {
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_BODY, body);
 
+        ArrayList<Integer> selectedCategories = new ArrayList<>(this.categoriesAdapter.items.size());
+        for (CategoryModel category : this.categoriesAdapter.items) {
+            selectedCategories.add(category.getId());
+        }
+
         // Add groups data
-//        data.putExtras(
-//                GroupAssociations.applyGroups(this.categoriesAdapter, this.item));
+        data.putIntegerArrayListExtra(EXTRA_CATEGORY_IDS, selectedCategories);
 
         setResult(this.item == null ? RESULT_CREATED : RESULT_UPDATED, data);
         finish();

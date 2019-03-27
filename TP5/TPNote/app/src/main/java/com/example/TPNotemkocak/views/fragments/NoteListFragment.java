@@ -17,6 +17,8 @@ import com.example.TPNotemkocak.views.activities.AddEditNoteActivity;
 import com.example.TPNotemkocak.views.viewholders.NoteViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 import static com.example.TPNotemkocak.controllers.ViewUtils.RESULT_DELETED;
 
 public class NoteListFragment
@@ -69,16 +71,24 @@ public class NoteListFragment
             return;
         }
 
+        NoteModel newItem = null;
         String newTitle = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
         String newBody = data.getStringExtra(AddEditNoteActivity.EXTRA_BODY);
+        ArrayList<Integer> categories = data.getIntegerArrayListExtra(
+                AddEditNoteActivity.EXTRA_CATEGORY_IDS);
 
         if (resultCode == AddEditNoteActivity.RESULT_CREATED) {
-            this.adapter.addItem(new NoteModel(newTitle, newBody));
+            newItem = new NoteModel(newTitle, newBody);
+            this.adapter.addItem(newItem);
         } else if (resultCode == AddEditNoteActivity.RESULT_UPDATED) {
-            NoteModel entry = this.getEntry(itemID);
-            entry.setTitle(newTitle);
-            entry.setBody(newBody);
-            this.adapter.changedItem(entry);
+            newItem = this.getEntry(itemID);
+            newItem.setTitle(newTitle);
+            newItem.setBody(newBody);
+            this.adapter.changedItem(newItem);
+        }
+
+        if (newItem != null) {
+            newItem.setCategories(categories);
         }
     }
 
@@ -87,6 +97,8 @@ public class NoteListFragment
         intent.putExtra(ViewUtils.EXTRA_ID, item.getId());
         intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, item.getTitle());
         intent.putExtra(AddEditNoteActivity.EXTRA_BODY, item.getBody());
+        intent.putIntegerArrayListExtra(
+                AddEditNoteActivity.EXTRA_CATEGORY_IDS, item.getCategories());
         this.startActivityForResult(intent, 1);
     }
 
