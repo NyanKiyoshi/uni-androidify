@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.TPNotemkocak.R;
 import com.example.TPNotemkocak.controllers.adapters.BaseAdapter;
 import com.example.TPNotemkocak.models.BaseModel;
+import com.example.TPNotemkocak.views.components.EmptyRecyclerView;
 import com.example.TPNotemkocak.views.viewholders.BaseViewHolder;
 
 import static com.example.TPNotemkocak.controllers.ViewUtils.RESULT_DELETED;
@@ -24,9 +25,7 @@ public abstract
 class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         extends Fragment {
 
-    private RecyclerView recyclerView;
-    private View emptyRecyclerView;
-
+    private EmptyRecyclerView recyclerView;
     BaseAdapter<VH, Model> adapter;
 
     public Context context;
@@ -51,7 +50,7 @@ class BaseRecyclerFragment<Model extends BaseModel, VH extends BaseViewHolder>
         this.recyclerView = view.findViewById(R.id.listRecyclerView);
         this.recyclerView.setAdapter(this.adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
-        this.emptyRecyclerView = view.findViewById(R.id.empty_recycler);
+        this.recyclerView.setEmptyView(view.findViewById(R.id.empty_recycler));
 
         return view;
     }
