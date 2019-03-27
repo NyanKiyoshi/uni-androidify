@@ -27,13 +27,13 @@
             android:name=".views.groupManagers.AddEditGroupActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
-            android:name=".views.groupManagers.ViewGroupActivity"
+            android:name=".views.activities.ViewCategoryActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
             android:name=".views.groupManagers.SelectContact"
             android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
-            android:name=".views.contactManagers.AddEditContactActivity"
+            android:name=".views.activities.AddEditNoteActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme" ></activity>
     </application>
 

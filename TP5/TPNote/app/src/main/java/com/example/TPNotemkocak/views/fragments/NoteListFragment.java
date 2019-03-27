@@ -10,22 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.TPNotemkocak.R;
-import com.example.TPNotemkocak.controllers.adapters.GroupAdapter;
-import com.example.TPNotemkocak.models.GroupModel;
-import com.example.TPNotemkocak.listeners.GroupAddEditActivityListener;
-import com.example.TPNotemkocak.views.viewholders.GroupViewHolder;
+import com.example.TPNotemkocak.controllers.adapters.NoteAdapter;
+import com.example.TPNotemkocak.models.NoteModel;
+import com.example.TPNotemkocak.views.viewholders.NoteViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static com.example.TPNotemkocak.controllers.ViewUtils.RESULT_DELETED;
 
-public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupViewHolder> {
+public class NoteListFragment
+        extends BaseRecyclerFragment<NoteModel, NoteViewHolder>
+        implements NoteAdapter.IHasContext {
 
-    public GroupListFragment() {
-        super(GroupModel.class);
-
+    public NoteListFragment() {
         // Create the view adapter
-        this.adapter = new GroupAdapter(
-                (item, pos) -> this.activityListener.startViewEntry(item));
+        this.adapter = new NoteAdapter(this, this::onSelectItem);
     }
 
     @Nullable
@@ -37,16 +35,9 @@ public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupVie
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // Create the activity's listener
-        this.activityListener = new GroupAddEditActivityListener(
-                this.context, this, this.requestQueue);
-
         // Register an handler to the floating button
         final FloatingActionButton fab = view.findViewById(R.id.create_fab);
-        fab.setOnClickListener((v) -> this.activityListener.startCreateNewEntry());
-
-        // Finally, get the data and return the inflated view
-        this.refreshData();
+        fab.setOnClickListener(this::onAddNewItem);
 
         return view;
     }
@@ -54,15 +45,17 @@ public class GroupListFragment extends BaseRecyclerFragment<GroupModel, GroupVie
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.activityListener.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_DELETED) {
-            this.refreshData();
+            // TODO
         }
     }
 
-    @Override
-    String getEndpoint() {
-        return "/groups";
+    public void onSelectItem(NoteModel item, int pos) {
+
+    }
+
+    public void onAddNewItem(View view) {
+
     }
 }

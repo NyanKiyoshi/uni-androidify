@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.groupManagers.ViewGroupActivity"
+    tools:context=".views.activities.ViewCategoryActivity"
     android:background="@color/windowBackground">
 
     <LinearLayout
@@ -59,10 +59,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.example.TPNotemkocak.views.components.EntryListView
-            android:id="@+id/contact_manager"
+            android:id="@+id/note_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/contacts"/>
+            app:title="@string/notes"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

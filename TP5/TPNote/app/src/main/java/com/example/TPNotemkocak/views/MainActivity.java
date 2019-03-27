@@ -3,14 +3,14 @@ package com.example.TPNotemkocak.views;
 import android.os.Bundle;
 
 import com.example.TPNotemkocak.R;
-import com.example.TPNotemkocak.views.fragments.ContactListFragment;
+import com.example.TPNotemkocak.views.fragments.NoteListFragment;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
-import com.example.TPNotemkocak.views.fragments.GroupListFragment;
+import com.example.TPNotemkocak.views.fragments.CategoryListFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,10 +26,10 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentManager fragmentManager;
 
-    private final ContactListFragment contactListFragment =
-            new ContactListFragment();
-    private final GroupListFragment groupListFragment =
-            new GroupListFragment();
+    private final NoteListFragment noteListFragment =
+            new NoteListFragment();
+    private final CategoryListFragment categoryListFragment =
+            new CategoryListFragment();
 
     private void initFragmentManager() {
         this.fragmentManager = getSupportFragmentManager();
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        this.replaceFragment(this.contactListFragment);
+        this.replaceFragment(this.noteListFragment);
         navigationView.setCheckedItem(R.id.nav_contacts);
     }
 
@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_contacts) {
-            this.replaceFragment(this.contactListFragment);
+            this.replaceFragment(this.noteListFragment);
         } else if (id == R.id.nav_groups) {
-            this.replaceFragment(this.groupListFragment);
+            this.replaceFragment(this.categoryListFragment);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

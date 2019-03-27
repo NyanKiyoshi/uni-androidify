@@ -1,63 +1,42 @@
 package com.example.TPNotemkocak.controllers;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 
-
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Response;
 import com.example.TPNotemkocak.R;
 import com.example.TPNotemkocak.models.BaseModel;
-import com.example.TPNotemkocak.models.IStringSerializable;
-import com.example.TPNotemkocak.views.IDeferrableActivity;
 import com.example.TPNotemkocak.views.dialogs.YesNoDialog;
 
 public class ViewUtils {
     public final static int RESULT_DELETED = 2;
 
-    public interface IOnClickEvent<Model extends IStringSerializable> {
+    public interface IOnClickEvent<Model extends BaseModel> {
         void onRemoveClick(Model item, int pos);
     }
 
-    public interface IRemoveClickListener<Model extends IStringSerializable> {
+    public interface IRemoveClickListener<Model extends BaseModel> {
         IOnClickEvent<Model> getRemoveCallback();
         Model getItem(int pos);
     }
 
-    public static void PromptDelete(IDeferrableActivity deferrable, BaseModel item) {
-        Activity activity = deferrable.getActivity();
-
+    public static void PromptDelete(AppCompatActivity activity, BaseModel item) {
         YesNoDialog.New(
                 activity,
                 R.string.are_you_sure,
                 (dialog, which) -> {
+                    // Close the dialog
                     dialog.dismiss();
-                    deferrable.getLoadingBar().show();
-                    deferrable.getListener().startDeleteEntry(item, wrappedOnDeleted(activity));
+
+                    // Close the activity, and dispatch the deletion event
+                    activity.setResult(RESULT_DELETED);
+                    activity.finish();
                 }
         ).show();
     }
 
-    public static @Nullable
-    SharedPreferences GetSharedPrefs(Context context) {
-        if (context != null) {
-            return context.getSharedPreferences("global", Context.MODE_PRIVATE);
-        }
-        return null;
-    }
-
-    private static Response.Listener<String> wrappedOnDeleted(Activity activity) {
-        return response -> {
-            activity.setResult(RESULT_DELETED);
-            activity.finish();
-        };
-    }
-
-    public static <M extends IStringSerializable>View.OnClickListener wrapRecyclerRemoveItem(
+    public static <M extends BaseModel>View.OnClickListener wrapRecyclerRemoveItem(
             IRemoveClickListener<M> adapter, RecyclerView.ViewHolder holder) {
 
         return (v) -> {
