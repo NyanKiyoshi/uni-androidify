@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.example.addressbook.views.components.EmptyRecyclerView
+        <com.example.TPNotemkocak.views.components.EmptyRecyclerView
             android:id="@+id/itemListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

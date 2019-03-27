@@ -58,7 +58,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.example.addressbook.views.components.EntryListView
+        <com.example.TPNotemkocak.views.components.EntryListView
             android:id="@+id/contact_manager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.example.addressbook.views.components.EmptyRecyclerView
+            <com.example.TPNotemkocak.views.components.EmptyRecyclerView
                 android:id="@+id/listRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

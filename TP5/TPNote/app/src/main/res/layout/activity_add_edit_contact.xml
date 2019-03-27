@@ -19,7 +19,7 @@
             android:layout_height="300dp"
             android:background="@color/colorPrimary">
 
-            <com.example.addressbook.views.components.TopCropImageView
+            <com.example.TPNotemkocak.views.components.TopCropImageView
                 android:id="@+id/picture_preview_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -86,28 +86,28 @@
                     android:hint="@string/entry_lastname" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.example.addressbook.views.components.EntryListView
+            <com.example.TPNotemkocak.views.components.EntryListView
                 android:id="@+id/group_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/groups"
                 app:alert_title="@string/select_group_title" />
 
-            <com.example.addressbook.views.components.EntryListView
+            <com.example.TPNotemkocak.views.components.EntryListView
                 android:id="@+id/postal_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/postal_addresses"
                 app:alert_title="@string/new_postal_address" />
 
-            <com.example.addressbook.views.components.EntryListView
+            <com.example.TPNotemkocak.views.components.EntryListView
                 android:id="@+id/phone_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/phone_numbers"
                 app:alert_title="@string/new_phone_address" />
 
-            <com.example.addressbook.views.components.EntryListView
+            <com.example.TPNotemkocak.views.components.EntryListView
                 android:id="@+id/mail_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
